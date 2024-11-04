@@ -7,7 +7,6 @@ WORKDIR /app
 # Copy your Python script
 COPY dynamic_ip_updater.py .
 COPY requirements.txt .
-COPY .env .
 
 # Copy the cron job
 COPY cronjob /etc/cron.d/cronjob
