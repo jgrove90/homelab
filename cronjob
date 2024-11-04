@@ -1,0 +1,1 @@
+*/3 * * * *  /bin/bash -c 'source /app/.venv/bin/activate && python3 /app/dynamic_ip_updater.py >> /var/log/ip_updater.log 2>&1'
