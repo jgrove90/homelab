@@ -1,5 +1,4 @@
 resource "proxmox_virtual_environment_vm" "talos_control_plane" {
-  #depends_on  = [proxmox_virtual_environment_download_file.talos_nocloud_image_intel]
   name        = "talos-control-plane"
   description = "Managed by Terraform"
   tags        = ["terraform"]
@@ -26,7 +25,7 @@ resource "proxmox_virtual_environment_vm" "talos_control_plane" {
 
   disk {
     datastore_id = "local-lvm"
-    file_id      = "local:iso/talos_linux_v1.9.4_intel.iso"
+    file_id      = "local:iso/talos_linux_v1.9.4_intel_agent.iso"
     file_format  = "raw"
     interface    = "virtio0"
     size         = 20
@@ -51,7 +50,6 @@ resource "proxmox_virtual_environment_vm" "talos_control_plane" {
 }
 
 resource "proxmox_virtual_environment_vm" "talos_worker_01" {
-  depends_on  = [talos_machine_bootstrap.bootstrap]
   name        = "talos-worker-01"
   description = "Managed by Terraform"
   tags        = ["terraform"]
@@ -78,7 +76,7 @@ resource "proxmox_virtual_environment_vm" "talos_worker_01" {
 
   disk {
     datastore_id = "local-lvm"
-    file_id      = "local:iso/talos_linux_v1.9.4_intel.iso"
+    file_id      = "local:iso/talos_linux_v1.9.4_intel_agent.iso"
     file_format  = "raw"
     interface    = "virtio0"
     size         = 20
@@ -103,7 +101,6 @@ resource "proxmox_virtual_environment_vm" "talos_worker_01" {
 }
 
 resource "proxmox_virtual_environment_vm" "talos_worker_02" {
-  depends_on  = [talos_machine_bootstrap.bootstrap]
   name        = "talos-worker-02"
   description = "Managed by Terraform"
   tags        = ["terraform"]
@@ -130,7 +127,7 @@ resource "proxmox_virtual_environment_vm" "talos_worker_02" {
 
   disk {
     datastore_id = "local-lvm"
-    file_id      = "local:iso/talos_linux_v1.9.4_amd.iso"
+    file_id      = "local:iso/talos_linux_v1.9.4_amd_v2.iso"
     file_format  = "raw"
     interface    = "virtio0"
     size         = 20

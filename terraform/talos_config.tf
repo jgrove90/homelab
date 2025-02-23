@@ -1,4 +1,5 @@
 resource "talos_machine_secrets" "machine_secrets" {
+  depends_on = [proxmox_virtual_environment_vm.talos_control_plane]  # Wait until Proxmox VM is created
   talos_version = var.talos_os_version
 }
 
@@ -7,17 +8,21 @@ resource "talos_machine_secrets" "machine_secrets" {
 # ********************************************
 
 data "talos_client_configuration" "talos_config" {
+  depends_on                  = [proxmox_virtual_environment_vm.talos_control_plane]
   cluster_name         = var.cluster_name
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  endpoints            = [var.talos_control_plane_ip_addr]
+  nodes            = [var.talos_control_plane_ip_addr]
 }
 
 data "talos_machine_configuration" "machineconfig_control_plane" {
+  depends_on                  = [proxmox_virtual_environment_vm.talos_control_plane]
   cluster_name     = var.cluster_name
   cluster_endpoint = "https://${var.talos_control_plane_ip_addr}:6443"
   machine_type     = "controlplane"
   machine_secrets  = talos_machine_secrets.machine_secrets.machine_secrets
   talos_version    = var.talos_os_version
+  config_patches = [file("${path.module}/patch/global.yaml"),
+                    file("${path.module}/patch/control-plane.yaml")]
 }
 
 resource "talos_machine_configuration_apply" "control_plane_config_apply" {
@@ -29,6 +34,18 @@ resource "talos_machine_configuration_apply" "control_plane_config_apply" {
 }
 
 # ********************************************
+# Talos Machine Bootstrap
+# ********************************************
+
+resource "talos_machine_bootstrap" "bootstrap" {
+  depends_on           = [talos_machine_configuration_apply.control_plane_config_apply,
+                          talos_machine_configuration_apply.worker_01_config_apply, 
+                          talos_machine_configuration_apply.worker_02_config_apply]
+  client_configuration = talos_machine_secrets.machine_secrets.client_configuration
+  node                 = var.talos_control_plane_ip_addr
+}
+
+# ********************************************
 # Talos Worker Node 01 Configuration
 # ********************************************
 
@@ -37,6 +54,8 @@ data "talos_machine_configuration" "machineconfig_worker_01" {
   cluster_endpoint = "https://${var.talos_control_plane_ip_addr}:6443"
   machine_type     = "worker"
   machine_secrets  = talos_machine_secrets.machine_secrets.machine_secrets
+  config_patches = [file("${path.module}/patch/global.yaml"),
+                    file("${path.module}/patch/worker-01.yaml")]
 }
 
 resource "talos_machine_configuration_apply" "worker_01_config_apply" {
@@ -56,6 +75,8 @@ data "talos_machine_configuration" "machineconfig_worker_02" {
   cluster_endpoint = "https://${var.talos_control_plane_ip_addr}:6443"
   machine_type     = "worker"
   machine_secrets  = talos_machine_secrets.machine_secrets.machine_secrets
+  config_patches = [file("${path.module}/patch/global.yaml"),
+                  file("${path.module}/patch/worker-02.yaml")]
 }
 
 resource "talos_machine_configuration_apply" "worker_02_config_apply" {
@@ -67,33 +88,23 @@ resource "talos_machine_configuration_apply" "worker_02_config_apply" {
 }
 
 # ********************************************
-# Talos Machine Bootstrap
-# ********************************************
-
-resource "talos_machine_bootstrap" "bootstrap" {
-  depends_on           = [talos_machine_configuration_apply.control_plane_config_apply]
-  client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  node                 = var.talos_control_plane_ip_addr
-}
-
-# ********************************************
 # Talos Cluster Health Check
 # ********************************************
 
-data "talos_cluster_health" "health" {
-  #depends_on           = [talos_machine_bootstrap.bootstrap, talos_machine_configuration_apply.worker_01_config_apply, talos_machine_configuration_apply.worker_02_config_apply]
-  client_configuration = data.talos_client_configuration.talos_config.client_configuration
-  control_plane_nodes  = [var.talos_control_plane_ip_addr]
-  #worker_nodes         = [var.talos_worker_01_ip_addr, var.talos_worker_02_ip_addr]
-  endpoints            = data.talos_client_configuration.talos_config.endpoints
-}
+# data "talos_cluster_health" "health" {
+#   depends_on           = [talos_machine_bootstrap.bootstrap]
+#   client_configuration = data.talos_client_configuration.talos_config.client_configuration
+#   control_plane_nodes  = [var.talos_control_plane_ip_addr]
+#   worker_nodes         = [var.talos_worker_01_ip_addr, var.talos_worker_02_ip_addr]
+#   endpoints            = ["https://${var.talos_control_plane_ip_addr}:6443"]
 
+# }
 # ********************************************
 # Talos Cluster Kubeconfig
 # ********************************************
 
 resource "talos_cluster_kubeconfig" "kubeconfig" {
-  depends_on           = [talos_machine_bootstrap.bootstrap, data.talos_cluster_health.health]
+  depends_on           = [talos_machine_bootstrap.bootstrap] # data.talos_cluster_health.health
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
   node                 = var.talos_control_plane_ip_addr
 }

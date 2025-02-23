@@ -1,0 +1,4 @@
+machine:
+  type: worker
+  network:
+    hostname: worker-01
