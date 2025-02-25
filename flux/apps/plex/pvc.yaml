@@ -7,6 +7,9 @@ spec:
   accessModes:
     - ReadWriteOnce
   volumeName: plex-config-pv
+  resources:
+    requests:
+      storage: 10Gi
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -17,6 +20,9 @@ spec:
   accessModes:
     - ReadOnlyMany
   volumeName: plex-media-tv-pv
+  resources:
+    requests:
+      storage: 10Gi
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -27,3 +33,6 @@ spec:
   accessModes:
     - ReadOnlyMany
   volumeName: plex-media-movies-pv
+  resources:
+    requests:
+      storage: 10Gi
