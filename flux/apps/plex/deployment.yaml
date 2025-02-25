@@ -38,7 +38,7 @@ spec:
             claimName: plex-config-pvc
         - name: media-tv-volume
           persistentVolumeClaim:
-            claimName: plex-media-pvc
+            claimName: plex-media-tv-pvc
         - name: media-movies-volume
           persistentVolumeClaim:
-            claimName: plex-media-pvc
+            claimName: plex-media-movies-pvcs
