@@ -2,6 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: plex-config-pvc
+  namespace: plex
 spec:
   accessModes:
     - ReadWriteOnce
@@ -11,6 +12,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: plex-media-tv-pvc
+  namespace: plex
 spec:
   accessModes:
     - ReadOnlyMany
@@ -20,6 +22,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: plex-media-movies-pvc
+  namespace: plex
 spec:
   accessModes:
     - ReadOnlyMany
