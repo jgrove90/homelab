@@ -86,6 +86,14 @@ resource "proxmox_virtual_environment_vm" "talos_worker_01" {
     type = "l26" # Linux Kernel 2.6 - 5.X.
   }
 
+  hostpci {
+    device = "hostpci0"
+    mapping = "iGPU"
+    xvga = false
+    pcie = true
+    rombar = true
+  }
+
   initialization {
     datastore_id = "local-lvm"
     ip_config {
