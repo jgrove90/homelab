@@ -12,4 +12,4 @@ spec:
       targetPort: 32400
   type: LoadBalancer
   externalIPs:
-    - 192.168.0.41
+    - 192.168.0.210
