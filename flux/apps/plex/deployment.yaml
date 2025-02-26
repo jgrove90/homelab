@@ -13,7 +13,6 @@ spec:
       labels:
         app: plex
     spec:
-      hostNetwork: true
       nodeSelector:
         kubernetes.io/hostname: worker-01
       containers:
