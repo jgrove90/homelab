@@ -15,6 +15,7 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/hostname: worker-01
+      hostNetowrk: true
       containers:
         - name: plex
           image: lscr.io/linuxserver/plex:latest
