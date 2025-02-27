@@ -1,0 +1,59 @@
+piVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wireguard
+  namespace: wireguard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wireguard
+  template:
+    metadata:
+      labels:
+        app: wireguard
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker-02    
+      containers:
+      - name: wireguard
+        image: linuxserver/wireguard:latest
+        securityContext:
+          privileged: true
+          capabilities:
+            add:
+              - NET_ADMIN
+              - SYS_MODULE
+        env:
+          - name: PUID
+            value: "1000"
+          - name: PGID
+            value: "1000"
+          - name: TZ
+            value: "America/Denver"
+          - name: SERVERPORT
+            value: "51820"
+          - name: PEERS
+            value: "3"  # Number of client configs to generate
+          - name: INTERNAL_SUBNET
+            value: "10.13.13.0"  # WireGuard subnet
+        ports:
+          - containerPort: 51820
+            protocol: UDP
+        volumeMounts:
+          - name: config
+            mountPath: /config
+          - name: libmodules
+            mountPath: /lib/modules
+          - name: run
+            mountPath: /var/run
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: wireguard-config
+        - name: libmodules
+          hostPath:
+            path: /lib/modules
+        - name: run
+          hostPath:
+            path: /var/run
