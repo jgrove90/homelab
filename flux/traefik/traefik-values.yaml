@@ -1,8 +1,0 @@
-values:
-  entryPoints:
-    web:
-      http:
-        redirections:
-          entryPoint:
-            to: websecure
-            scheme: https
