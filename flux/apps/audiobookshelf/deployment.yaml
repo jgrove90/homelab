@@ -81,7 +81,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi  # Match the PV size
+      storage: 10Gi
 
 ---
 apiVersion: v1
@@ -94,7 +94,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi  # Match the PV size
+      storage: 10Gi
 
 ---
 apiVersion: v1
