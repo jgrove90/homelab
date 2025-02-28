@@ -59,11 +59,11 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: audiobookshelf-books-pv
+  name: audiobookshelf-media-pv
   namespace: audiobookshelf
 spec:
   accessModes:
-    - ReadOnlyMany
+    - ReadWriteOnce
   capacity:
     storage: 10Gi
   nfs:
