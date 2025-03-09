@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: ingress-nginx
-      version: "4.10.0"  # Check latest version if needed
+      version: "4.10.0"
       sourceRef:
         kind: HelmRepository
         name: ingress-nginx
@@ -19,4 +19,4 @@ spec:
     controller:
       service:
         type: LoadBalancer
-        loadBalancerIP: 192.168.0.100 # Choose an IP from MetalLB's range
+        loadBalancerIP: 192.168.0.100
