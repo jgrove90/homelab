@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: external-dns
+  namespace: external-dns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: external-dns
+  template:
+    metadata:
+      labels:
+        app: external-dns
+    spec:
+      containers:
+      - name: external-dns
+        image: k8s.gcr.io/external-dns/external-dns:v0.15.1
+        args:
+          - --provider=cloudflare
+          - --cloudflare-proxied
+          - --cloudflare-api-token-secret=external-dns-secret
+          - --txt-owner-id=external-dns
+          - --domain-filter=alarlab.dev
+          - --policy=sync
+          - --source=ingress
+          - --registry=txt
+        env:
+          - name: CF_API_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: external-dns-secret
+                key: CF_API_TOKEN
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: external-dns
+  namespace: external-dns
+
