@@ -19,7 +19,6 @@ spec:
         args:
           - --provider=cloudflare
           - --cloudflare-proxied
-          - --cloudflare-api-token-secret=external-dns-secret
           - --txt-owner-id=external-dns
           - --domain-filter=alarlab.dev
           - --policy=sync
