@@ -4,6 +4,7 @@ metadata:
   name: audiobookshelf-ingress
   namespace: audiobookshelf
   annotations:
+    external-dns.alpha.kubernetes.io/hostname: audiobookshelf.alarlab.dev
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx 

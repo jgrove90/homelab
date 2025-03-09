@@ -30,6 +30,11 @@ spec:
               secretKeyRef:
                 name: external-dns-secret
                 key: CF_API_TOKEN
+          - name: CF_API_EMAIL
+            valueFrom:
+              secretKeyRef:
+                name: cloudflare-api-key
+                key: email
 ---
 apiVersion: v1
 kind: ServiceAccount
