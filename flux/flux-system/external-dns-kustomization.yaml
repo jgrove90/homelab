@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m
-  path: ./external-dns
+  path: flux/external-dns  # Make sure this matches your Git repo folder structure
   prune: true
   sourceRef:
     kind: GitRepository
