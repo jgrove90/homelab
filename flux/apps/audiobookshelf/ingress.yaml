@@ -5,7 +5,8 @@ metadata:
   namespace: audiobookshelf
   annotations:
     external-dns.alpha.kubernetes.io/hostname: audiobookshelf.alarlab.dev
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
+    external-dns.alpha.kubernetes.io/target: "174.16.194.223"
 spec:
   ingressClassName: nginx 
   rules:
