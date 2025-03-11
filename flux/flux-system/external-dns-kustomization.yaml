@@ -12,3 +12,5 @@ spec:
     name: flux-system
     namespace: flux-system
   targetNamespace: external-dns
+  dependsOn:
+    - name: flux-system
