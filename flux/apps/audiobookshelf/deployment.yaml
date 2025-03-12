@@ -46,6 +46,8 @@ kind: PersistentVolume
 metadata:
   name: audiobookshelf-config-pv
 spec:
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
   accessModes:
     - ReadWriteOnce
   capacity:
@@ -63,6 +65,8 @@ kind: PersistentVolume
 metadata:
   name: audiobookshelf-media-pv
 spec:
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
   accessModes:
     - ReadWriteOnce
   capacity:
