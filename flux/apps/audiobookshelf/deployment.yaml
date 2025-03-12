@@ -47,7 +47,6 @@ metadata:
   name: audiobookshelf-config-pv
 spec:
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: ""
   accessModes:
     - ReadWriteOnce
   capacity:
@@ -66,7 +65,6 @@ metadata:
   name: audiobookshelf-media-pv
 spec:
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: ""
   accessModes:
     - ReadWriteOnce
   capacity:
@@ -90,8 +88,6 @@ spec:
   resources:
     requests:
       storage: 10Gi
-  volumeName: audiobookshelf-config-pv
-  storageClassName: ""
 
 ---
 apiVersion: v1
@@ -105,8 +101,7 @@ spec:
   resources:
     requests:
       storage: 10Gi
-  volumeName: audiobookshelf-media-pv  
-  storageClassName: ""
+
 ---
 apiVersion: v1
 kind: Service
