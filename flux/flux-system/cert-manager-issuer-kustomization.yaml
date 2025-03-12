@@ -12,5 +12,5 @@ spec:
     name: flux-system
     namespace: flux-system
   dependsOn:
-    - name: cert-manager  # This ensures cert-manager is fully deployed first
+    - name: cert-manager 
   timeout: 2m
