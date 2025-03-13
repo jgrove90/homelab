@@ -175,11 +175,11 @@ spec:
     - name: bittorrent-tcp
       port: 6881
       targetPort: 6881
-      nodePort: 42308
+      nodePort: 31413
       protocol: TCP
     - name: bittorrent-udp
       port: 6881
       targetPort: 6881
-      nodePort: 42308
+      nodePort: 31413
       protocol: UDP
   type: NodePort
