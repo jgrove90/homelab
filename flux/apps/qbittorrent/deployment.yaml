@@ -44,8 +44,12 @@ spec:
                   key: private_key
             - name: HTTPPROXY
               value: "on"
-            - name: HTTPPROXY_PORT
+            - name: HTTPPROXY_LISTENING_ADDRESS
               value: "8888"
+            - name: FIREWALL_VPN_INPUT_PORTS
+              value: "8080,6881"
+            - name: FIREWALL_OUTBOUND_SUBNETS
+              value: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
           ports:
             - containerPort: 8080
               name: qbittorrent-web
