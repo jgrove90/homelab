@@ -37,6 +37,8 @@ spec:
               value: "Colorado"
             - name: SERVER_CITIES
               value: "Denver"
+            - name: SERVER_CATEGORIES
+              value: "P2P"
             - name: WIREGUARD_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:
