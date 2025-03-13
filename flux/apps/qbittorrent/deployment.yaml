@@ -17,7 +17,7 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/hostname: worker-02
-      #shareProcessNamespace: true
+      shareProcessNamespace: true
       containers:
         - name: gluetun
           image: qmcgaw/gluetun:latest
@@ -42,12 +42,6 @@ spec:
                 secretKeyRef:
                   name: nordvpn-secret
                   key: private_key
-            - name: HTTPPROXY
-              value: "on"
-            - name: HTTPPROXY_LISTENING_ADDRESS
-              value: "0.0.0.0"
-            - name: HTTPPROXY_PORT
-              value: "8888"
             - name: FIREWALL_VPN_INPUT_PORTS
               value: "8080,6881"
             - name: FIREWALL_OUTBOUND_SUBNETS
@@ -59,16 +53,9 @@ spec:
               protocol: UDP
             - containerPort: 6881
               protocol: TCP
-            - containerPort: 8888
-              name: gluetun-proxy
           volumeMounts:
             - mountPath: /tmp/gluetun
               name: gluetun-data
-          readinessProbe:
-            tcpSocket:
-              port: 8888
-            initialDelaySeconds: 10
-            periodSeconds: 10
             
         - name: qbittorrent
           image: lscr.io/linuxserver/qbittorrent:latest
