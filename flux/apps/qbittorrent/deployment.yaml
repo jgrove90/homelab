@@ -17,7 +17,7 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/hostname: worker-02
-      shareProcessNamespace: true
+      #shareProcessNamespace: true
       containers:
         - name: gluetun
           image: qmcgaw/gluetun:latest
@@ -66,6 +66,11 @@ spec:
             
         - name: qbittorrent
           image: lscr.io/linuxserver/qbittorrent:latest
+          securityContext:
+            runAsUser: 0
+            capabilities:
+              add:
+                - NET_ADMIN           
           env:
             - name: PUID
               value: "1000"
@@ -73,15 +78,6 @@ spec:
               value: "1000"
             - name: WEBUI_PORT
               value: "8080"
-            # Use the HTTP proxy from gluetun
-            - name: QBITTORRENT_USE_PROXY
-              value: "true"
-            - name: QBITTORRENT_PROXY_TYPE
-              value: "http"
-            - name: QBITTORRENT_PROXY_HOST
-              value: "localhost"
-            - name: QBITTORRENT_PROXY_PORT
-              value: "8888"
           volumeMounts:
             - mountPath: "/config"
               name: qbittorrent-config
