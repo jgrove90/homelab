@@ -1,0 +1,186 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vpn-qbittorrent
+  namespace: qbittorrent
+  labels:
+    app: vpn-qbittorrent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vpn-qbittorrent
+  template:
+    metadata:
+      labels:
+        app: vpn-qbittorrent
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker-02
+      shareProcessNamespace: true
+      containers:
+        - name: gluetun
+          image: qmcgaw/gluetun:latest
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+            privileged: true
+          env:
+            - name: VPN_SERVICE_PROVIDER
+              value: "nordvpn"
+            - name: VPN_TYPE
+              value: "wireguard"
+            - name: SERVER_COUNTRIES
+              value: "United States" 
+            - name: WIREGUARD_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: nordvpn-secret
+                  key: private_key
+          ports:
+            - containerPort: 8080
+              name: qbittorrent-web
+            - containerPort: 6881
+              protocol: UDP
+            - containerPort: 6881
+              protocol: TCP
+            - containerPort: 8888
+              name: gluetun-proxy
+          volumeMounts:
+            - mountPath: /tmp/gluetun
+              name: gluetun-data
+          readinessProbe:
+            tcpSocket:
+              port: 8888
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            
+        - name: qbittorrent
+          image: lscr.io/linuxserver/qbittorrent:latest
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: WEBUI_PORT
+              value: "8080"
+            # Use the HTTP proxy from gluetun
+            - name: QBITTORRENT_USE_PROXY
+              value: "true"
+            - name: QBITTORRENT_PROXY_TYPE
+              value: "http"
+            - name: QBITTORRENT_PROXY_HOST
+              value: "localhost"
+            - name: QBITTORRENT_PROXY_PORT
+              value: "8888"
+          volumeMounts:
+            - mountPath: "/config"
+              name: qbittorrent-config
+            - mountPath: "/downloads"
+              name: qbittorrent-downloads
+
+      volumes:
+        - name: qbittorrent-config
+          persistentVolumeClaim:
+            claimName: qbittorrent-config-pvc
+        - name: qbittorrent-downloads
+          persistentVolumeClaim:
+            claimName: qbittorrent-downloads-pvc
+        - name: gluetun-data
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: qbittorrent-config-pv
+spec:
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 2Gi
+  nfs:
+    path: /mnt/apps/qbittorrent
+    server: 192.168.0.26
+  mountOptions:
+    - nfsvers=4.1
+    - noatime
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: qbittorrent-downloads-pv
+spec:
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 100Gi
+  nfs:
+    path: mnt/apps/qbittorrent/downloads
+    server: 192.168.0.26
+  mountOptions:
+    - nfsvers=4.1
+    - noatime
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: qbittorrent-config-pvc
+  namespace: qbittorrent
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  volumeName: qbittorrent-config-pv
+  storageClassName: ""
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: qbittorrent-downloads-pvc
+  namespace: qbittorrent
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Gi
+  volumeName: qbittorrent-downloads-pv
+  storageClassName: ""
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qbittorrent-service
+  namespace: qbittorrent
+spec:
+  selector:
+    app: vpn-qbittorrent
+  ports:
+    - name: webui
+      port: 8080
+      targetPort: 8080
+      nodePort: 30080 
+      protocol: TCP
+    - name: bittorrent-tcp
+      port: 6881
+      targetPort: 6881
+      nodePort: 30681
+      protocol: TCP
+    - name: bittorrent-udp
+      port: 6881
+      targetPort: 6881
+      nodePort: 30681
+      protocol: UDP
+  type: NodePort
