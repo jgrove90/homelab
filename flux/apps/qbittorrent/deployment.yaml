@@ -17,7 +17,7 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/hostname: worker-02
-      shareProcessNamespace: true
+      #shareProcessNamespace: true
       containers:
         - name: gluetun
           image: qmcgaw/gluetun:latest
