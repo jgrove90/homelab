@@ -122,7 +122,7 @@ spec:
   capacity:
     storage: 100Gi
   nfs:
-    path: mnt/apps/qbittorrent/downloads
+    path: /mnt/apps/qbittorrent/downloads
     server: 192.168.0.26
   mountOptions:
     - nfsvers=4.1
