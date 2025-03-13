@@ -33,7 +33,15 @@ spec:
               value: "wireguard"
             - name: SERVER_COUNTRIES
               value: "United States" 
+            - name: SERVER_REGIONS
+              value: "Colorado"
+            - name: SERVER_CITIES
+              value: "Denver"
             - name: WIREGUARD_PRIVATE_KEY
+            - name: HTTPPROXY
+              value: "on"
+            - name: HTTPPROXY_PORT
+              value: "8888"
               valueFrom:
                 secretKeyRef:
                   name: nordvpn-secret
