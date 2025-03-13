@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: qbittorrent-ingress
-  namespace: qbittorrent
+  namespace: vpn-qbittorrent
   annotations:
     external-dns.alpha.kubernetes.io/hostname: qbittorrent.alarlab.dev
     external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
