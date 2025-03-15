@@ -21,7 +21,7 @@ spec:
       - name: flaresolver
         image: ghcr.io/flaresolverr/flaresolverr:latest
         ports:
-        - containerPort: 8080
+        - containerPort: 8191
         env:
         - name: PUID
           value: "1000"
@@ -40,6 +40,6 @@ spec:
     app: flaresolver
   ports:
     - protocol: TCP
-      port: 8081
-      targetPort: 8080
+      port: 8191
+      targetPort: 8191
   type: ClusterIP
