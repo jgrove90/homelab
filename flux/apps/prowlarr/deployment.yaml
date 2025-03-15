@@ -47,7 +47,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   capacity:
-    storage: 100Gi
+    storage: 10Gi
   nfs:
     path: /mnt/apps/prowlarr
     server: 192.168.0.26
