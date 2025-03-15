@@ -25,6 +25,8 @@ spec:
         volumeMounts:
         - name: config
           mountPath: /config
+        - name: tv-media
+          mountPath: /tv
         env:
         - name: PUID
           value: "1000"
@@ -36,6 +38,9 @@ spec:
       - name: config
         persistentVolumeClaim:
           claimName: sonarr-pvc
+      - name: tv-media
+        persistentVolumeClaim:
+          claimName: sonarr-tv-pvc
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -53,7 +58,23 @@ spec:
     server: 192.168.0.26
   mountOptions:
     - nfsvers=4.1
-    - noatime         
+    - noatime 
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: sonarr-tv-pv
+  namespace: sonarr
+spec:
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 10Gi
+  nfs:
+    path: /mnt/media/tv
+    server: 192.168.0.26
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -63,6 +84,18 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sonarr-tv-pvc
+  namespace: sonarr
+spec:
+  accessModes:
+    - ReadWriteMany
   resources:
     requests:
       storage: 10Gi
