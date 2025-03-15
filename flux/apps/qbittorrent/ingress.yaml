@@ -15,9 +15,20 @@ spec:
   tls:
   - hosts:
     - qbittorrent.alarlab.dev
+    - qbittorent.local
     secretName: qbittorrent-tls
   rules:
   - host: qbittorrent.alarlab.dev 
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: qbittorrent-service
+            port:
+              number: 8080
+  - host: qbittorrent.local
     http:
       paths:
       - path: /
