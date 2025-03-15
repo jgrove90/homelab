@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flaresolver
+  namespace: flaresolver
+  labels:
+    app: flaresolver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flaresolver
+  template:
+    metadata:
+      labels:
+        app: flaresolver
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker-02
+      containers:
+      - name: flaresolver
+        image: ghcr.io/flaresolverr/flaresolverr:latest
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        - name: TZ
+          value: "America/Denver"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flaresolver
+  namespace: flaresolver
+spec:
+  selector:
+    app: flaresolver
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
