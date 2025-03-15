@@ -165,16 +165,16 @@ spec:
     - name: webui
       port: 8080
       targetPort: 8080
-      nodePort: 30080 
+      #nodePort: 30080 
       protocol: TCP
     - name: bittorrent-tcp
       port: 6881
       targetPort: 6881
-      nodePort: 31413
+      #nodePort: 31413
       protocol: TCP
     - name: bittorrent-udp
       port: 6881
       targetPort: 6881
-      nodePort: 31413
+      #nodePort: 31413
       protocol: UDP
-  type: NodePort
+  type: ClusterIP
