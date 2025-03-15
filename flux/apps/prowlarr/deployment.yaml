@@ -49,7 +49,7 @@ spec:
   capacity:
     storage: 100Gi
   nfs:
-    path: /mnt/apps/prowlarr/data
+    path: /mnt/apps/prowlarr
     server: 192.168.0.26
   mountOptions:
     - nfsvers=4.1
