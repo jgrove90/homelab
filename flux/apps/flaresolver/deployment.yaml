@@ -22,9 +22,6 @@ spec:
         image: ghcr.io/flaresolverr/flaresolverr:latest
         ports:
         - containerPort: 8080
-        volumeMounts:
-        - name: config
-          mountPath: /config
         env:
         - name: PUID
           value: "1000"
