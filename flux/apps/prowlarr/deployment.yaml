@@ -35,7 +35,7 @@ spec:
       volumes:
       - name: config
         persistentVolumeClaim:
-          claimName: prowlarr-config
+          claimName: prowlarr-pvc
 ---
 apiVersion: v1
 kind: PersistentVolume
