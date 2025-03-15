@@ -17,7 +17,6 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/hostname: worker-02
-      #shareProcessNamespace: true
       dnsPolicy: None
       dnsConfig:
         nameservers:
@@ -49,10 +48,6 @@ spec:
                 secretKeyRef:
                   name: nordvpn-secret
                   key: private_key
-            # - name: FIREWALL_VPN_INPUT_PORTS
-            #   value: "8080,6881,31413"
-            # - name: FIREWALL_OUTBOUND_SUBNETS
-            #   value: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
           ports:
             - containerPort: 8080
               name: qbittorrent-web
@@ -63,7 +58,6 @@ spec:
           volumeMounts:
             - mountPath: /tmp/gluetun
               name: gluetun-data
-            
         - name: qbittorrent
           image: lscr.io/linuxserver/qbittorrent:latest
           securityContext:
@@ -85,7 +79,6 @@ spec:
               name: qbittorrent-config
             - mountPath: "/downloads"
               name: qbittorrent-downloads
-
       volumes:
         - name: qbittorrent-config
           persistentVolumeClaim:
@@ -95,7 +88,6 @@ spec:
             claimName: qbittorrent-downloads-pvc
         - name: gluetun-data
           emptyDir: {}
-
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -114,7 +106,6 @@ spec:
   mountOptions:
     - nfsvers=4.1
     - noatime
-
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -133,7 +124,6 @@ spec:
   mountOptions:
     - nfsvers=4.1
     - noatime
-
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -148,7 +138,6 @@ spec:
       storage: 2Gi
   volumeName: qbittorrent-config-pv
   storageClassName: ""
-
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -163,7 +152,6 @@ spec:
       storage: 100Gi
   volumeName: qbittorrent-downloads-pv
   storageClassName: ""
-
 ---
 apiVersion: v1
 kind: Service
