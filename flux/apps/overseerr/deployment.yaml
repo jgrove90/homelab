@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: overseerr
+  namespace: overseerr
+  labels:
+    app: overseerr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: overseerr
+  template:
+    metadata:
+      labels:
+        app: overseerr
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker-02
+      containers:
+      - name: overseerr
+        image: lscr.io/linuxserver/overseerr:latest
+        ports:
+        - containerPort: 5055
+          name: webui
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        - name: TZ
+          value: "America/Denver"
+      volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: overseerr-config-pvc
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: overseerr-config-pv
+spec:
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 5Gi
+  nfs:
+    path: /mnt/apps/overseerr
+    server: 192.168.0.26
+  mountOptions:
+    - nfsvers=4.1
+    - noatime
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: overseerr-config-pvc
+  namespace: overseerr
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: overseerr-config-pv
+  storageClassName: ""
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: overseerr-service
+  namespace: overseerr
+spec:
+  selector:
+    app: overseerr
+  ports:
+    - name: webui
+      port: 5055
+      targetPort: 5055
+  type: ClusterIP
