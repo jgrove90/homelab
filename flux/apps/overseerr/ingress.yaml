@@ -24,7 +24,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: overseerr
+            name: overseerr-service
             port:
               number: 5055
   - host: overseerr.local
@@ -36,4 +36,4 @@ spec:
           service:
             name: overseerr-service
             port:
-              number: 8080
+              number: 5055
