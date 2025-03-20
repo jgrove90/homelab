@@ -37,6 +37,9 @@ spec:
       - name: config
         persistentVolumeClaim:
           claimName: overseerr-config-pvc
+      - name: overseerr-downloads
+        persistentVolumeClaim:
+            claimName: overseerr-downloads-pvc
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -57,6 +60,24 @@ spec:
     - noatime
 ---
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: overseerr-downloads-pv
+spec:
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 100Gi
+  nfs:
+    path: /mnt/apps/qbittorrent/downloads
+    server: 192.168.0.26
+  mountOptions:
+    - nfsvers=4.1
+    - noatime
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: overseerr-config-pvc
@@ -68,6 +89,20 @@ spec:
     requests:
       storage: 1Gi
   volumeName: overseerr-config-pv
+  storageClassName: ""
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: overseerr-downloads-pvc
+  namespace: overseerr
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: overseerr-downloads-pv
   storageClassName: ""
 ---
 apiVersion: v1
