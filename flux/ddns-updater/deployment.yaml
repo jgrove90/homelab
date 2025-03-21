@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ddns-updater
+  namespace: ddns
+  labels:
+    app: ddns-updater
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ddns-updater
+  template:
+    metadata:
+      labels:
+        app: ddns-updater
+    spec:
+      containers:
+      - name: ddns-updater
+        image: qmcgaw/ddns-updater:latest
+        env:
+        - name: LOG_LEVEL
+          value: "info"
+        - name: PERIOD
+          value: "5m"
+        - name: HTTP_TIMEOUT
+          value: "10s"
+        - name: PUBLICIP_FETCHERS
+          value: "all"
+        - name: DNS_PROVIDER
+          value: "cloudflare"
+        - name: CLOUDFLARE_API_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: cloudflare-api-key
+              key: apiKey             
+        - name: CLOUDFLARE_ZONE
+          value: "alarlab.dev"
+        - name: CLOUDFLARE_HOSTNAME
+          value: "alarlab.dev"
+        ports:
+        - containerPort: 8000
+          name: webui
+        volumeMounts:
+        - name: config
+          mountPath: /updater/config
+      volumes:
+      - name: config
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ddns-updater-service
+  namespace: ddns
+spec:
+  selector:
+    app: ddns-updater
+  ports:
+  - name: webui
+    port: 8000
+    targetPort: 8000
+    protocol: TCP
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ddns-updater-ingress
+  namespace: ddns
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: ddns-updater.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ddns-updater-service
+            port:
+              number: 8000
