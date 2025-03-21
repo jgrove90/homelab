@@ -32,7 +32,7 @@ spec:
           name: webui
         volumeMounts:
         - name: config
-          mountPath: /updater/config
+          mountPath: /updater/data
       volumes:
       - name: config
         secret:
