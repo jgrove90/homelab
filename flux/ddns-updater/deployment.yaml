@@ -37,6 +37,8 @@ spec:
       - name: config
         secret:
           secretName: ddns-updater-config
+      - name: data
+        emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
