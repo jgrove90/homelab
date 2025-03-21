@@ -34,8 +34,11 @@ spec:
             secretKeyRef:
               name: cloudflare-api-key
               key: apiKey             
-        - name: CLOUDFLARE_ZONE
-          value: "alarlab.dev"
+        - name: CLOUDFLARE_ZONE_IDENTIFIER
+          valueFrom:
+            secretKeyRef:
+              name: cloudflare-zone-id
+              key: zoneId
         - name: CLOUDFLARE_HOSTNAME
           value: "alarlab.dev"
         ports:
