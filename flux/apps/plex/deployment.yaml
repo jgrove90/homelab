@@ -47,10 +47,8 @@ spec:
               name: media-tv-volume
             - mountPath: /media/movies
               name: media-movies-volume
-            - mountPath: /dev/dri/card0
-              name: card0
-            - mountPath: /dev/dri/renderD128
-              name: renderd128
+            - mountPath: /dev/dri
+              name: dri-directory
           securityContext:
             privileged: true
             capabilities:
@@ -66,11 +64,7 @@ spec:
         - name: media-movies-volume
           persistentVolumeClaim:
             claimName: plex-media-movies-pvc
-        - name: card0
+        - name: dri-directory
           hostPath:
-            path: /dev/dri/card0
-            type: CharDevice
-        - name: renderd128
-          hostPath:
-            path: /dev/dri/renderD128
-            type: CharDevice
+            path: /dev/dri
+            type: Directory
