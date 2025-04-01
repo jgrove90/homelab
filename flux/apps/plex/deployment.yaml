@@ -49,7 +49,7 @@ spec:
               name: media-movies-volume
             - mountPath: /dev/dri/card0
               name: card0
-            - mountPath: /dev/dri/renderD128
+            - mountPath: /dev/dri/renderd128
               name: renderD128
           securityContext:
             privileged: true
@@ -70,7 +70,7 @@ spec:
           hostPath:
             path: /dev/dri/card0
             type: CharDevice
-        - name: renderD128
+        - name: renderd128
           hostPath:
             path: /dev/dri/renderD128
             type: CharDevice
