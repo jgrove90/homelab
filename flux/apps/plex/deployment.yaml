@@ -49,8 +49,8 @@ spec:
               name: media-movies-volume
             - mountPath: /dev/dri/card0
               name: card0
-            - mountPath: /dev/dri/renderd128
-              name: renderD128
+            - mountPath: /dev/dri/renderD128
+              name: renderd128
           securityContext:
             privileged: true
             capabilities:
