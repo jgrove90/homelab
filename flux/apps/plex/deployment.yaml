@@ -32,6 +32,12 @@ spec:
                 secretKeyRef:
                   name: plex-claim-secret
                   key: PlexClaimToken
+            - name: NVIDIA_VISIBLE_DEVICES
+              value: "all"
+            - name: NVIDIA_DRIVER_CAPABILITIES
+              value: "all"
+            - name: INTEL_OPENCL_TMP 
+              value: "/tmp"
           volumeMounts:
             - mountPath: /config
               name: config-volume
@@ -39,6 +45,14 @@ spec:
               name: media-tv-volume
             - mountPath: /media/movies
               name: media-movies-volume
+          securityContext:
+            privileged: true
+            capabilities:
+              add:
+                - SYS_ADMIN
+          volumeDevices:
+            - name: dri-devices
+              devicePath: /dev/dri
       volumes:
         - name: config-volume
           persistentVolumeClaim:
@@ -49,3 +63,6 @@ spec:
         - name: media-movies-volume
           persistentVolumeClaim:
             claimName: plex-media-movies-pvc
+        - name: dri-devices
+          hostPath:
+            path: /dev/dri
