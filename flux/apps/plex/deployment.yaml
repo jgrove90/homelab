@@ -38,6 +38,12 @@ spec:
               value: "all"
             - name: INTEL_OPENCL_TMP 
               value: "/tmp"
+            - name: HARDWARE_ACCELERATION
+              value: "1"
+            - name: VA_DRIVER_NAME
+              value: "iHD" 
+            - name: INTEL_GPU_AUTODETECT 
+              value: "1"
           volumeMounts:
             - mountPath: /config
               name: config-volume
