@@ -32,10 +32,6 @@ spec:
                 secretKeyRef:
                   name: plex-claim-secret
                   key: PlexClaimToken
-            - name: NVIDIA_VISIBLE_DEVICES
-              value: "all"
-            - name: NVIDIA_DRIVER_CAPABILITIES
-              value: "all"
             - name: INTEL_OPENCL_TMP 
               value: "/tmp"
             - name: HARDWARE_ACCELERATION
@@ -51,8 +47,10 @@ spec:
               name: media-tv-volume
             - mountPath: /media/movies
               name: media-movies-volume
-            - mountPath: /dev/dri
-              name: dri-devices  
+            - mountPath: /dev/dri/card0
+              name: card0
+            - mountPath: /dev/dri/renderD128
+              name: renderD128
           securityContext:
             privileged: true
             capabilities:
@@ -68,6 +66,11 @@ spec:
         - name: media-movies-volume
           persistentVolumeClaim:
             claimName: plex-media-movies-pvc
-        - name: dri-devices
+        - name: card0
           hostPath:
-            path: /dev/dri
+            path: /dev/dri/card0
+            type: CharDevice
+        - name: renderD128
+          hostPath:
+            path: /dev/dri/renderD128
+            type: CharDevice
