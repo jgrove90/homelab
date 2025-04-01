@@ -45,14 +45,13 @@ spec:
               name: media-tv-volume
             - mountPath: /media/movies
               name: media-movies-volume
+            - mountPath: /dev/dri
+              name: dri-devices  
           securityContext:
             privileged: true
             capabilities:
               add:
                 - SYS_ADMIN
-          volumeDevices:
-            - name: dri-devices
-              devicePath: /dev/dri
       volumes:
         - name: config-volume
           persistentVolumeClaim:
