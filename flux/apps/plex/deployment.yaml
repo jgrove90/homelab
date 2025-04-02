@@ -40,6 +40,9 @@ spec:
               value: "iHD" 
             - name: INTEL_GPU_AUTODETECT 
               value: "1"
+          resources:
+            limits:
+              gpu.intel.com/i915: 1
           volumeMounts:
             - mountPath: /config
               name: config-volume
@@ -47,8 +50,6 @@ spec:
               name: media-tv-volume
             - mountPath: /media/movies
               name: media-movies-volume
-            - mountPath: /dev/dri
-              name: dri-directory
           securityContext:
             privileged: true
             capabilities:
@@ -64,7 +65,3 @@ spec:
         - name: media-movies-volume
           persistentVolumeClaim:
             claimName: plex-media-movies-pvc
-        - name: dri-directory
-          hostPath:
-            path: /dev/dri
-            type: Directory
