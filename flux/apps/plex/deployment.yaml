@@ -70,4 +70,4 @@ spec:
         - name: dri-volume
           hostPath:        
             path: /dev/dri  
-            type: Directory 
+            type: DirectoryOrCreate
