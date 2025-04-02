@@ -50,6 +50,8 @@ spec:
               name: media-tv-volume
             - mountPath: /media/movies
               name: media-movies-volume
+            - mountPath: /dev/dri
+              name: dri-volume
           securityContext:
             privileged: true
             capabilities:
@@ -65,3 +67,7 @@ spec:
         - name: media-movies-volume
           persistentVolumeClaim:
             claimName: plex-media-movies-pvc
+        - name: dri-volume
+          hostPath:        
+            path: /dev/dri  
+            type: Directory 
