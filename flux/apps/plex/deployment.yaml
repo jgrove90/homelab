@@ -3,8 +3,8 @@ kind: Namespace
 metadata:
   name: plex
   labels:
-  pod-security.kubernetes.io/enforce: privileged
-  pod-security.kubernetes.io/warn: privileged
+    pod-security.kubernetes.io/enforce: privileged
+    pod-security.kubernetes.io/warn: privileged
 ---
 apiVersion: apps/v1
 kind: Deployment
