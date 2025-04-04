@@ -3,6 +3,8 @@ kind: PersistentVolume
 metadata:
   name: plex-config-pv
 spec:
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
   accessModes:
     - ReadWriteOnce
   capacity:
@@ -10,6 +12,9 @@ spec:
   nfs:
     path: /mnt/apps/plex
     server: 192.168.0.26
+  mountOptions:
+    - nfsvers=4.1
+    - noatime
 
 ---
 apiVersion: v1
@@ -17,6 +22,8 @@ kind: PersistentVolume
 metadata:
   name: plex-media-tv-pv
 spec:
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
   accessModes:
     - ReadOnlyMany
   capacity:
@@ -24,6 +31,9 @@ spec:
   nfs:
     path: /mnt/media/tv
     server: 192.168.0.26
+  mountOptions:
+    - nfsvers=4.1
+    - noatime
 
 ---
 apiVersion: v1
@@ -31,6 +41,8 @@ kind: PersistentVolume
 metadata:
   name: plex-media-movies-pv
 spec:
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
   accessModes:
     - ReadOnlyMany
   capacity:
@@ -38,3 +50,6 @@ spec:
   nfs:
     path: /mnt/media/movies
     server: 192.168.0.26
+  mountOptions:
+    - nfsvers=4.1
+    - noatime
