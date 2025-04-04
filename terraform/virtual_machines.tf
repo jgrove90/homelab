@@ -55,6 +55,7 @@ resource "proxmox_virtual_environment_vm" "talos_worker_01" {
   tags        = ["terraform"]
   node_name   = "severen"
   on_boot     = true
+  machine     = "q35"
 
   cpu {
     cores = 10
