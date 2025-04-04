@@ -71,6 +71,8 @@ spec:
   resources:
     requests:
       storage: 10Gi
+  volumeName: prowlarr-pv
+  storageClassName: "" 
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
