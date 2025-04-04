@@ -61,11 +61,6 @@ spec:
               name: media-tv-volume
             - mountPath: /media/movies
               name: media-movies-volume
-          securityContext:
-            privileged: true
-            capabilities:
-              add:
-                - SYS_ADMIN
       volumes:
         - name: config-volume
           persistentVolumeClaim:
