@@ -34,18 +34,6 @@ resource "talos_machine_configuration_apply" "control_plane_config_apply" {
 }
 
 # ********************************************
-# Talos Machine Bootstrap
-# ********************************************
-
-resource "talos_machine_bootstrap" "bootstrap" {
-  depends_on           = [talos_machine_configuration_apply.control_plane_config_apply,
-                          talos_machine_configuration_apply.worker_01_config_apply, 
-                          talos_machine_configuration_apply.worker_02_config_apply]
-  client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  node                 = var.talos_control_plane_ip_addr
-}
-
-# ********************************************
 # Talos Worker Node 01 Configuration
 # ********************************************
 
@@ -85,6 +73,18 @@ resource "talos_machine_configuration_apply" "worker_02_config_apply" {
   machine_configuration_input = data.talos_machine_configuration.machineconfig_worker_02.machine_configuration
   count                       = 1
   node                        = var.talos_worker_02_ip_addr
+}
+
+# ********************************************
+# Talos Machine Bootstrap
+# ********************************************
+
+resource "talos_machine_bootstrap" "bootstrap" {
+  depends_on           = [talos_machine_configuration_apply.control_plane_config_apply,
+                          talos_machine_configuration_apply.worker_01_config_apply, 
+                          talos_machine_configuration_apply.worker_02_config_apply]
+  client_configuration = talos_machine_secrets.machine_secrets.client_configuration
+  node                 = var.talos_control_plane_ip_addr
 }
 
 # ********************************************
