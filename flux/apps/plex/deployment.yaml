@@ -71,3 +71,114 @@ spec:
         - name: media-movies-volume
           persistentVolumeClaim:
             claimName: plex-media-movies-pvc
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: plex-config-pv
+spec:
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 10Gi
+  nfs:
+    path: /mnt/apps/plex
+    server: 192.168.0.26
+  mountOptions:
+    - nfsvers=4.1
+    - noatime
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: plex-media-tv-pv
+spec:
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  accessModes:
+    - ReadOnlyMany
+  capacity:
+    storage: 10Gi
+  nfs:
+    path: /mnt/media/tv
+    server: 192.168.0.26
+  mountOptions:
+    - nfsvers=4.1
+    - noatime
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: plex-media-movies-pv
+spec:
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  accessModes:
+    - ReadOnlyMany
+  capacity:
+    storage: 10Gi
+  nfs:
+    path: /mnt/media/movies
+    server: 192.168.0.26
+  mountOptions:
+    - nfsvers=4.1
+    - noatime
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: plex-config-pvc
+  namespace: plex
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeName: plex-config-pv
+  storageClassName: "" 
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: plex-media-tv-pvc
+  namespace: plex
+spec:
+  accessModes:
+    - ReadOnlyMany
+  volumeName: plex-media-tv-pv
+  storageClassName: "" 
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: plex-media-movies-pvc
+  namespace: plex
+spec:
+  accessModes:
+    - ReadOnlyMany
+  volumeName: plex-media-movies-pv
+  storageClassName: "" 
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: plex-service
+  namespace: plex
+spec:
+  selector:
+    app: plex
+  ports:
+    - protocol: TCP
+      port: 32400
+      targetPort: 32400
+      hostport: 32400
+  type: NodePort
