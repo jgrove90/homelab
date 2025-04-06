@@ -4,4 +4,5 @@ metadata:
   name: intel-gpu-plugin 
 namespace: intel-device-plugins-system
 resources:
+  - namespace.yaml
   - https://raw.githubusercontent.com/intel/intel-device-plugins-for-kubernetes/main/deployments/gpu_plugin/base/intel-gpu-plugin.yaml
