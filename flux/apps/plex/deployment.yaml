@@ -182,6 +182,21 @@ spec:
       targetPort: 32400
   type: ClusterIP
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: plex-external
+  namespace: plex
+spec:
+  selector:
+    app: plex
+  ports:
+    - protocol: TCP
+      port: 32400
+      targetPort: 32400
+      nodePort: 32400
+  type: NodePort
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
