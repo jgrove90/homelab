@@ -32,11 +32,11 @@ spec:
               value: "1000"
             - name: TZ
               value: "America/Denver"
-            - name: PLEX_CLAIM
-              valueFrom:
-                secretKeyRef:
-                  name: plex-claim-secret
-                  key: PlexClaimToken
+            # - name: PLEX_CLAIM
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: plex-claim-secret
+            #       key: PlexClaimToken
             - name: INTEL_OPENCL_TMP 
               value: "/tmp"
             - name: HARDWARE_ACCELERATION
