@@ -1,0 +1,104 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: wizarr
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wizarr
+  namespace: wizarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wizarr
+  template:
+    metadata:
+      labels:
+        app: wizarr
+    spec:
+      containers:
+      - name: wizarr
+        image: ghcr.io/wizarrrr/wizarr:latest
+        ports:
+        - containerPort: 5690
+          name: web
+        env:
+        - name: TZ
+          value: "America/Denver"
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        volumeMounts:
+        - name: config
+          mountPath: /data
+      volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: wizarr-config-pvc
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: wizarr-config-pv
+spec:
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  nfs:
+    path: /mnt/apps/wizarr
+    server: 192.168.0.26
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wizarr-config-pvc
+  namespace: wizarr
+spec:
+  storageClassName: ""
+  accessModes:
+    - ReadWriteOnce
+  volumeName: wizarr-config-pv
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wizarr-service
+  namespace: wizarr
+spec:
+  selector:
+    app: wizarr
+  ports:
+  - port: 5690
+    targetPort: 5690
+    protocol: TCP
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: wizarr-ingress
+  namespace: wizarr
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: wizarr.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: wizarr-service
+            port:
+              number: 5690
