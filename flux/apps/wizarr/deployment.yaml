@@ -27,10 +27,10 @@ spec:
         env:
         - name: TZ
           value: "America/Denver"
-        - name: PUID
-          value: "1000"
-        - name: PGID
-          value: "1000"
+        # - name: PUID
+        #   value: "1000"
+        # - name: PGID
+        #   value: "1000"
         volumeMounts:
         - name: config
           mountPath: /data
