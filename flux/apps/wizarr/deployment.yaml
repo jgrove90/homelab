@@ -18,10 +18,6 @@ spec:
       labels:
         app: wizarr
     spec:
-      securityContext:
-        fsGroup: 1000
-        runAsUser: 1000
-        runAsGroup: 1000
       nodeSelector:
         kubernetes.io/hostname: worker-02
       containers:
@@ -39,7 +35,7 @@ spec:
           value: "1000"
         volumeMounts:
         - name: config
-          mountPath: /data
+          mountPath: /data/database
       volumes:
       - name: config
         persistentVolumeClaim:
