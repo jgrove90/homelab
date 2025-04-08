@@ -47,7 +47,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: ""
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   capacity:
     storage: 1Gi
   nfs:
@@ -62,7 +62,7 @@ metadata:
 spec:
   storageClassName: ""
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   volumeName: wizarr-config-pv
   resources:
     requests:
