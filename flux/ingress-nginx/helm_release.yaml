@@ -6,7 +6,7 @@ metadata:
 spec:
   install:
     createNamespace: true
-  interval: 10m
+  interval: 24h
   chart:
     spec:
       chart: ingress-nginx
