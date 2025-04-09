@@ -14,7 +14,7 @@ metadata:
   name: external-dns
   namespace: external-dns
 spec:
-  interval: 24hr
+  interval: 24h
   chart:
     spec:
       chart: external-dns
@@ -23,7 +23,7 @@ spec:
         kind: HelmRepository
         name: external-dns
         namespace: external-dns
-      interval: 24hr
+      interval: 24h
   values:
     provider: 
       name: cloudflare
