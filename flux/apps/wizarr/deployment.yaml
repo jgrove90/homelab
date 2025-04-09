@@ -115,7 +115,7 @@ spec:
           service:
             name: wizarr-service
             port:
-              number: 5055
+              number: 5690
   - host: wizarr.local
     http:
       paths:
