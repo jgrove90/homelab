@@ -4,7 +4,7 @@ metadata:
   name: external-dns
   namespace: external-dns
 spec:
-  interval: 1h
+  interval: 24h
   url: https://kubernetes-sigs.github.io/external-dns/
 
 ---
@@ -14,7 +14,7 @@ metadata:
   name: external-dns
   namespace: external-dns
 spec:
-  interval: 1m
+  interval: 24hr
   chart:
     spec:
       chart: external-dns
@@ -23,9 +23,14 @@ spec:
         kind: HelmRepository
         name: external-dns
         namespace: external-dns
-      interval: 1m
+      interval: 24hr
   values:
-    provider: cloudflare
+    provider: 
+      name: cloudflare
+    cloudflare:
+      proxied: true
+    domainFilters:
+      - "alarlab.dev"
     env:
       - name: CF_API_TOKEN
         valueFrom:
