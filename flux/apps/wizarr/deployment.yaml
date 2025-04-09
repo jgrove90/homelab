@@ -103,7 +103,7 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - https://plex-invite.alarlab.dev
+    - plex-invite.alarlab.dev
     secretName: wizarr-tls
   rules:
   - host: plex-invite.alarlab.dev
