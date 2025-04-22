@@ -3,3 +3,5 @@ kind: Kustomization
 resources:
 - gotk-components.yaml
 - gotk-sync.yaml
+- postgres-kustomization.yaml
+- sops-age-secret-kustomization.yaml
