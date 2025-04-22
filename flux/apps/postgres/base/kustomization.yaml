@@ -1,0 +1,5 @@
+resources:
+  - statefulset.yaml
+  - pvc.yaml
+  - pv.yaml
+  - service.yaml

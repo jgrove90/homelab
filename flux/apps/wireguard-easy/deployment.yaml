@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: wireguard
+  name: wireguard-easy
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: wireguard
-  namespace: wireguard
+  namespace: wireguard-easy
 spec:
   replicas: 1
   selector:
@@ -39,7 +39,7 @@ spec:
           - name: SERVERPORT
             value: "51820"
           - name: PEERS
-            value: "3"  # Number of client configs to generate
+            value: "3" 
           - name: INTERNAL_SUBNET
             value: "10.13.13.0"  # WireGuard subnet
         ports:
@@ -62,3 +62,48 @@ spec:
         - name: run
           hostPath:
             path: /var/run
+--- 
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: wireguard-config-pv
+spec:
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  nfs:
+    path: /mnt/apps/wireguard
+    server: 192.168.0.26
+--- 
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wireguard-config-pvc
+  namespace: wireguard-easy
+spec:
+  storageClassName: ""
+  accessModes:
+    - ReadWriteOnce
+  volumeName: wireguard-config-pv
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wireguard-service
+  namespace: wireguard-easy
+spec:
+  selector:
+    app: wireguard
+  ports:
+    - protocol: UDP
+      port: 51820
+      targetPort: 51820
+      hostport: 51820
+      nodePort: 31820
+  type: NodePort
