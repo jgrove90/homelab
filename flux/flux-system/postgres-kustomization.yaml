@@ -4,7 +4,7 @@ metadata:
   name: postgres
 spec:
   interval: 24h
-  path: ./apps/postgres/production
+  path: ./flux/apps/postgres/production
   prune: true
   sourceRef:
     kind: GitRepository
