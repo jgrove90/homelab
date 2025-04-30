@@ -23,6 +23,7 @@ spec:
             add:
               - NET_ADMIN
               - SYS_MODULE
+          privileged: true
         ports:
         - containerPort: 51820
           protocol: UDP
