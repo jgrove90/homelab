@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
-  path: ./flux/apps/postgres
+  path: ./flux/databases/postgres
   prune: true
   targetNamespace: postgres
   sourceRef:
