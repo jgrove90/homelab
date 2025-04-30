@@ -29,11 +29,9 @@ spec:
           protocol: UDP
         - containerPort: 51821
           protocol: TCP
-        env:
-        - name: WG_HOST
-          value: alarlab.dev
-        - name: WG_PORT
-          value: 31820
+        envFrom:
+        - configMapRef:
+            name: wireguard-config
         volumeMounts:
         - name: wireguard-config
           mountPath: /etc/wireguard

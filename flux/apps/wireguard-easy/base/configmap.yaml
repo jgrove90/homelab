@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wireguard-config
+  namespace: wireguard-easy
+data:
+  WG_HOST: "alarlab.dev"
+  WG_PORT: "31820"
+  WG_DEFAULT_DNS: "8.8.8.8, 1.1.1.1"
+  WG_ALLOWED_IPS: "0.0.0.0/0, ::/0"
