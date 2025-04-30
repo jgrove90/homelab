@@ -16,7 +16,7 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: worker-02
       containers:
-      - image: weejewel/wg-easy
+      - image: ghcr.io/wg-easy/wg-easy:latest
         name: wireguard-easy
         securityContext:
           capabilities:
