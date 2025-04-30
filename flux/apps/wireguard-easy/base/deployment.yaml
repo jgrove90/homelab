@@ -31,7 +31,7 @@ spec:
           protocol: TCP
         env:
         - name: WG_HOST
-          value: wireguard-easy.local
+          value: alarlab.dev
         volumeMounts:
         - name: wireguard-config
           mountPath: /etc/wireguard
