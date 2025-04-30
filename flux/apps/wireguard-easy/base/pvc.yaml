@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  namespace: postgres
-  name: postgres-data
+  namespace: wireguard-easy
+  name: wireguard-easy-pvc
 spec:
   storageClassName: ""
-  volumeName: postgres-pv
+  volumeName: wireguard-easy-pv
   accessModes:
     - ReadWriteMany
   resources:

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wireguard-easy
+  namespace: wireguard-easy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wireguard-easy
+  template:
+    metadata:
+      labels:
+        app: wireguard-easy
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker-02
+      containers:
+      - image: weejewel/wg-easy
+        name: wireguard-easy
+        ports:
+        - containerPort: 51820
+          protocol: UDP
+        - containerPort: 51821
+          protocol: TCP
+        env:
+        - name: WG_HOST
+          value: wireguard-easy.local

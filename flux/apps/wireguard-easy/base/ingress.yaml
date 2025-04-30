@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: wireguard-easy-ui
+  namespace: wireguard-easy
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"  # Changed to false for local access
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: wireguard-easy.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: wireguard-easy-ui
+                port:
+                  number: 51821

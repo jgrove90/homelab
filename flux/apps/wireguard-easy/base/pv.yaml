@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: postgres-pv
+  name: wireguard-easy-pv
 spec:
   capacity:
     storage: 20Gi
   accessModes:
     - ReadWriteMany
   nfs:
-    path: /mnt/apps/postgres
+    path: /mnt/apps/wireguard-easy
     server: 192.168.0.26  
   persistentVolumeReclaimPolicy: Retain
   storageClassName: ""
