@@ -26,3 +26,10 @@ spec:
         env:
         - name: WG_HOST
           value: wireguard-easy.local
+        volumeMounts:
+        - name: wireguard-config
+          mountPath: /etc/wireguard
+      volumes:
+      - name: wireguard-config
+        persistentVolumeClaim:
+          claimName: wireguard-easy-pvc
