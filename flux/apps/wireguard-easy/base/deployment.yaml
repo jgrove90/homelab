@@ -18,6 +18,11 @@ spec:
       containers:
       - image: weejewel/wg-easy
         name: wireguard-easy
+        securityContext:
+          capabilities:
+            add:
+              - NET_ADMIN
+              - SYS_MODULE
         ports:
         - containerPort: 51820
           protocol: UDP
