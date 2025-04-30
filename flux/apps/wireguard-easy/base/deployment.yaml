@@ -33,7 +33,7 @@ spec:
         - name: WG_HOST
           value: alarlab.dev
         - name: WG_PORT
-          value: 51820
+          value: 31820
         volumeMounts:
         - name: wireguard-config
           mountPath: /etc/wireguard
