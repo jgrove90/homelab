@@ -4,6 +4,6 @@ resources:
   - pvc.yaml
   - configmap.yaml
   - deployment.yaml
-  - service-clusterip.yaml
+  - service-externalname.yaml
   - service-nodeport.yaml
   - ingress.yaml
