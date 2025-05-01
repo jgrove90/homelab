@@ -13,6 +13,7 @@ spec:
       labels:
         app: wireguard-easy
     spec:
+      hostNetwork: true
       nodeSelector:
         kubernetes.io/hostname: worker-02
       containers:

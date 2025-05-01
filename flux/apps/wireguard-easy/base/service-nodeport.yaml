@@ -11,5 +11,4 @@ spec:
       port: 51820
       targetPort: 51820
       protocol: UDP
-      nodePort: 31820
-  type: NodePort
+  clusterIP: None 

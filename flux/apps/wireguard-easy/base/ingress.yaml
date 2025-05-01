@@ -4,7 +4,10 @@ metadata:
   name: wireguard-easy-ui
   namespace: wireguard-easy
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"  # Changed to false for local access
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/upstream-vhost: "worker-02"
+    nginx.ingress.kubernetes.io/service-upstream: "false"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
 spec:
   ingressClassName: nginx
   rules:
