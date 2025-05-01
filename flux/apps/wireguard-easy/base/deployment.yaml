@@ -15,8 +15,6 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/hostname: worker-02
-      hostNetwork: true
-      dnsPolicy: ClusterFirstWithHostNet
       containers:
       - image: ghcr.io/wg-easy/wg-easy:latest
         name: wireguard-easy
