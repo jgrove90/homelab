@@ -4,6 +4,7 @@ metadata:
   name: wireguard-easy-vpn
   namespace: wireguard-easy
 spec:
+  type: NodePort
   selector:
     app: wireguard-easy
   ports:
@@ -11,4 +12,4 @@ spec:
       port: 51820
       targetPort: 51820
       protocol: UDP
-  clusterIP: None 
+      nodePort: 31820
