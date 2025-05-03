@@ -5,7 +5,7 @@ metadata:
   name: wg-easy-pvc
 spec:
   storageClassName: ""
-  volumeName: wireguard-easy-pv
+  volumeName: wg-easy-pv
   accessModes:
     - ReadWriteMany
   resources:

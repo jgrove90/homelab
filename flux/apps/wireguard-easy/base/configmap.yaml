@@ -5,6 +5,6 @@ metadata:
   namespace: wg-easy
 data:
   WG_HOST: "vpn.alarlab.dev"
-  WG_PORT: "31820"
+  WG_PORT: "51820"
   WG_DEFAULT_DNS: "8.8.8.8, 1.1.1.1"
   WG_ALLOWED_IPS: "0.0.0.0/0, ::/0"

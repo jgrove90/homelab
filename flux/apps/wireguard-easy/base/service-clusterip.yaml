@@ -7,7 +7,7 @@ spec:
   type: ClusterIP
   ports:
     - name: wg-easy-ui
-      protocol: UDP
+      protocol: TCP
       port: 51821
       targetPort: 51821
   selector:
