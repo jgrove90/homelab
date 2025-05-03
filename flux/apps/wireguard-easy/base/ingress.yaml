@@ -1,23 +1,20 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: wireguard-easy-ui
-  namespace: wireguard-easy
+  name: wg-easy-ui
+  namespace: wg-easy
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    nginx.ingress.kubernetes.io/upstream-vhost: "worker-02"
-    nginx.ingress.kubernetes.io/service-upstream: "false"
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "192.168.0.0/16,10.0.0.0/8"
 spec:
   ingressClassName: nginx
   rules:
-    - host: wireguard-easy.local
+    - host: wg-easy.local
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: wireguard-easy-ui
+                name: wg-easy-ui
                 port:
                   number: 51821

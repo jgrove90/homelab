@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  namespace: wireguard-easy
-  name: wireguard-easy-pvc
+  namespace: wg-easy
+  name: wg-easy-pvc
 spec:
   storageClassName: ""
   volumeName: wireguard-easy-pv

@@ -1,24 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: wireguard-easy
-  namespace: wireguard-easy
+  name: wg-easy
+  namespace: wg-easy
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: wireguard-easy
+      app: wg-easy
   template:
     metadata:
       labels:
-        app: wireguard-easy
+        app: wg-easy
     spec:
-      hostNetwork: true
       nodeSelector:
         kubernetes.io/hostname: worker-02
       containers:
       - image: ghcr.io/wg-easy/wg-easy:latest
-        name: wireguard-easy
+        name: wg-easy
         securityContext:
           capabilities:
             add:
@@ -32,11 +31,11 @@ spec:
           protocol: TCP
         envFrom:
         - configMapRef:
-            name: wireguard-config
+            name: wg-easy-config
         volumeMounts:
-        - name: wireguard-config
+        - name: wg-easy-pv
           mountPath: /etc/wireguard
       volumes:
-      - name: wireguard-config
+      - name: wg-easy-pv
         persistentVolumeClaim:
-          claimName: wireguard-easy-pvc
+          claimName: wg-easy-pvc

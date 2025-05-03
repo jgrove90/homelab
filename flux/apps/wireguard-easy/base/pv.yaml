@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: wireguard-easy-pv
+  name: wg-easy-pv
 spec:
   capacity:
     storage: 20Gi
@@ -12,3 +12,6 @@ spec:
     server: 192.168.0.26  
   persistentVolumeReclaimPolicy: Retain
   storageClassName: ""
+  mountOptions:
+    - nfsvers=4.1
+    - noatime
