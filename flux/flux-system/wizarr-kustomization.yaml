@@ -1,0 +1,13 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: wizarr
+  namespace: flux-system
+spec:
+  interval: 24h
+  path: ./flux/apps/wizarr
+  prune: true
+  targetNamespace: wizarr
+  sourceRef:
+    kind: GitRepository
+    name: flux-system  

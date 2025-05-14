@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wizarr
+  namespace: wizarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wizarr
+  template:
+    metadata:
+      labels:
+        app: wizarr
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker-02
+      containers:
+      - name: wizarr
+        image: ghcr.io/wizarrrr/wizarr:latest
+        ports:
+        - containerPort: 5690
+          name: web
+        env:
+        - name: BASE_URL
+          value: "https://plex-invite.alarlab.dev"
+        - name: TZ
+          value: "America/Denver"
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        volumeMounts:
+        - name: config
+          mountPath: /data/database
+      volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: wizarr-config-pvc
