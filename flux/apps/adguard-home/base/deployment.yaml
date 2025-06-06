@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adguard
+  namespace: adguard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: adguard
+  template:
+    metadata:
+      labels:
+        app: adguard
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker-02
+      containers:
+      - name: adguard
+        image: adguard/adguardhome:latest
+        ports:
+        - containerPort: 53
+          protocol: UDP
+          name: dns-udp
+        - containerPort: 53
+          protocol: TCP
+          name: dns-tcp
+        - containerPort: 80
+          name: http
+        - containerPort: 443
+          name: https
+        - containerPort: 3000
+          name: dns-setup
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
+        volumeMounts:
+        - name: adguard-work
+          mountPath: /opt/adguardhome/work
+          subPath: work
+        - name: adguard-conf
+          mountPath: /opt/adguardhome/conf
+          subPath: conf
+      volumes:
+      - name: adguard-work
+        persistentVolumeClaim:
+          claimName: adguard-work-pvc
+      - name: adguard-conf
+        persistentVolumeClaim:
+          claimName: adguard-conf-pvc
