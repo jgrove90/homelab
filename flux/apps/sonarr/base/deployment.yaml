@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarr
+  namespace: sonarr
+  labels:
+    app: sonarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarr
+  template:
+    metadata:
+      labels:
+        app: sonarr
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker-02
+      containers:
+      - name: sonarr
+        image: lscr.io/linuxserver/sonarr:latest
+        ports:
+        - containerPort: 8989
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: tv-media
+          mountPath: /tv-media
+        - name: downloads
+          mountPath: /downloads
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        - name: TZ
+          value: "America/Denver"
+      volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: sonarr-pvc
+      - name: tv-media
+        persistentVolumeClaim:
+          claimName: sonarr-tv-pvc
+      - name: downloads
+        persistentVolumeClaim:
+          claimName: sonarr-downloads-pvc

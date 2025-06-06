@@ -25,10 +25,9 @@ spec:
         namespace: external-dns
       interval: 24h
   values:
-    provider: 
-      name: cloudflare
+    provider: cloudflare
     cloudflare:
-      proxied: true
+      proxied: false
     domainFilters:
       - "alarlab.dev"
     env:
