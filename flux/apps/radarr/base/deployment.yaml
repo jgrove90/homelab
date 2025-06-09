@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: radarr
+  namespace: radarr
+  labels:
+    app: radarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: radarr
+  template:
+    metadata:
+      labels:
+        app: radarr
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker-02
+      containers:
+      - name: radarr
+        image: lscr.io/linuxserver/radarr:latest
+        ports:
+        - containerPort: 7878
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: movies-media
+          mountPath: /movies-media
+        - name: downloads
+          mountPath: /downloads
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        - name: TZ
+          value: "America/Denver"
+      volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: radarr-pvc
+      - name: movies-media
+        persistentVolumeClaim:
+          claimName: radarr-movies-pvc
+      - name: downloads
+        persistentVolumeClaim:
+          claimName: radarr-downloads-pvc
