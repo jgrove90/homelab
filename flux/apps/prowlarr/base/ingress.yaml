@@ -8,7 +8,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: prowlarr.local
+  - host: prowlarr.home
     http:
       paths:
       - path: /

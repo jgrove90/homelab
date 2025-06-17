@@ -27,7 +27,7 @@ spec:
             name: qbittorrent-service
             port:
               number: 8080
-  - host: qbittorrent.local
+  - host: qbittorrent.home
     http:
       paths:
       - path: /

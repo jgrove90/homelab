@@ -9,7 +9,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: adguard.local
+  - host: adguard.home
     http:
       paths:
       - path: /

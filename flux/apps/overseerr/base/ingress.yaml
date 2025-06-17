@@ -28,7 +28,7 @@ spec:
             name: overseerr-service
             port:
               number: 5055
-  - host: overseerr.local
+  - host: overseerr.home
     http:
       paths:
       - path: /

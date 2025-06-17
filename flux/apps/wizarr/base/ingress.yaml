@@ -28,7 +28,7 @@ spec:
             name: wizarr-service
             port:
               number: 5690
-  - host: wizarr.local
+  - host: wizarr.home
     http:
       paths:
       - path: /
