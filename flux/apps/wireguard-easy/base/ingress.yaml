@@ -4,11 +4,11 @@ metadata:
   name: wg-easy-ui
   namespace: wg-easy
   annotations:
-    nginx.ingress.kubernetes.io/whitelist-source-range: "192.168.0.0/16,10.0.0.0/8"
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
   rules:
-    - host: wg-easy.local
+    - host: wg-easy.home
       http:
         paths:
           - path: /

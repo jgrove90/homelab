@@ -26,8 +26,10 @@ spec:
           privileged: true
         ports:
         - containerPort: 51820
+          name: wg-vpn
           protocol: UDP
         - containerPort: 51821
+          name: wg-easy-ui
           protocol: TCP
         envFrom:
         - configMapRef:
@@ -39,3 +41,4 @@ spec:
       - name: wg-easy-pv
         persistentVolumeClaim:
           claimName: wg-easy-pvc
+      restartPolicy: Always

@@ -4,11 +4,10 @@ metadata:
   name: wg-easy-ui
   namespace: wg-easy
 spec:
-  type: ClusterIP
-  ports:
-    - name: wg-easy-ui
-      protocol: TCP
-      port: 51821
-      targetPort: 51821
   selector:
     app: wg-easy
+  ports:
+    - name: wg-easy-ui
+      port: 51821
+      targetPort: 51821
+  type: ClusterIP
