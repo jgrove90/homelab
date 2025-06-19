@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
-  path: ./flux/apps/architecture/ddns-updater
+  path: ./flux/architecture/ddns-updater
   prune: true
   targetNamespace: ddns-updater
   sourceRef:
