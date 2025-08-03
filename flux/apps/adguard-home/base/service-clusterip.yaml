@@ -8,11 +8,8 @@ spec:
     app: adguard
   ports:
   - name: http
-    port: 80
-    targetPort: 80
-  - name: https
-    port: 443
-    targetPort: 443
+    port: 8080
+    targetPort: 8080
   - name: dns-setup
     port: 3000
     targetPort: 3000

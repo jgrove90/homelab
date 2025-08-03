@@ -4,7 +4,7 @@ metadata:
   name: adguard-ingress
   namespace: adguard
   annotations:
-    nginx.ingress.kubernetes.io/whitelist-source-range: "192.168.0.0/16,10.0.0.0/8"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "192.168.1.0/16,10.0.0.0/8"
     nginx.ingress.kubernetes.io/proxy-body-size: "128m"
 spec:
   ingressClassName: nginx
@@ -18,4 +18,4 @@ spec:
           service:
             name: adguard-ui
             port:
-              number: 80 # changed from 3000 (initial setup)
+              number: 8080 # changed from 3000 (initial setup)
