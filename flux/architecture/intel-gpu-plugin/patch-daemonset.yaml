@@ -1,0 +1,10 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: intel-gpu-plugin
+  namespace: intel-device-plugins-system
+spec:
+  template:
+    spec:
+      nodeSelector:
+        hardware.type: intel-gpu

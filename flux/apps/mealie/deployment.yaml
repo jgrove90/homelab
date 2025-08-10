@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mealie
+  namespace: mealie
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mealie
+  template:
+    metadata:
+      labels:
+        app: mealie
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker-02
+      containers:
+        - name: mealie
+          image: ghcr.io/mealie-recipes/mealie:latest
+          ports:
+            - containerPort: 9000
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "America/Denver"
+            - name: BASE_URL
+              value: "https://mealie.alarlab.dev"
+            - name: DB_ENGINE
+              value: "postgres"
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mealie-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mealie-secret
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_SERVER
+              value: "192.168.1.15"
+            - name: POSTGRES_PORT
+              value: "30432"
+            - name: POSTGRES_DB
+              value: "mealie"
+            - name: SMTP_HOST
+              value: "smtp.gmail.com"
+            - name: SMTP_PORT
+              value: "587"
+            - name: SMTP_FROM_NAME
+              value: "Mealie Recipe Manager"
+            - name: SMTP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mealie-secret
+                  key: SMTP_USER
+            - name: SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mealie-secret
+                  key: SMTP_PASSWORD
+            - name: SMTP_FROM_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: mealie-secret
+                  key: SMTP_USER
+          volumeMounts:
+            - name: config-volume
+              mountPath: /app/mealie
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+        - name: config-volume
+          persistentVolumeClaim:
+            claimName: mealie-config-pvc

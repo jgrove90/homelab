@@ -48,6 +48,16 @@ spec:
                 secretKeyRef:
                   name: nordvpn-secret
                   key: private_key
+            - name: HEALTH_TARGET_ADDRESS
+              value: "cloudflare.com:443"
+            - name: HEALTH_VPN_DURATION_INITIAL
+              value: "10s"
+            - name: HEALTH_VPN_DURATION_ADDITION
+              value: "5s"
+            - name: HEALTH_SUCCESS_WAIT_DURATION
+              value: "30s"  # Check every 30 seconds
+            - name: HEALTH_SERVER_ADDRESS
+              value: "127.0.0.1:9999"
           ports:
             - containerPort: 8080
               name: qbittorrent-web

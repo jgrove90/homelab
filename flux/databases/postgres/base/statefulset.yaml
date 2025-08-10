@@ -14,6 +14,8 @@ spec:
       labels:
         app: postgres
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker-02
       containers:
         - name: postgres
           image: postgres:17
@@ -28,14 +30,9 @@ spec:
             - secretRef:
                 name: postgres-secret
           volumeMounts:
-            - name: postgres-storage
+            - name: postgres-pv
               mountPath: /var/lib/postgresql/data
-  volumeClaimTemplates:
-    - metadata:
-        name: postgres-storage
-      spec:
-        storageClassName: ""
-        accessModes: ["ReadWriteMany"]
-        resources:
-          requests:
-            storage: 20Gi
+      volumes:
+        - name: postgres-pv
+          persistentVolumeClaim:
+            claimName: postgres-data

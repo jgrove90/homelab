@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
-  path: "./flux/cert-manager"
+  path: "./flux/architecture/cert-manager"
   prune: true
   sourceRef:
     kind: GitRepository

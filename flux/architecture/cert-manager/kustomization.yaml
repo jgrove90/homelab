@@ -3,3 +3,5 @@ kind: Kustomization
 resources:
   - helm_repo.yaml
   - helm_release.yaml
+  - namespace.yaml
+  - cluster-issuer.yaml

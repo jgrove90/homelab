@@ -7,7 +7,7 @@ variable "talos_os_version" {
 variable "proxmox_endpoint" {
   description = "The endpoint URL for the Proxmox server"
   type        = string
-  default     = "https://192.168.0.10:8006"
+  default     = "https://192.168.1.101:8006"
 }
 
 variable "proxmox_api_key" {
@@ -37,23 +37,29 @@ variable "cluster_name" {
 variable "default_gateway" {
   description = "The gateway for the network"
   type        = string
-  default     = "192.168.0.1"
+  default     = "192.168.1.1"
 }
 
 variable "talos_control_plane_ip_addr" {
-  description = "The IP address of the control plane node"
+  description = "The IP address of the control plane node (severen)"
   type        = string
-  default     = "192.168.0.41"
+  default     = "192.168.1.19"
 }
 
 variable "talos_worker_01_ip_addr" {
-  description = "The IP address of the first worker node"
+  description = "The IP address of the first worker node (severen)"
   type        = string
-  default     = "192.168.0.42"
+  default     = "192.168.1.20"
 }
 
 variable "talos_worker_02_ip_addr" {
-  description = "The IP address of the second worker node"
+  description = "The IP address of the second worker node (imre)"
   type        = string
-  default     = "192.168.0.35"
+  default     = "192.168.1.15"
+}
+
+variable "dns_vpn_services_ip_addr" {
+  description = "The IP address of the DNS and VPN services VM"
+  type        = string
+  default     = "192.168.1.120" 
 }

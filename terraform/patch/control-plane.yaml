@@ -1,5 +1,16 @@
 machine:
   network:
     hostname: control-plane
+    interfaces:
+      - interface: eth0
+        dhcp: false
+        addresses:
+          - 192.168.1.19/24
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 192.168.1.1
+    nameservers:
+      - 75.75.75.75
+      - 8.8.8.8 
   install:
     image: factory.talos.dev/installer/d3dc673627e9b94c6cd4122289aa52c2484cddb31017ae21b75309846e257d30:v1.9.4

@@ -6,7 +6,7 @@ metadata:
 data:
   WG_HOST: "vpn.alarlab.dev"
   WG_PORT: "51820"
-  WG_DEFAULT_DNS: "192.168.0.103"
-  WG_ALLOWED_IPS: "192.168.0.0/16, 10.0.0.0/8"
+  WG_DEFAULT_DNS: "192.168.1.111"
+  WG_ALLOWED_IPS: "192.168.1.0/16, 10.0.0.0/8"
   WG_WEB_UI_HOST: "0.0.0.0, ::/0"
   WG_WEB_UI_PORT: "51821"

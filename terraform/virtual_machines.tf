@@ -1,7 +1,7 @@
 resource "proxmox_virtual_environment_vm" "talos_control_plane" {
   name        = "talos-control-plane"
   description = "Managed by Terraform"
-  tags        = ["terraform"]
+  tags        = ["terraform","talos-os"]
   node_name   = "severen"
   on_boot     = true
 
@@ -35,35 +35,33 @@ resource "proxmox_virtual_environment_vm" "talos_control_plane" {
     type = "l26" # Linux Kernel 2.6 - 5.X.
   }
 
-  initialization {
-    datastore_id = "local-lvm"
-    ip_config {
-      ipv4 {
-        address = "${var.talos_control_plane_ip_addr}/24"
-        gateway = var.default_gateway
-      }
-      ipv6 {
-        address = "dhcp"
-      }
-    }
-  }
+  # initialization {
+  #   datastore_id = "local-lvm"
+  #   ip_config {
+  #     ipv4 {
+  #       address = "${var.talos_control_plane_ip_addr}/24"
+  #       gateway = var.default_gateway
+  #     }
+  #   }
+  # }
 }
+
 
 resource "proxmox_virtual_environment_vm" "talos_worker_01" {
   name        = "talos-worker-01"
   description = "Managed by Terraform"
-  tags        = ["terraform"]
+  tags        = ["terraform","talos-os"]
   node_name   = "severen"
   on_boot     = true
   machine     = "q35"
 
   cpu {
-    cores = 10
+    cores = 8
     type  = "x86-64-v2-AES"
   }
 
   memory {
-    dedicated = 28672 # 28 GiB
+    dedicated = 24576 # 24 GiB
   }
 
   agent {
@@ -95,24 +93,79 @@ resource "proxmox_virtual_environment_vm" "talos_worker_01" {
     rombar = true
   }
 
-  initialization {
-    datastore_id = "local-lvm"
-    ip_config {
-      ipv4 {
-        address = "${var.talos_worker_01_ip_addr}/24"
-        gateway = var.default_gateway
-      }
-      ipv6 {
-        address = "dhcp"
-      }
-    }
+  # initialization {
+  #   datastore_id = "local-lvm"
+  #   ip_config {
+  #     ipv4 {
+  #       address = "${var.talos_worker_01_ip_addr}/24"
+  #       gateway = var.default_gateway
+  #     }
+  #   }
+  # }
+}
+
+resource "proxmox_virtual_environment_vm" "dns_vpn_services" {
+  name        = "dns-vpn-services"
+  description = "Netbird Controller & AdGuard Home"
+  tags        = ["terraform", "rocky-os", "dns_vpn-services"]
+  node_name   = "severen"
+  on_boot     = true
+  machine     = "q35"
+  boot_order  = ["virtio0", "ide2"]
+
+  cpu {
+    cores = 4
+    type  = "host"
   }
+
+  memory {
+    dedicated = 8192
+  }
+
+  agent {
+    enabled = true
+  }
+
+  network_device {
+    bridge = "vmbr0"
+    mac_address = "bc:24:11:bb:c9:36"
+  }
+
+  disk {
+    datastore_id = "local-lvm"
+    file_format  = "raw"
+    interface    = "virtio0"
+    size         = 40 
+  }
+
+  cdrom {
+    file_id   = "local:iso/Rocky-10.0-x86_64-minimal.iso"
+    interface = "ide2"
+  }
+
+
+  operating_system {
+    type = "l26"
+  }
+
+  # initialization {
+  #   datastore_id = "local-lvm"
+  #   ip_config {
+  #     ipv4 {
+  #       address = "${var.dns_vpn_services_ip_addr}/24"s
+  #       gateway = var.default_gateway
+  #     }
+  #   }
+  #   dns {
+  #     servers = ["8.8.8.8", "8.8.4.4"]
+  #   }
+  # }
 }
 
 resource "proxmox_virtual_environment_vm" "talos_worker_02" {
   name        = "talos-worker-02"
   description = "Managed by Terraform"
-  tags        = ["terraform"]
+  tags        = ["terraform", "talos-os"]
   node_name   = "imre"
   on_boot     = true
 
@@ -146,16 +199,13 @@ resource "proxmox_virtual_environment_vm" "talos_worker_02" {
     type = "l26" # Linux Kernel 2.6 - 5.X.
   }
 
-  initialization {
-    datastore_id = "local-lvm"
-    ip_config {
-      ipv4 {
-        address = "${var.talos_worker_02_ip_addr}/24"
-        gateway = var.default_gateway
-      }
-      ipv6 {
-        address = "dhcp"
-      }
-    }
-  }
+  # initialization {
+  #   datastore_id = "local-lvm"
+  #   ip_config {
+  #     ipv4 {
+  #       address = "${var.talos_worker_02_ip_addr}/24"
+  #       gateway = var.default_gateway
+  #     }
+  #   }
+  # }
 }

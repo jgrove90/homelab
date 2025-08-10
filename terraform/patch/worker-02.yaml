@@ -2,5 +2,16 @@ machine:
   type: worker
   network:
     hostname: worker-02
+    interfaces:
+      - interface: eth0
+        dhcp: false
+        addresses:
+          - 192.168.1.15/24
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 192.168.1.1
+    nameservers:
+      - 75.75.75.75
+      - 8.8.8.8
   install:
     image: factory.talos.dev/installer/ef909f816be835a6236a401377846307a921533d6b218c2d8e95c6d9013ede06:v1.9.4

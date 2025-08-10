@@ -10,7 +10,7 @@ spec:
     storage: 10Gi
   nfs:
     path: /mnt/apps/audiobookshelf
-    server: 192.168.0.26
+    server: 10.0.0.79
   mountOptions:
     - nfsvers=4.1
     - noatime
@@ -27,7 +27,7 @@ spec:
     storage: 10Gi
   nfs:
     path: /mnt/media/audiobooks
-    server: 192.168.0.26
+    server: 10.0.0.79
   mountOptions:
     - nfsvers=4.1
     - noatime

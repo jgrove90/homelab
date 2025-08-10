@@ -9,7 +9,7 @@ spec:
     - ReadWriteMany
   nfs:
     path: /mnt/apps/wireguard-easy
-    server: 192.168.0.26  
+    server: 192.168.1.13 
   persistentVolumeReclaimPolicy: Retain
   storageClassName: ""
   mountOptions:

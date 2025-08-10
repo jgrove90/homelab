@@ -1,4 +1,4 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: ingress-nginx
@@ -19,4 +19,4 @@ spec:
     controller:
       service:
         type: LoadBalancer
-        loadBalancerIP: 192.168.0.100
+        loadBalancerIP: 192.168.1.110
