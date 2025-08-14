@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: fivefilters-rss-data-pv
+spec:
+  persistentVolumeReclaimPolicy: Retain
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 2Gi
+  nfs:
+    path: /mnt/apps/fivefilters-rss
+    server: 192.168.1.13
+  mountOptions:
+    - nfsvers=4.1
+    - noatime

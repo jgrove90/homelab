@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fivefilters-rss-data-pvc
+  namespace: fivefilters-rss
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  volumeName: fivefilters-rss-data-pv
+  storageClassName: ""

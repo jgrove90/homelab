@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: freshrss
+  namespace: fresh-rss
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: freshrss
+  template:
+    metadata:
+      labels:
+        app: freshrss
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker-02
+      securityContext:
+        fsGroup: 33
+      containers:
+        - name: freshrss
+          image: freshrss/freshrss:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: TZ
+              value: "America/Denver"
+            - name: CRON_MIN
+              value: "13,43"
+          volumeMounts:
+            - name: data-volume
+              mountPath: /var/www/FreshRSS/data
+            - name: extensions-volume
+              mountPath: /var/www/FreshRSS/extensions
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: freshrss-data-pvc
+        - name: extensions-volume
+          persistentVolumeClaim:
+            claimName: freshrss-extensions-pvc
+        
