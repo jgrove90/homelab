@@ -48,16 +48,6 @@ spec:
                 secretKeyRef:
                   name: nordvpn-secret
                   key: private_key
-            - name: HEALTH_TARGET_ADDRESS
-              value: "cloudflare.com:443"
-            - name: HEALTH_VPN_DURATION_INITIAL
-              value: "10s"
-            - name: HEALTH_VPN_DURATION_ADDITION
-              value: "5s"
-            - name: HEALTH_SUCCESS_WAIT_DURATION
-              value: "30s"  # Check every 30 seconds
-            - name: HEALTH_SERVER_ADDRESS
-              value: "127.0.0.1:9999"
           ports:
             - containerPort: 8080
               name: qbittorrent-web
@@ -65,6 +55,26 @@ spec:
               protocol: UDP
             - containerPort: 6881
               protocol: TCP
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - "ping -c 1 www.google.com"
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            timeoutSeconds: 10
+            failureThreshold: 5
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - "ping -c 1 www.google.com"
+            initialDelaySeconds: 10
+            periodSeconds: 20
+            timeoutSeconds: 10
+            failureThreshold: 3
           volumeMounts:
             - mountPath: /tmp/gluetun
               name: gluetun-data
