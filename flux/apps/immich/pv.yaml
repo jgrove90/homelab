@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: immich-pv
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: YOUR_NFS_SERVER_IP  # Replace with your NFS server IP
+    path: /path/to/immich/data   # Replace with your NFS path

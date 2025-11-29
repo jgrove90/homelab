@@ -1,0 +1,73 @@
+- Media:
+    - Plex:
+        icon: plex.png
+        href: https://plex.home/web
+        description: Watch movies and TV shows
+        widget:
+          type: plex
+          url: http://plex-service.plex.svc.cluster.local:32400
+          key: "{{HOMEPAGE_VAR_PLEX_KEY}}"
+
+- Arrrr:
+    - Qbittorrent:
+        icon: qbittorrent.png
+        href: http://qbittorrent.home
+        description: BitTorrent Client
+        widget:
+          type: qbittorrent
+          url: http://qbittorrent-service.vpn-qbittorrent.svc.cluster.local:8080
+          username: "{{HOMEPAGE_VAR_QBITTORRENT_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_QBITTORRENT_PASSWORD}}"
+          enableLeechProgress: true
+    - Overseerr:
+        icon: overseerr.png
+        href: http://overseerr.home
+        description: Request management and media discovery
+        widget:
+          type: overseerr
+          url: http://overseerr-service.overseerr.svc.cluster.local:5055
+          key: "{{HOMEPAGE_VAR_OVERSEERR_APIKEY}}"          
+    - Sonarr:
+        icon: sonarr.png
+        href: http://sonarr.home
+        description: Manage your TV show collection
+        widget:
+          type: sonarr
+          url: http://sonarr.sonarr.svc.cluster.local:8989
+          key: "{{HOMEPAGE_VAR_SONARR_APIKEY}}"
+    - Radarr:
+        icon: radarr.png
+        href: http://radarr.home
+        description: Manage your movie collection
+        widget:
+          type: radarr
+          url: http://radarr.radarr.svc.cluster.local:7878
+          key: "{{HOMEPAGE_VAR_RADARR_APIKEY}}"
+    - Prowlarr:
+        icon: prowlarr.png
+        href: http://prowlarr.home
+        description: Manage indexers for Sonarr and Radarr
+        widget:
+          type: prowlarr
+          url: http://prowlarr.prowlarr.svc.cluster.local:9696
+          key: "{{HOMEPAGE_VAR_PROWLARR_APIKEY}}"
+
+- Network:
+    - Adguard:
+        icon: adguard-home.png
+        href: http://adguard.home
+        description: Network-wide ad blocker
+        widget:
+          type: adguard
+          url: http://adguard-ui.adguard.svc.cluster.local:8080
+          username: "{{HOMEPAGE_VAR_ADGUARD_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_ADGUARD_PASSWORD}}"
+    - WireGuard:
+        icon: wireguard.png
+        href: http://wg-easy.home
+        description: WireGuard VPN status
+        widget:
+          type: wgeasy
+          url: http://wg-easy-vpn.wg-easy.svc.cluster.local:51821
+          version: 2
+          threshold: 2

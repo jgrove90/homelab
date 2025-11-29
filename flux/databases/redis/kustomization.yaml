@@ -1,0 +1,7 @@
+resources:
+  - namespace.yaml
+  - statefulset.yaml
+  - pvc.yaml
+  - pv.yaml
+  - service-clusterip.yaml
+  - service-nodeport.yaml

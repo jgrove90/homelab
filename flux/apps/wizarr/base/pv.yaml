@@ -11,4 +11,4 @@ spec:
     storage: 1Gi
   nfs:
     path: /mnt/apps/wizarr
-    server: 10.0.0.79
+    server: 192.168.1.13

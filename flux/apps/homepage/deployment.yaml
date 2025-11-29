@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homepage
+  namespace: homepage
+  labels:
+    app: homepage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: homepage
+  template:
+    metadata:
+      labels:
+        app: homepage
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker-02
+      containers:
+      - name: homepage
+        image: ghcr.io/gethomepage/homepage:latest
+        ports:
+          - containerPort: 3000
+        volumeMounts:
+          - name: config
+            mountPath: /app/config
+          - name: homepage-bookmarks
+            mountPath: /app/config/bookmarks.yaml
+            subPath: bookmarks.yaml
+          - name: homepage-services
+            mountPath: /app/config/services.yaml
+            subPath: services.yaml
+          - name: logs
+            mountPath: /app/logs
+
+        env:
+          - name: HOMEPAGE_VAR_TITLE
+            value: "Alar Lab"
+          - name: HOMEPAGE_VAR_SEARCH_PROVIDER
+            value: "duckduckgo"
+          - name: HOMEPAGE_VAR_HEADER_STYLE
+            value: "clean"
+          - name: HOMEPAGE_VAR_HIDEVERSION
+            value: "true"
+          - name: HOMEPAGE_ALLOWED_HOSTS
+            value: "*"
+        envFrom:
+        - secretRef:
+            name: homepage-secrets
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
+        resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: homepage-config-pvc
+      - name: homepage-bookmarks
+        configMap:
+          name: homepage-bookmarks
+      - name: homepage-services
+        configMap:
+          name: homepage-services
+      - name: logs
+        emptyDir: {}

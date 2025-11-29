@@ -3,5 +3,5 @@ resources:
   - pv.yaml
   - pvc.yaml
   - deployment.yaml
-  - service-clusterip.yaml
+  - service.yaml
   - ingress.yaml

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+  namespace: redis
+spec:
+  selector:
+    matchLabels:
+      app: redis
+  serviceName: "redis"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker-02
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsGroup: 1000
+      containers:
+        - name: redis
+          image: redis:8.2
+          ports:
+            - containerPort: 6379
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+          args: ["redis-server", "--appendonly", "yes"]  # Enable persistence
+          volumeMounts:
+            - name: redis-pv
+              mountPath: /data
+      volumes:
+        - name: redis-pv
+          persistentVolumeClaim:
+            claimName: redis-data

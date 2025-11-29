@@ -16,12 +16,9 @@ spec:
         app: vpn-qbittorrent
     spec:
       nodeSelector:
-        kubernetes.io/hostname: worker-02
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 8.8.8.8  
-          - 1.1.1.1    
+        kubernetes.io/hostname: worker-02 
+      dnsPolicy: Default
+      dnsConfig: {}
       containers:
         - name: gluetun
           image: qmcgaw/gluetun:latest
@@ -29,7 +26,6 @@ spec:
             capabilities:
               add:
                 - NET_ADMIN
-            privileged: true
           env:
             - name: VPN_SERVICE_PROVIDER
               value: "nordvpn"
@@ -48,6 +44,14 @@ spec:
                 secretKeyRef:
                   name: nordvpn-secret
                   key: private_key
+            - name: DOT
+              value: "on"
+            - name: DOT_PROVIDERS
+              value: "quad9"  # Try Quad9 instead of Cloudflare
+            - name: WIREGUARD_PERSISTENT_KEEPALIVE
+              value: "30s"
+            - name: LOG_LEVEL
+              value: "debug"
           ports:
             - containerPort: 8080
               name: qbittorrent-web
@@ -55,26 +59,6 @@ spec:
               protocol: UDP
             - containerPort: 6881
               protocol: TCP
-          livenessProbe:
-            exec:
-              command:
-                - /bin/sh
-                - -c
-                - "ping -c 1 www.google.com"
-            initialDelaySeconds: 30
-            periodSeconds: 20
-            timeoutSeconds: 10
-            failureThreshold: 5
-          readinessProbe:
-            exec:
-              command:
-                - /bin/sh
-                - -c
-                - "ping -c 1 www.google.com"
-            initialDelaySeconds: 10
-            periodSeconds: 20
-            timeoutSeconds: 10
-            failureThreshold: 3
           volumeMounts:
             - mountPath: /tmp/gluetun
               name: gluetun-data

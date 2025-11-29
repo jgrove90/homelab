@@ -16,11 +16,18 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/hostname: worker-02
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsGroup: 1000
       containers:
         - name: postgres
-          image: postgres:17
+          image: tensorchord/cloudnative-vectorchord:17 #postgres:17 #tensorchord/cloudnative-vectorchord:17
           ports:
             - containerPort: 5432
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
           env:
           - name: POSTGRES_HOST_AUTH_METHOD
             value: "md5"
@@ -29,6 +36,7 @@ spec:
           envFrom:
             - secretRef:
                 name: postgres-secret
+          args: ["postgres", "-c", "shared_preload_libraries=vector"]
           volumeMounts:
             - name: postgres-pv
               mountPath: /var/lib/postgresql/data

@@ -30,6 +30,22 @@ spec:
           value: "1000"
         - name: PGID
           value: "1000"
+        # - name: DB_HOSTNAME
+        #   value: "192.168.1.15"
+        # - name: DB_PORT
+        #   value: "30432"
+        # - name: DB_USERNAME
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: wizarr-secret
+        #       key: POSTGRES_USER
+        # - name: DB_PASSWORD
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: wizarr-secret
+        #       key: POSTGRES_PASSWORD 
+        # - name: DB_NAME 
+        #   value: "wizarr"
         volumeMounts:
         - name: config
           mountPath: /data/database
