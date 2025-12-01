@@ -9,5 +9,5 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   nfs:
-    server: YOUR_NFS_SERVER_IP  # Replace with your NFS server IP
-    path: /path/to/immich/data   # Replace with your NFS path
+    server: 192.168.1.13  # Replace with your NFS server IP
+    path: /mnt/apps/immich   # Replace with your NFS path

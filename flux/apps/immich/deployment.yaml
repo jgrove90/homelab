@@ -23,7 +23,7 @@ spec:
         - name: immich
           image: ghcr.io/immich-app/immich-server:release
           ports:
-            - containerPort: 3001
+            - containerPort: 2283
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
@@ -64,13 +64,13 @@ spec:
           livenessProbe:
             httpGet:
               path: /server-info/ping
-              port: 3001
+              port: 2283
             initialDelaySeconds: 30
             periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /server-info/ping
-              port: 3001
+              port: 2283
             initialDelaySeconds: 5
             periodSeconds: 5
       volumes:

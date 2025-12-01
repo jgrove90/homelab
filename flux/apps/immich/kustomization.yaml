@@ -7,5 +7,4 @@ resources:
   - pvc.yaml
   #- secret.enc.yaml
   - deployment.yaml
-  - service-clusterip.yaml
   - ingress.yaml

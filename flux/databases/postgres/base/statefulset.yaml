@@ -36,7 +36,7 @@ spec:
           envFrom:
             - secretRef:
                 name: postgres-secret
-          args: ["postgres", "-c", "shared_preload_libraries=vector"]
+          args: ["postgres", "-c", "shared_preload_libraries=vchord"]
           volumeMounts:
             - name: postgres-pv
               mountPath: /var/lib/postgresql/data
