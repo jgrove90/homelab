@@ -32,6 +32,8 @@ spec:
               value: "postgres.postgres.svc.cluster.local"
             - name: DB_PORT
               value: "5432"
+            - name: IMMICH_MACHINE_LEARNING_URL
+              value: "http://immich-machine-learning:3003"              
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -77,3 +79,49 @@ spec:
         - name: immich-data
           persistentVolumeClaim:
             claimName: immich-data
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-machine-learning
+  namespace: immich
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-machine-learning
+  template:
+    metadata:
+      labels:
+        app: immich-machine-learning
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker-02
+      containers:
+        - name: immich-machine-learning
+          image: ghcr.io/immich-app/immich-machine-learning:release
+          ports:
+            - containerPort: 3003
+          env:
+            - name: MACHINE_LEARNING_CACHE_FOLDER
+              value: "/cache"
+          volumeMounts:
+            - name: ml-cache
+              mountPath: /cache
+      volumes:
+        - name: ml-cache
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: immich-machine-learning
+  namespace: immich
+spec:
+  selector:
+    app: immich-machine-learning
+  ports:
+    - protocol: TCP
+      port: 3003
+      targetPort: 3003
