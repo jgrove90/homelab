@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: diyhue-config-pv
+spec:
+  persistentVolumeReclaimPolicy: Retain
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 5Gi
+  nfs:
+    path: /mnt/apps/diyhue
+    server: 192.168.1.13
+  mountOptions:
+    - nfsvers=4.1
+    - noatime

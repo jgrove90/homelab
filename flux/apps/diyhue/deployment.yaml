@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: diyhue
+  namespace: diyhue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: diyhue
+  template:
+    metadata:
+      labels:
+        app: diyhue
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+      - name: diyhue
+        image: diyhue/core:latest
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        - name: TZ
+          value: "America/Denver"
+        volumeMounts:
+        - name: config
+          mountPath: /opt/hue-emulator/config
+      volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: diyhue-config-pvc
