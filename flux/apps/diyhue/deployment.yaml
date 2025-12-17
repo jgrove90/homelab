@@ -13,14 +13,18 @@ spec:
       labels:
         app: diyhue
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker-01
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
       securityContext:
         fsGroup: 1000
       containers:
       - name: diyhue
         image: diyhue/core:latest
-        ports:
-        - containerPort: 80
-        - containerPort: 443
+        # ports:
+        # - containerPort: 80
+        # - containerPort: 443
         env:
         - name: PUID
           value: "1000"
