@@ -11,3 +11,16 @@ spec:
       port: 2283
       targetPort: 2283
   type: ClusterIP
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: immich-machine-learning
+#   namespace: immich
+# spec:
+#   selector:
+#     app: immich-machine-learning
+#   ports:
+#     - protocol: TCP
+#       port: 3003
+#       targetPort: 3003
