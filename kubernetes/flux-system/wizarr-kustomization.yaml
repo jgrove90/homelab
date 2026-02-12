@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
-  path: ./flux/apps/wizarr
+  path: ./kubernetes/apps/wizarr
   prune: true
   targetNamespace: wizarr
   sourceRef:

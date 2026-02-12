@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
-  path: ./flux/apps/adguard
+  path: ./kubernetes/apps/adguard
   prune: true
   targetNamespace: adguard
   sourceRef:

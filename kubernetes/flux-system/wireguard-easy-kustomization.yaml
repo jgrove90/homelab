@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
-  path: ./flux/apps/wireguard-easy
+  path: ./kubernetes/apps/wireguard-easy
   prune: true
   targetNamespace: wg-easy
   sourceRef:

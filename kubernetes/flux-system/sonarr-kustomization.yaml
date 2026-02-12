@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
-  path: ./flux/apps/sonarr
+  path: ./kubernetes/apps/sonarr
   prune: true
   targetNamespace: sonarr
   sourceRef:

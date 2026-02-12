@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
-  path: ./flux/apps/plex
+  path: ./kubernetes/apps/plex
   prune: true
   targetNamespace: plex
   sourceRef:

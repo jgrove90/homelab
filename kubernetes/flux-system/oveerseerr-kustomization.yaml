@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
-  path: ./flux/apps/overseerr
+  path: ./kubernetes/apps/overseerr
   prune: true
   targetNamespace: overseerr
   sourceRef:

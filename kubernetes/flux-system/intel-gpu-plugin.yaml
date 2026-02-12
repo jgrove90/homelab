@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
-  path: ./flux/architecture/intel-gpu-plugin
+  path: ./kubernetes/architecture/intel-gpu-plugin
   prune: true
   sourceRef:
     kind: GitRepository

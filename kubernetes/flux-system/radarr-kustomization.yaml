@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
-  path: ./flux/apps/radarr
+  path: ./kubernetes/apps/radarr
   prune: true
   targetNamespace: radarr
   sourceRef:

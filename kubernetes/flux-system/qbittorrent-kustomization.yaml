@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
-  path: ./flux/apps/qbittorrent
+  path: ./kubernetes/apps/qbittorrent
   prune: true
   targetNamespace: vpn-qbittorrent
   sourceRef:

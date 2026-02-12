@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
-  path: ./flux/apps/mealie
+  path: ./kubernetes/apps/mealie
   prune: true
   sourceRef:
     kind: GitRepository

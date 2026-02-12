@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
-  path: ./flux/apps/prowlarr
+  path: ./kubernetes/apps/prowlarr
   prune: true
   targetNamespace: prowlarr
   sourceRef:
