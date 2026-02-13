@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- adguard-kustomization.yaml
+- audiobookshelf-kustomization.yaml
+- cert-manager-kustomization.yaml
+- ddns-updater-kustomization.yaml
+- external-dns-kustomization.yaml
+- flaresolver-kustomization.yaml
+- gotk-components.yaml
+- gotk-sync.yaml
+- homelab-repository.yaml
+- homepage-kustomization.yaml
+- intel-gpu-plugin.yaml
+- mealie-kustomization.yaml
+- oveerseerr-kustomization.yaml
+- plex-kustomization.yaml
+- postgres-kustomization.yaml
+- prowlarr-kustomization.yaml
+- qbittorrent-kustomization.yaml
+- radarr-kustomization.yaml
+- sonarr-kustomization.yaml
+- wireguard-easy-kustomization.yaml
+- wizarr-kustomization.yaml
