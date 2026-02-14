@@ -7,7 +7,6 @@ spec:
   interval: 24h
   path: ./kubernetes/apps/overseerr
   prune: true
-  targetNamespace: overseerr
   sourceRef:
     kind: GitRepository
     name: flux-system  
