@@ -9,6 +9,6 @@ spec:
     - ReadWriteOnce
   nfs:
     path: /mnt/apps/mysql
-    server: 192.168.1.13 
+    server: 192.168.1.13
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: ""
+  storageClassName: "manual"
