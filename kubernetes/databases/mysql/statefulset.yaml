@@ -23,13 +23,15 @@ spec:
             - secretRef:
                 name: mysql-secret
           volumeMounts:
-            - name: mysql-data
+            - name: mysql-pvc
               mountPath: /var/lib/mysql
   volumeClaimTemplates:
     - metadata:
-        name: mysql-data
+        name: mysql-pvc
       spec:
-        accessModes: ["ReadWriteOnce"]
+        storageClassName: ""
+        accessModes:
+          - ReadWriteOnce
         resources:
           requests:
-            storage: 10Gi
+            storage: 20Gi

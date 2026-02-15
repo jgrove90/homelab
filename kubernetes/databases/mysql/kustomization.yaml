@@ -2,6 +2,5 @@ resources:
   - namespace.yaml
   - secret.enc.yaml
   - statefulset.yaml
-  - pvc.yaml
   - pv.yaml
-  - service-nodeport.yaml
+  - service.yaml
