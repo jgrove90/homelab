@@ -5,7 +5,7 @@ metadata:
 spec:
   persistentVolumeReclaimPolicy: Retain
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   capacity:
     storage: 5Gi
   nfs:
