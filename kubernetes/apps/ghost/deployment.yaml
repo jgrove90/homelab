@@ -1,0 +1,49 @@
+# ghost-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ghost
+  namespace: ghost
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ghost
+  template:
+    metadata:
+      labels:
+        app: ghost
+    spec:
+      containers:
+        - name: ghost
+          image: ghost:5
+          ports:
+            - containerPort: 2368
+          env:
+            - name: database__client
+              value: mysql
+            - name: database__connection__host
+              value: mysql.mysql
+            - name: database__connection__user
+              valueFrom:
+                secretKeyRef:
+                  name: ghost-db-secret
+                  key: database__connection__user
+            - name: database__connection__password
+              valueFrom:
+                secretKeyRef:
+                  name: ghost-db-secret
+                  key: database__connection__password
+            - name: database__connection__database
+              value: ghost
+            - name: url
+              value: https://blog.alarlab.dev
+            - name: NODE_ENV
+              value: production
+          volumeMounts:
+            - name: ghost-pv
+              mountPath: /var/lib/ghost/content
+      volumes:
+        - name: ghost-pv
+          persistentVolumeClaim:
+            claimName: ghost-pvc
