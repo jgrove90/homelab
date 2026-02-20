@@ -8,11 +8,11 @@ Declarative infrastructure with Terraform, continuous delivery via FluxCD, encry
 ```
 Internet
    │
-[OPNsense] ── VLANs, Firewall, Reverse Proxy
+[OPNsense] ── VLANs, Firewall
    │
 [Proxmox Cluster]
    │
-   └─ Kubernetes Cluster
+   └─ Kubernetes Cluster / nginx
          │
          ├─ FluxCD (GitOps reconciler)
          ├─ SOPS + Age (decryption in-cluster)
@@ -24,14 +24,13 @@ Internet
 
 ### Prerequisites
 - A working Kubernetes cluster (k3s, Talos, vanilla, etc.)
-- `flux` CLI installed (`brew install fluxcd/tap/flux` or similar)
+- `flux` CLI installed
 - `kubectl` access to your cluster
 - Age keypair generated:  
   ```bash
   mkdir -p ~/.sops/age
   age-keygen -o ~/.sops/age.agekey
   ```
-- This repo cloned or forked
 
 ### 1. Bootstrap Flux
 ```bash
