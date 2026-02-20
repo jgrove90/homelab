@@ -1,7 +1,7 @@
-**My personal homelab** — a GitOps-powered Kubernetes setup running at home in Colorado.  
-Declarative infrastructure with **Terraform**, continuous delivery via **FluxCD**, encrypted secrets using **SOPS + Age**, and helpful automation scripts.
+**My homelab** — a GitOps-powered Kubernetes setup running at home in Colorado.  
+Declarative infrastructure with Terraform, continuous delivery via FluxCD, encrypted secrets using SOPS + Age, and helpful automation scripts.
 
-#![Homelab Banner] TODO
+## Homelab Banner TODO
 
 ## 🏗️ High-Level Architecture
 
@@ -10,7 +10,7 @@ Internet
    │
 [OPNsense] ── VLANs, Firewall, Reverse Proxy
    │
-[Proxmox]
+[Proxmox Cluster]
    │
    └─ Kubernetes Cluster
          │
@@ -46,7 +46,7 @@ flux bootstrap github \
 ```bash
 kubectl create secret generic sops-age \
   --namespace=flux-system \
-  --from-file=keys.agekey=~/.sops/age/keys.txt
+  --from-file=age.agekey=~/.sops/age/age.agekey
 ```
 
 ### 4. Apply encrypted secrets
@@ -66,4 +66,3 @@ flux logs --kind=Kustomization --follow
 
 Made with ☕ in Colorado  
 Last updated: February 2026
-```
