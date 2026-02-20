@@ -29,7 +29,7 @@ Internet
 - Age keypair generated:  
   ```bash
   mkdir -p ~/.sops/age
-  age-keygen -o ~/.sops/age/keys.txt
+  age-keygen -o ~/.sops/age.agekey
   ```
 - This repo cloned or forked
 
@@ -46,7 +46,7 @@ flux bootstrap github \
 ```bash
 kubectl create secret generic sops-age \
   --namespace=flux-system \
-  --from-file=age.agekey=~/.sops/age/age.agekey
+  --from-file=age.agekey=~/.sops/age.agekey
 ```
 
 ### 4. Apply encrypted secrets
