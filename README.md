@@ -1,21 +1,69 @@
-Initial Install 
+**My personal homelab** — a GitOps-powered Kubernetes setup running at home in Colorado.  
+Declarative infrastructure with **Terraform**, continuous delivery via **FluxCD**, encrypted secrets using **SOPS + Age**, and helpful automation scripts.
 
-Initialize flux 
+#![Homelab Banner] TODO
+
+## 🏗️ High-Level Architecture
+
+```
+Internet
+   │
+[OPNsense] ── VLANs, Firewall, Reverse Proxy
+   │
+[Proxmox]
+   │
+   └─ Kubernetes Cluster
+         │
+         ├─ FluxCD (GitOps reconciler)
+         ├─ SOPS + Age (decryption in-cluster)
+         ├─ Ingress / Cert-Manager / External-DNS
+         └─ Apps (Immich, Home Assistant, monitoring, etc.)
+```
+
+## 🚀 Bootstrap / Quick Start
+
+### Prerequisites
+- A working Kubernetes cluster (k3s, Talos, vanilla, etc.)
+- `flux` CLI installed (`brew install fluxcd/tap/flux` or similar)
+- `kubectl` access to your cluster
+- Age keypair generated:  
+  ```bash
+  mkdir -p ~/.sops/age
+  age-keygen -o ~/.sops/age/keys.txt
+  ```
+- This repo cloned or forked
+
+### 1. Bootstrap Flux
+```bash
 flux bootstrap github \
-  --owner=your-github-username \
-  --repository=your-repo-name \
+  --owner=jgrove90 \
+  --repository=homelab \
   --branch=main \
   --path=clusters/homelab
-1. kubectl apply -f https://github.com/fluxcd/flux2/releases/latest/download/install.yaml
+```
 
-add sops secret
+### 3. Add your Age key to the cluster
+```bash
 kubectl create secret generic sops-age \
   --namespace=flux-system \
-  --from-file=age.agekey=$HOME/.sops/age/keys.txt
+  --from-file=keys.agekey=~/.sops/age/keys.txt
+```
 
-add secrets to k8's
-2. sops-decrypt config-secret.enc.yaml | kubectl apply -f - 
+### 4. Apply encrypted secrets
+```bash
+sops --decrypt kubernetes/flux-system/config-secret.enc.yaml | kubectl apply -f -
+```
+
+### 5. Watch reconciliation
+```bash
+flux get kustomizations --all-namespaces -w
+# or
+flux logs --kind=Kustomization --follow
+```
+
+## 📂 Repository Structure TODO
 
 
-assiging a new mac address 
- printf 'bc:24:11:%02x:%02x:%02x\n' $((RANDOM%256)) $((RANDOM%256)) $((RANDOM%256))
+Made with ☕ in Colorado  
+Last updated: February 2026
+```
