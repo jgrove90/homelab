@@ -4,7 +4,7 @@ metadata:
   name: ghost-ingress
   namespace: ghost
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: blog.alarlab.dev
+    external-dns.alpha.kubernetes.io/hostname: packetsandpods.com
     external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
@@ -14,10 +14,10 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - blog.alarlab.dev
+    - packetsandpods.com
     secretName: ghost-tls
   rules:
-  - host: blog.alarlab.dev
+  - host: packetsandpods.com
     http:
       paths:
       - path: /
