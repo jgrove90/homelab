@@ -26,21 +26,39 @@ spec:
             - name: database__connection__user
               valueFrom:
                 secretKeyRef:
-                  name: ghost-db-secret
+                  name: ghost-secrets
                   key: database__connection__user
             - name: database__connection__password
               valueFrom:
                 secretKeyRef:
-                  name: ghost-db-secret
+                  name: ghost-secrets
                   key: database__connection__password
+            - name: mail__options__auth__user
+              valueFrom:
+                secretKeyRef:
+                  name: ghost-secrets
+                  key: mail__options__auth__user
+            - name: mail__options__auth__pass
+              valueFrom:
+                secretKeyRef:
+                  name: ghost-secrets
+                  key: mail__options__auth__pass
             - name: database__connection__database
               value: ghost
             - name: url
               value: https://packetsandpods.com
             - name: NODE_ENV
               value: production
-            - name: security__staffDeviceVerification
-              value: false
+            - name: mail__transport
+              value: SMTP
+            - name: mail__options__host
+              value: smtp.mailgun.org
+            - name: mail__options__port
+              value: "587"
+            - name: mail__options__secure
+              value: "false"
+            - name: mail__from
+              value: "'Packets & Pods' <noreply@packetsandpods.com>"
           volumeMounts:
             - name: ghost-pv
               mountPath: /var/lib/ghost/content
