@@ -39,6 +39,8 @@ spec:
               value: https://packetsandpods.com
             - name: NODE_ENV
               value: production
+            - name: security__staffDeviceVerification
+              value: false
           volumeMounts:
             - name: ghost-pv
               mountPath: /var/lib/ghost/content
