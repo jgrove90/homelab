@@ -14,21 +14,23 @@ spec:
       labels:
         app: postgres
     spec:
+      securityContext:
+        fsGroup: 999
+        runAsUser: 999
+        runAsGroup: 999
       nodeSelector:
         kubernetes.io/hostname: worker-02
-      securityContext:
-        fsGroup: 1000
-        runAsUser: 1000
-        runAsGroup: 1000
       containers:
         - name: postgres
-          image: tensorchord/cloudnative-vectorchord:17 #postgres:17 #tensorchord/cloudnative-vectorchord:17
+          image: tensorchord/cloudnative-vectorchord:17
+          securityContext:
+            runAsUser: 999
+            runAsGroup: 999
           ports:
             - containerPort: 5432
-          securityContext:
-            runAsUser: 1000
-            runAsGroup: 1000
-          env:
+          env: 
+          - name: PGDATA
+            value: /var/lib/postgresql/data      
           - name: POSTGRES_HOST_AUTH_METHOD
             value: "md5"
           - name: POSTGRES_LISTEN_ADDRESSES
@@ -36,7 +38,14 @@ spec:
           envFrom:
             - secretRef:
                 name: postgres-secret
-          args: ["postgres", "-c", "shared_preload_libraries=vchord"]
+          args: 
+            - "postgres"
+            - "-D"
+            - "/var/lib/postgresql/data"
+            - "-c"
+            - "shared_preload_libraries=vchord"
+            - "-c"
+            - "unix_socket_directories=/var/lib/postgresql/data"
           volumeMounts:
             - name: postgres-pv
               mountPath: /var/lib/postgresql/data
