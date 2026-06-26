@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: radarr
+  namespace: arr-stack
+  labels:
+    app: radarr
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: radarr
+
+  template:
+    metadata:
+      labels:
+        app: radarr
+
+    spec:
+      containers:
+        - name: radarr
+          image: lscr.io/linuxserver/radarr:6.2.1-nightly
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - name: http
+              containerPort: 7878
+
+          env:
+            - name: PUID
+              value: "1000"
+
+            - name: PGID
+              value: "1000"
+
+            - name: TZ
+              value: "America/Denver"
+
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+
+            limits:
+              cpu: "1"
+              memory: 2Gi
+
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 10
+            failureThreshold: 30
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          volumeMounts:
+            - name: config
+              mountPath: /config
+
+            - name: movies-media
+              mountPath: /movies-media
+
+            - name: downloads
+              mountPath: /downloads
+
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: radarr-pvc
+
+        - name: movies-media
+          persistentVolumeClaim:
+            claimName: radarr-movies-pvc
+
+        - name: downloads
+          persistentVolumeClaim:
+            claimName: radarr-downloads-pvc

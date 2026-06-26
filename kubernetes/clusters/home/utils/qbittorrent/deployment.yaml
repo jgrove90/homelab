@@ -1,0 +1,182 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vpn-qbittorrent
+  namespace: utils
+  labels:
+    app: vpn-qbittorrent
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: vpn-qbittorrent
+
+  template:
+    metadata:
+      labels:
+        app: vpn-qbittorrent
+
+    spec:
+      dnsPolicy: Default
+      dnsConfig: {}
+
+      containers:
+        - name: gluetun
+          image: qmcgaw/gluetun:latest
+          imagePullPolicy: IfNotPresent
+
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+
+          env:
+            - name: VPN_SERVICE_PROVIDER
+              value: "nordvpn"
+
+            - name: VPN_TYPE
+              value: "wireguard"
+
+            - name: SERVER_COUNTRIES
+              value: "United States"
+
+            - name: SERVER_REGIONS
+              value: "Colorado"
+
+            - name: SERVER_CITIES
+              value: "Denver"
+
+            - name: SERVER_CATEGORIES
+              value: "P2P"
+
+            - name: WIREGUARD_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: nordvpn-secret
+                  key: private_key
+
+            - name: DOT
+              value: "on"
+
+            - name: DOT_PROVIDERS
+              value: "quad9"
+
+            - name: WIREGUARD_PERSISTENT_KEEPALIVE
+              value: "30s"
+
+            - name: LOG_LEVEL
+              value: "info"
+
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+
+            limits:
+              cpu: 250m
+              memory: 256Mi
+
+          startupProbe:
+            tcpSocket:
+              port: 8080
+            periodSeconds: 10
+            failureThreshold: 30
+
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            periodSeconds: 15
+            timeoutSeconds: 5
+
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            periodSeconds: 30
+            timeoutSeconds: 5
+
+          ports:
+            - name: webui
+              containerPort: 8080
+
+            - name: bittorrent-tcp
+              containerPort: 6881
+              protocol: TCP
+
+            - name: bittorrent-udp
+              containerPort: 6881
+              protocol: UDP
+
+          volumeMounts:
+            - name: gluetun-data
+              mountPath: /tmp/gluetun
+
+        - name: qbittorrent
+          image: lscr.io/linuxserver/qbittorrent:5.2.2_v2.0.13-ls463
+          imagePullPolicy: IfNotPresent
+
+          securityContext:
+            runAsUser: 0
+            capabilities:
+              add:
+                - NET_ADMIN
+
+          env:
+            - name: PUID
+              value: "1000"
+
+            - name: PGID
+              value: "1000"
+
+            - name: WEBUI_PORT
+              value: "8080"
+
+            - name: TORRENTING_PORT
+              value: "6881"
+
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+
+            limits:
+              cpu: "2"
+              memory: 2Gi
+
+          startupProbe:
+            tcpSocket:
+              port: 8080
+            periodSeconds: 10
+            failureThreshold: 30
+
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            periodSeconds: 15
+            timeoutSeconds: 5
+
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            periodSeconds: 30
+            timeoutSeconds: 5
+
+          volumeMounts:
+            - name: qbittorrent-config
+              mountPath: /config
+
+            - name: qbittorrent-downloads
+              mountPath: /downloads
+
+      volumes:
+        - name: qbittorrent-config
+          persistentVolumeClaim:
+            claimName: qbittorrent-config-pvc
+
+        - name: qbittorrent-downloads
+          persistentVolumeClaim:
+            claimName: qbittorrent-downloads-pvc
+
+        - name: gluetun-data
+          emptyDir: {}
