@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: radarr-pv
+
+spec:
+  persistentVolumeReclaimPolicy: Retain
+
+  storageClassName: ""
+
+  accessModes:
+    - ReadWriteMany
+
+  capacity:
+    storage: 10Gi
+
+  nfs:
+    server: 192.168.1.13
+    path: /mnt/apps/radarr
+
+  mountOptions:
+    - nfsvers=4.1
+    - noatime
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: radarr-movies-pv
+
+spec:
+  persistentVolumeReclaimPolicy: Retain
+
+  storageClassName: ""
+
+  accessModes:
+    - ReadWriteMany
+
+  capacity:
+    storage: 10Gi
+
+  nfs:
+    server: 192.168.1.13
+    path: /mnt/media/movies
+
+  mountOptions:
+    - nfsvers=4.1
+    - noatime
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: radarr-downloads-pv
+
+spec:
+  persistentVolumeReclaimPolicy: Retain
+
+  storageClassName: ""
+
+  accessModes:
+    - ReadWriteMany
+
+  capacity:
+    storage: 10Gi
+
+  nfs:
+    server: 192.168.1.13
+    path: /mnt/apps/qbittorrent/downloads
+
+  mountOptions:
+    - nfsvers=4.1
+    - noatime

@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: freshrss
+  namespace: media
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: freshrss
+
+  template:
+    metadata:
+      labels:
+        app: freshrss
+
+    spec:
+      securityContext:
+        fsGroup: 33
+
+      containers:
+        - name: freshrss
+          image: freshrss/freshrss:1.29.1
+
+          ports:
+            - containerPort: 80
+
+          env:
+            - name: TZ
+              value: America/Denver
+            - name: CRON_MIN
+              value: "13,43"
+
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+
+          startupProbe:
+            httpGet:
+              path: /
+              port: 80
+            failureThreshold: 30
+            periodSeconds: 10
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
+
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 5
+
+          volumeMounts:
+            - name: data-volume
+              mountPath: /var/www/FreshRSS/data
+
+            - name: extensions-volume
+              mountPath: /var/www/FreshRSS/extensions
+
+      volumes:
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: freshrss-data-pvc
+
+        - name: extensions-volume
+          persistentVolumeClaim:
+            claimName: freshrss-extensions-pvc

@@ -34,18 +34,7 @@ resource "proxmox_virtual_environment_vm" "talos_control_plane" {
   operating_system {
     type = "l26" # Linux Kernel 2.6 - 5.X.
   }
-
-  # initialization {
-  #   datastore_id = "local-lvm"
-  #   ip_config {
-  #     ipv4 {
-  #       address = "${var.talos_control_plane_ip_addr}/24"
-  #       gateway = var.default_gateway
-  #     }
-  #   }
-  # }
 }
-
 
 resource "proxmox_virtual_environment_vm" "talos_worker_01" {
   name        = "talos-worker-01"
@@ -92,16 +81,6 @@ resource "proxmox_virtual_environment_vm" "talos_worker_01" {
     pcie = true
     rombar = true
   }
-
-  # initialization {
-  #   datastore_id = "local-lvm"
-  #   ip_config {
-  #     ipv4 {
-  #       address = "${var.talos_worker_01_ip_addr}/24"
-  #       gateway = var.default_gateway
-  #     }
-  #   }
-  # }
 }
 
 resource "proxmox_virtual_environment_vm" "talos_worker_02" {
@@ -140,14 +119,4 @@ resource "proxmox_virtual_environment_vm" "talos_worker_02" {
   operating_system {
     type = "l26" # Linux Kernel 2.6 - 5.X.
   }
-
-  # initialization {
-  #   datastore_id = "local-lvm"
-  #   ip_config {
-  #     ipv4 {
-  #       address = "${var.talos_worker_02_ip_addr}/24"
-  #       gateway = var.default_gateway
-  #     }
-  #   }
-  # }
 }

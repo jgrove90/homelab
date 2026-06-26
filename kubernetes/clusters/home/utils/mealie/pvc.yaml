@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+
+metadata:
+  name: mealie-config-pvc
+  namespace: utils
+
+spec:
+  storageClassName: ""
+  volumeName: mealie-config-pv
+
+  accessModes:
+    - ReadWriteOnce
+
+  resources:
+    requests:
+      storage: 5Gi

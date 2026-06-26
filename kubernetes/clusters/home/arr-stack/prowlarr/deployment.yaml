@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prowlarr
+  namespace: arr-stack
+  labels:
+    app: prowlarr
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: prowlarr
+
+  template:
+    metadata:
+      labels:
+        app: prowlarr
+
+    spec:
+      containers:
+        - name: prowlarr
+          image: linuxserver/prowlarr:2.5.0-nightly
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - name: http
+              containerPort: 9696
+
+          env:
+            - name: PUID
+              value: "1000"
+
+            - name: PGID
+              value: "1000"
+
+            - name: TZ
+              value: "America/Denver"
+
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+
+            limits:
+              cpu: 500m
+              memory: 1Gi
+
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 10
+            failureThreshold: 30
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          volumeMounts:
+            - name: config
+              mountPath: /config
+
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: prowlarr-pvc

@@ -1,9 +1,0 @@
-resources:
-  - namespace.yaml
-  - pv.yaml
-  - pvc.yaml
-  - deployment.yaml
-  #- service-nodeport.yaml
-  - service-clusterip.yaml
-  - service-loadbalancer.yaml
-  - ingress.yaml

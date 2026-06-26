@@ -1,7 +1,0 @@
-resources:
-  - namespace.yaml
-  - pv.yaml
-  - pvc.yaml
-  - deployment.yaml
-  - service-clusterip.yaml
-  - ingress.yaml

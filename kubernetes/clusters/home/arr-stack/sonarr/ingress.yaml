@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sonarr
+  namespace: arr-stack
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "10g"
+
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: sonarr.home
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: sonarr
+                port:
+                  number: 8989

@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: audiobookshelf
+  namespace: media
+  labels:
+    app: audiobookshelf
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: audiobookshelf
+
+  template:
+    metadata:
+      labels:
+        app: audiobookshelf
+
+    spec:
+      containers:
+        - name: audiobookshelf
+          image: ghcr.io/advplyr/audiobookshelf:2.35.1
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - containerPort: 80
+              name: web
+
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "America/Denver"
+
+          volumeMounts:
+            - name: config
+              mountPath: /config
+
+            - name: audiobooks
+              mountPath: /audiobooks
+
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+
+          startupProbe:
+            tcpSocket:
+              port: 80
+            failureThreshold: 30
+            periodSeconds: 10
+
+          readinessProbe:
+            tcpSocket:
+              port: 80
+            periodSeconds: 10
+
+          livenessProbe:
+            tcpSocket:
+              port: 80
+            periodSeconds: 30
+
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: audiobookshelf-config-pvc
+
+        - name: audiobooks
+          persistentVolumeClaim:
+            claimName: audiobookshelf-media-pvc

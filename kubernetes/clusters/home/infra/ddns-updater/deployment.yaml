@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ddns-updater
+  namespace: infra
+  labels:
+    app: ddns-updater
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: ddns-updater
+
+  template:
+    metadata:
+      labels:
+        app: ddns-updater
+
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        fsGroup: 1000
+
+      containers:
+        - name: ddns-updater
+
+          image: qmcgaw/ddns-updater:v2.8
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - name: http
+              containerPort: 8000
+
+          env:
+            - name: LOG_LEVEL
+              value: "info"
+
+            - name: PERIOD
+              value: "5m"
+
+            - name: HTTP_TIMEOUT
+              value: "10s"
+
+            - name: PUBLICIP_FETCHERS
+              value: "all"
+
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+
+            limits:
+              cpu: 250m
+              memory: 256Mi
+
+          startupProbe:
+            httpGet:
+              path: /
+              port: 8000
+            failureThreshold: 30
+            periodSeconds: 10
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 3
+
+          volumeMounts:
+            - name: config
+              mountPath: /updater/data/config.json
+              subPath: config.json
+
+      volumes:
+        - name: config
+          secret:
+            secretName: ddns-updater-config

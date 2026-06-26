@@ -1,6 +1,0 @@
-resources:
-  - namespace.yaml
-  - secret.enc.yaml
-  - deployment.yaml
-  - service-clusterip.yaml
-  - ingress.yaml

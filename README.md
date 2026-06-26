@@ -62,6 +62,5 @@ flux logs --kind=Kustomization --follow
 
 ## 📂 Repository Structure TODO
 
-
 Made with ☕ in Colorado  
 Last updated: February 2026
