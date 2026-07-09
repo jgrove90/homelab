@@ -34,7 +34,7 @@ spec:
 
           env:
             - name: DB_HOSTNAME
-              value: "postgres.postgres.svc.cluster.local"
+              value: "immich-pg-lb.cnpg-system.svc.cluster.local"
             - name: DB_PORT
               value: "5432"
 
@@ -57,7 +57,7 @@ spec:
                   key: DB_DATABASE_NAME
 
             - name: REDIS_HOSTNAME
-              value: "redis.redis.svc.cluster.local"
+              value: "redis.database.svc.cluster.local"
 
             - name: REDIS_PORT
               value: "6379"
@@ -77,11 +77,13 @@ spec:
 
           resources:
             requests:
-              cpu: 200m
-              memory: 512Mi
+              cpu: 500m
+              memory: 1Gi
+              ephemeral-storage: "2Gi"
             limits:
               cpu: "2"
-              memory: 2Gi
+              memory: 3Gi
+              ephemeral-storage: "30Gi"
 
           readinessProbe:
             httpGet:

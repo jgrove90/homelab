@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: platform-db-pv
+
+spec:
+  capacity:
+    storage: 50Gi
+
+  accessModes:
+    - ReadWriteOnce
+
+  storageClassName: ""
+
+  persistentVolumeReclaimPolicy: Retain
+
+  claimRef:
+    namespace: cnpg-system
+    name: platform-db-1
+
+  nfs:
+    server: 192.168.1.13
+    path: /mnt/apps/postgres/platform-db
+--- 
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: immich-db-pv
+
+spec:
+  capacity:
+    storage: 100Gi
+
+  accessModes:
+    - ReadWriteOnce
+
+  storageClassName: ""
+
+  persistentVolumeReclaimPolicy: Retain
+
+  claimRef:
+    namespace: cnpg-system
+    name: immich-db-1
+
+  nfs:
+    server: 192.168.1.13
+    path: /mnt/apps/postgres/immich-db
