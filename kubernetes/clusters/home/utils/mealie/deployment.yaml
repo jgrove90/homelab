@@ -58,7 +58,7 @@ spec:
                   key: POSTGRES_PASSWORD
 
             - name: POSTGRES_SERVER
-              value: "postgres.postgres.svc.cluster.local"
+              value: "postgres-lb.cnpg-system.svc.cluster.local"
 
             - name: POSTGRES_PORT
               value: "5432"
