@@ -20,21 +20,10 @@ spec:
   tls:
     - hosts:
         - audiobookshelf.alarlab.dev
-      secretName: audiobookshelf-tls
+      secretName: wildcard-alarlab-tls
 
   rules:
     - host: audiobookshelf.alarlab.dev
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: audiobookshelf
-                port:
-                  number: 80
-
-    - host: audiobookshelf.home
       http:
         paths:
           - path: /

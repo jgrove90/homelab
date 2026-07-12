@@ -10,7 +10,6 @@ metadata:
     external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
 
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    acme.cert-manager.io/http01-edit-in-place: "true"
 
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
@@ -24,7 +23,7 @@ spec:
   tls:
     - hosts:
         - plex.alarlab.dev
-      secretName: plex-tls
+      secretName: wildcard-alarlab-tls
 
   rules:
     - host: plex.alarlab.dev
@@ -35,16 +34,5 @@ spec:
             backend:
               service:
                 name: plex-external
-                port:
-                  number: 32400
-
-    - host: plex.home
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: plex
                 port:
                   number: 32400

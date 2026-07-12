@@ -10,8 +10,13 @@ metadata:
 spec:
   ingressClassName: nginx
 
+  tls:
+  - hosts:
+      - homeassistant.alarlab.dev
+    secretName: wildcard-alarlab-tls
+
   rules:
-    - host: homeassistant.home
+    - host: homeassistant.alarlab.dev
       http:
         paths:
           - path: /

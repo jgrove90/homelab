@@ -1,5 +1,6 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
+
 metadata:
   name: sonarr
   namespace: arr-stack
@@ -8,8 +9,14 @@ metadata:
 
 spec:
   ingressClassName: nginx
+
+  tls:
+    - hosts:
+        - sonarr.alarlab.dev
+      secretName: wildcard-alarlab-tls
+
   rules:
-    - host: sonarr.home
+    - host: sonarr.alarlab.dev
       http:
         paths:
           - path: /

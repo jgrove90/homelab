@@ -9,8 +9,13 @@ metadata:
 spec:
   ingressClassName: nginx
 
+  tls:
+    - hosts:
+        - radarr.alarlab.dev
+      secretName: wildcard-alarlab-tls
+
   rules:
-    - host: radarr.home
+    - host: radarr.alarlab.dev
       http:
         paths:
           - path: /

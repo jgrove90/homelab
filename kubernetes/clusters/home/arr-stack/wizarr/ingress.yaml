@@ -10,7 +10,6 @@ metadata:
     external-dns.alpha.kubernetes.io/target: "alarlab.dev"
 
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    acme.cert-manager.io/http01-edit-in-place: "true"
 
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
@@ -21,21 +20,10 @@ spec:
   tls:
     - hosts:
         - plex-invite.alarlab.dev
-      secretName: wizarr-tls
+      secretName: wildcard-alarlab-tls
 
   rules:
     - host: plex-invite.alarlab.dev
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: wizarr-service
-                port:
-                  number: 5690
-
-    - host: wizarr.home
       http:
         paths:
           - path: /

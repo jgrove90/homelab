@@ -11,16 +11,21 @@ spec:
     spec:
       chart: external-dns
       version: "1.21.1"
-
       sourceRef:
         kind: HelmRepository
         name: external-dns
         namespace: infra
-
       interval: 24h
 
   values:
-    provider: cloudflare
+    provider:
+      name: cloudflare
+
+    serviceAccount:
+      create: true
+
+    rbac:
+      create: true
 
     cloudflare:
       proxied: false
@@ -38,19 +43,19 @@ spec:
 
     policy: upsert-only
 
+    registry: txt
     txtOwnerId: homelab
 
     sources:
       - ingress
       - service
 
-    logLevel: info
+    logLevel: debug
 
     resources:
       requests:
         cpu: 50m
         memory: 64Mi
-
       limits:
         cpu: 250m
         memory: 256Mi
