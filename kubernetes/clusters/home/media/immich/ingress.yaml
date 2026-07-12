@@ -12,8 +12,13 @@ metadata:
 spec:
   ingressClassName: nginx
 
+  tls:
+    - hosts:
+        - immich.alarlab.dev
+      secretName: wildcard-alarlab-tls
+
   rules:
-    - host: immich.home
+    - host: immich.alarlab.dev
       http:
         paths:
           - path: /

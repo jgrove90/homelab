@@ -8,12 +8,14 @@ metadata:
     external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
     external-dns.alpha.kubernetes.io/target: "alarlab.dev"
 spec:
+  type: LoadBalancer
+  loadBalancerIP: 192.168.1.120
+
   selector:
     app: wg-easy
+
   ports:
     - name: vpn
       port: 51820
       targetPort: wg-vpn
       protocol: UDP
-  type: LoadBalancer
-  loadBalancerIP: 192.168.1.120

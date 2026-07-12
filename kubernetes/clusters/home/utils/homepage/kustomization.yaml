@@ -9,8 +9,7 @@ resources:
   - pvc.yaml
   - deployment.yaml
   - ingress.yaml
-  - secrets.enc.yaml
-
+  
 configMapGenerator:
   - name: homepage-bookmarks
     files:

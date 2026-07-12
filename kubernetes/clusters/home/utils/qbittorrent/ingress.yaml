@@ -7,8 +7,13 @@ metadata:
 spec:
   ingressClassName: nginx
 
+  tls:
+  - hosts:
+      - qbittorrent.alarlab.dev
+    secretName: wildcard-alarlab-tls
+
   rules:
-    - host: qbittorrent.home
+    - host: qbittorrent.alarlab.dev
       http:
         paths:
           - path: /

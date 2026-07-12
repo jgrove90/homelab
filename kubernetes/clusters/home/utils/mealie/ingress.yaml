@@ -20,23 +20,12 @@ spec:
   ingressClassName: nginx
 
   tls:
-    - hosts:
-        - mealie.alarlab.dev
-      secretName: mealie-tls
+  - hosts:
+      - mealie.alarlab.dev
+    secretName: wildcard-alarlab-tls
 
   rules:
     - host: mealie.alarlab.dev
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: mealie-service
-                port:
-                  number: 9000
-
-    - host: mealie.home
       http:
         paths:
           - path: /
