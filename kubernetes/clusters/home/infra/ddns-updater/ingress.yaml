@@ -11,7 +11,7 @@ spec:
   ingressClassName: nginx
 
   rules:
-    - host: ddns-updater.home
+    - host: ddns-updater.alarlab.dev
       http:
         paths:
           - path: /
