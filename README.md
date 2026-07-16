@@ -97,6 +97,5 @@ flux logs --kind=Kustomization --follow
 
 ## Notes
 
-- Kubernetes manifests are split between shared app bases and cluster-specific overlays.
 - Secrets remain encrypted in git and are only decrypted in-cluster.
 - Terraform manages the infrastructure layer that supports the cluster.
