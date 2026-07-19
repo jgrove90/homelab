@@ -14,3 +14,4 @@ spec:
   dnsNames:
     - "*.alarlab.dev"
     - "alarlab.dev"
+    - "packetsandpods.com"

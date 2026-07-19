@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: packetsandpods-ingress
+  namespace: media
+
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+
+spec:
+  ingressClassName: nginx
+
+  tls:
+    - hosts:
+        - packetsandpods.com
+      secretName: wildcard-alarlab-tls
+
+  rules:
+    - host: packetsandpods.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: packetsandpods-service
+                port:
+                  number: 80
