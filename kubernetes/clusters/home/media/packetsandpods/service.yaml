@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: packetsandpods-service
+  namespace: media
+
+  labels:
+    app: packetsandpods
+
+spec:
+  selector:
+    app: packetsandpods
+
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP
+
+  type: ClusterIP
