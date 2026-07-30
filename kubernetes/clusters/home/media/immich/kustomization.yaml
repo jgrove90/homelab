@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - pv.yaml
   - pvc.yaml
+  - secret.enc.yaml
   - service.yaml
   - deployment.yaml
   - ingress.yaml

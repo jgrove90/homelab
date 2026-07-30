@@ -7,6 +7,7 @@ resources:
   - service.yaml
   - pv.yaml
   - pvc.yaml
+  - secrets.enc.yaml
   - deployment.yaml
   - ingress.yaml
   

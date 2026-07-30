@@ -3,3 +3,8 @@ kind: Kustomization
 
 resources:
   - wildcard-tls.yaml
+  - flaresolver
+  - home-assistant
+  - homepage
+  - mealie
+  - qbittorrent

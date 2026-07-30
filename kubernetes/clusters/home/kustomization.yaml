@@ -3,3 +3,8 @@ kind: Kustomization
 
 resources:
   - namespaces.yaml
+  - flux-infra.yaml
+  - flux-database.yaml
+  - flux-arr-stack.yaml
+  - flux-media.yaml
+  - flux-utils.yaml

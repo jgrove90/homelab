@@ -3,3 +3,8 @@ kind: Kustomization
 
 resources:
   - wildcard-tls.yaml
+  - audioookshelf
+  - fresh-rss
+  - immich
+  - packetsandpods
+  - plex

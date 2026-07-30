@@ -1,0 +1,14 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: home-arr-stack
+  namespace: flux-system
+spec:
+  interval: 10m
+  dependsOn:
+    - name: home-infra
+  path: ./kubernetes/clusters/home/arr-stack
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
