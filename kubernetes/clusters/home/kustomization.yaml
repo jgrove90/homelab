@@ -4,9 +4,7 @@ kind: Kustomization
 resources:
   - namespaces.yaml
   - flux-infra.yaml
-  - flux-infra-post.yaml
   - flux-database.yaml
-  - flux-database-post.yaml
   - flux-arr-stack.yaml
   - flux-media.yaml
   - flux-utils.yaml
