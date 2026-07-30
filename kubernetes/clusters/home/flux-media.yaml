@@ -8,6 +8,10 @@ spec:
   dependsOn:
     - name: home-infra-post
     - name: home-database-post
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   path: ./kubernetes/clusters/home/media
   prune: true
   sourceRef:

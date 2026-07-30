@@ -7,6 +7,10 @@ spec:
   interval: 10m
   dependsOn:
     - name: home-infra-post
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   path: ./kubernetes/clusters/home/arr-stack
   prune: true
   sourceRef:

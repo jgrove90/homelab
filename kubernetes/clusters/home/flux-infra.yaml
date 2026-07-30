@@ -7,6 +7,10 @@ spec:
   interval: 10m
   timeout: 15m
   wait: true
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   path: ./kubernetes/clusters/home/infra
   prune: true
   healthChecks:

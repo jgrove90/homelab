@@ -9,6 +9,10 @@ spec:
   wait: true
   dependsOn:
     - name: home-infra-post
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   path: ./kubernetes/clusters/home/database
   prune: true
   healthChecks:
