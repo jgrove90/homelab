@@ -1,5 +1,9 @@
 terraform {
   required_providers {
+    local = {
+      source  = "hashicorp/local"
+      version = "2.5.3"
+    }
     proxmox = {
       source  = "bpg/proxmox"
       version = "0.80.0"
@@ -12,8 +16,12 @@ terraform {
 }
 
 provider "proxmox" {
-  endpoint = var.proxmox_endpoint
-  username = var.proxmox_username
-  password = var.proxmox_password
-  insecure = true
+  endpoint  = var.proxmox_endpoint
+  api_token = var.proxmox_api_token
+  insecure  = true
+
+  ssh {
+    username = "root"
+    agent    = true
+  }
 }

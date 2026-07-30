@@ -1,11 +1,19 @@
 output "talosconfig" {
-  value     = yamlencode(data.talos_client_configuration.talos_config.talos_config)
+  value     = data.talos_client_configuration.talos_config.talos_config
   sensitive = true
 }
 
 output "kubeconfig" {
   value     = talos_cluster_kubeconfig.kubeconfig.kubeconfig_raw
   sensitive = true
+}
+
+output "talosconfig_path" {
+  value = local.talosconfig_file_path
+}
+
+output "kubeconfig_path" {
+  value = local.kubeconfig_file_path
 }
 
 output "machineconfig_control_plane" {
