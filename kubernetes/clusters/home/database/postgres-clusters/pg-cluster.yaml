@@ -1,0 +1,62 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: platform-db
+  namespace: cnpg-system
+
+spec:
+  instances: 1
+
+  enableSuperuserAccess: true
+
+  superuserSecret:
+    name: superuser-secret
+
+  imageName: ghcr.io/cloudnative-pg/postgresql:17
+
+  storage:
+    size: 50Gi
+    storageClass: ""
+
+  bootstrap:
+    initdb:
+      database: postgres
+      owner: postgres
+      secret:
+        name: postgres-secret
+
+  postgresql:
+    parameters:
+      shared_buffers: "256MB"
+---
+
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: immich-db
+  namespace: cnpg-system
+
+spec:
+  instances: 1
+
+  enableSuperuserAccess: true
+
+  superuserSecret:
+    name: superuser-secret
+
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:18.4
+
+  storage:
+    size: 100Gi
+    storageClass: ""
+
+  bootstrap:
+    initdb:
+      database: immich
+      owner: immich
+      secret:
+        name: immich-secret
+
+  postgresql:
+    shared_preload_libraries:
+      - vchord

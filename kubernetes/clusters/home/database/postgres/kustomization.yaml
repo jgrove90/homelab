@@ -6,5 +6,4 @@ resources:
   - helm-release.yaml
   - secret.enc.yaml
   - pv.yaml
-  - pg-cluster.yaml 
   - service.yaml

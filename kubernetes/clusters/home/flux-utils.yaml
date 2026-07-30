@@ -6,8 +6,8 @@ metadata:
 spec:
   interval: 10m
   dependsOn:
-    - name: home-infra
-    - name: home-database
+    - name: home-infra-post
+    - name: home-database-post
   path: ./kubernetes/clusters/home/utils
   prune: true
   sourceRef:
