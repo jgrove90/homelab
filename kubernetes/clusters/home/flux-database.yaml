@@ -5,10 +5,17 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m
+  timeout: 15m
+  wait: true
   dependsOn:
     - name: home-infra-post
   path: ./kubernetes/clusters/home/database
   prune: true
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: cnpg
+      namespace: cnpg-system
   sourceRef:
     kind: GitRepository
     name: flux-system
