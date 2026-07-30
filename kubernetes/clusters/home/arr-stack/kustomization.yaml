@@ -3,8 +3,3 @@ kind: Kustomization
 
 resources:
   - wildcard-tls.yaml
-  - prowlarr
-  - radarr
-  - seerr
-  - sonarr
-  - wizarr

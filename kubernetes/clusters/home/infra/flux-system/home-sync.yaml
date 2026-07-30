@@ -5,6 +5,10 @@ metadata:
   namespace: flux-system
 spec:
   interval: 5m
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   path: ./kubernetes/clusters/home
   prune: true
   sourceRef:
