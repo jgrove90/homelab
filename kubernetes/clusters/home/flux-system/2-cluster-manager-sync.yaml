@@ -12,6 +12,9 @@ spec:
 
   prune: true
   wait: true
+  
+  dependsOn:
+    - name: repositories
 
   sourceRef:
     kind: GitRepository
