@@ -1,0 +1,10 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- 0-namespaces-sync.yaml
+- 1-repos-sync.yaml
+- 2-infra-sync.yaml
+- 3-services-sync.yaml
+- 4-apps-sync.yaml
+- gotk-components.yaml
+- gotk-sync.yaml
