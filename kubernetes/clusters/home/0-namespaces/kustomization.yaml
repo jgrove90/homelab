@@ -3,8 +3,3 @@ kind: Kustomization
 
 resources:
   - namespaces.yaml
-  - infra
-  - database
-  - arr-stack
-  - media
-  - utils
