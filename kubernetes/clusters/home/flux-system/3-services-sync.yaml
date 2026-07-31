@@ -9,7 +9,7 @@ spec:
 
   interval: 1h
 
-  path: ./3-services
+  path: ../3-services
 
   prune: true
   wait: true

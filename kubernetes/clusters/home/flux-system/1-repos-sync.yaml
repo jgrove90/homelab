@@ -9,7 +9,7 @@ spec:
 
   interval: 1h
 
-  path: ./1-repos
+  path: ../1-repos
 
   prune: true
   wait: true
