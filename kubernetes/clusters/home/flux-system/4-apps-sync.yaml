@@ -9,7 +9,7 @@ spec:
 
   interval: 1h
 
-  path: ../4-apps
+  path: ./kubernetes/clusters/home/4-apps
 
   prune: true
   wait: true

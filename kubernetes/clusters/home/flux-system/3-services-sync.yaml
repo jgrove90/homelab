@@ -9,7 +9,7 @@ spec:
 
   interval: 1h
 
-  path: ../3-services
+  path: ./kubernetes/clusters/home/3-services
 
   prune: true
   wait: true

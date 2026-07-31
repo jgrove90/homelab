@@ -9,7 +9,7 @@ spec:
 
   interval: 1h
 
-  path: ../2-infra
+  path: ./kubernetes/clusters/home/2-infra
 
   prune: true
   wait: true

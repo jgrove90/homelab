@@ -6,7 +6,7 @@ metadata:
 spec:
   interval: 1h
 
-  path: ../0-namespaces
+  path: ./kubernetes/clusters/home/0-namespaces
 
   prune: true
   wait: true
