@@ -6,7 +6,6 @@ metadata:
   namespace: flux-system
 
 spec:
-
   interval: 1h
 
   path: ./kubernetes/clusters/home/3-services
@@ -15,7 +14,11 @@ spec:
   wait: true
 
   dependsOn:
-    - name: infrastructure
+    - name: metallb
+    - name: metallb-config
+    - name: ingress-nginx
+    - name: cert-manager
+    - name: cert-issuer
 
   sourceRef:
     kind: GitRepository

@@ -1,0 +1,19 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+
+metadata:
+  name: intel-gpu-plugin
+  namespace: flux-system
+
+spec:
+  interval: 1h
+  path: ./kubernetes/clusters/home/2-infra/intel-gpu-plugin
+  prune: true
+  wait: true
+
+  dependsOn:
+    - name: repositories
+
+  sourceRef:
+    kind: GitRepository
+    name: flux-system

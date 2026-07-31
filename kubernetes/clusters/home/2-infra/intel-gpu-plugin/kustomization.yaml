@@ -3,6 +3,9 @@ kind: Kustomization
 
 namespace: infra
 
+resources:
+  - https://github.com/intel/intel-device-plugins-for-kubernetes/deployments/gpu_plugin/base?ref=v0.36.0
+
 patches:
   - target:
       kind: DaemonSet
