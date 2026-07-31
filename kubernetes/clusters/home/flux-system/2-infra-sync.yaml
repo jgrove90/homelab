@@ -1,0 +1,27 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+
+metadata:
+  name: infrastructure
+  namespace: flux-system
+
+spec:
+
+  interval: 1h
+
+  path: ./2-infra
+
+  prune: true
+  wait: true
+
+  dependsOn:
+    - name: repositories
+
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age

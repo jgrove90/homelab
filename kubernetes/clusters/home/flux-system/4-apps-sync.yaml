@@ -1,16 +1,27 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
+
 metadata:
-  name: home
+  name: apps
   namespace: flux-system
+
 spec:
-  interval: 5m
+
+  interval: 1h
+
+  path: ./4-apps
+
+  prune: true
+  wait: true
+
+  dependsOn:
+    - name: services
+
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+
   decryption:
     provider: sops
     secretRef:
       name: sops-age
-  path: ./kubernetes/clusters/home
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
