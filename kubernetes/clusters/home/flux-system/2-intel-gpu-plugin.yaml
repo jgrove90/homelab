@@ -7,7 +7,9 @@ metadata:
 
 spec:
   interval: 1h
+  
   path: ./kubernetes/clusters/home/2-infra/intel-gpu-plugin
+  
   prune: true
   wait: true
 

@@ -4,7 +4,7 @@ kind: Kustomization
 namespace: infra
 
 resources:
-  - https://github.com/intel/intel-device-plugins-for-kubernetes/deployments/gpu_plugin/base?ref=v0.36.0
+  - https://raw.githubusercontent.com/intel/intel-device-plugins-for-kubernetes/main/deployments/gpu_plugin/base/intel-gpu-plugin.yaml
 
 patches:
   - target:
