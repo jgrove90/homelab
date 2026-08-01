@@ -7,6 +7,7 @@ resources:
 - 1-repos-sync.yaml
 - 2-cluster-manager-sync.yaml
 - 2-cluster-issuer-sync.yaml
+- 2-ddns-updater-sync.yaml
 - 2-intel-gpu-plugin-sync.yaml
 - 2-metallb-sync.yaml
 - 2-metallb-config-sync.yaml
