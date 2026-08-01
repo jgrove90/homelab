@@ -11,11 +11,12 @@ spec:
   path: ./kubernetes/clusters/home/2-infra/external-dns
 
   prune: true
-  wait: true
+  wait: false
 
   dependsOn:
     - name: repositories
     - name: ingress-nginx
+    - name: cert-issuer
 
   sourceRef:
     kind: GitRepository

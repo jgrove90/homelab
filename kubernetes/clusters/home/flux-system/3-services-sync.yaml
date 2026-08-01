@@ -11,13 +11,11 @@ spec:
   path: ./kubernetes/clusters/home/3-services
 
   prune: true
-  wait: true
+  wait: false
 
   dependsOn:
-    - name: metallb-system
     - name: metallb-config
     - name: ingress-nginx
-    - name: cert-manager
     - name: cert-issuer
 
   sourceRef:

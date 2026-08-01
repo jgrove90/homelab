@@ -11,7 +11,7 @@ spec:
   path: ./kubernetes/clusters/home/2-infra/cert-issuer
 
   prune: true
-  wait: true
+  wait: false
 
   dependsOn:
     - name: cert-manager

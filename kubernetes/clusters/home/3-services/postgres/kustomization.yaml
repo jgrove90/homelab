@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - helm-release.yaml
+  - pg-cluster.yaml
   - secret.enc.yaml
   - pv.yaml
   - service.yaml

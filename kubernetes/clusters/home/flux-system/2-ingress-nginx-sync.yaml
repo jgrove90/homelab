@@ -16,6 +16,7 @@ spec:
   dependsOn:
     - name: repositories
     - name: metallb-system
+    - name: metallb-config
 
   sourceRef:
     kind: GitRepository
