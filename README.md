@@ -97,7 +97,7 @@ flux bootstrap github \
   --owner=jgrove90 \
   --repository=homelab \
   --branch=main \
-  --path=kubernetes/clusters/home/infra/flux-system
+  --path=kubernetes/clusters/home
 ```
 
 If you bootstrap from a different directory structure, update the path so Flux points at the correct cluster overlay.
@@ -152,3 +152,4 @@ This repository does not rotate Talos machine secrets automatically. If you need
 - Secrets remain encrypted in git and are only decrypted in-cluster.
 - Terraform manages the infrastructure layer that supports the cluster.
 - Proxmox authentication is API-token-only in Terraform; provide the token through `TF_VAR_proxmox_api_token`.
+flux reconcile source git flux-system && flux reconcile kustomization flux-system --with-source
