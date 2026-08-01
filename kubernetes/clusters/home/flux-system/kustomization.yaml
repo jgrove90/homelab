@@ -12,5 +12,3 @@ resources:
 - 2-external-dns-sync.yaml
 - 3-services-sync.yaml
 - 4-apps-sync.yaml
-- gotk-components.yaml
-- gotk-sync.yaml
