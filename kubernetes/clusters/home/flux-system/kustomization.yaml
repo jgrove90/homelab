@@ -3,3 +3,14 @@ kind: Kustomization
 resources:
 - gotk-components.yaml
 - gotk-sync.yaml
+- 0-namespaces-sync.yaml
+- 1-repos-sync.yaml
+- 2-cluster-manager-sync.yaml
+- 2-cluster-issuer-sync.yaml
+- 2-intel-gpu-plugin-sync.yaml
+- 2-metallb-sync.yaml
+- 2-metallb-config-sync.yaml
+- 2-ingress-nginx-sync.yaml
+- 2-external-dns-sync.yaml
+- 3-services-sync.yaml
+- 4-apps-sync.yaml
