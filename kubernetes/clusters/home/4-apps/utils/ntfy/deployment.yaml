@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ntfy
+  namespace: utils
+  labels:
+    app: ntfy
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: ntfy
+
+  template:
+    metadata:
+      labels:
+        app: ntfy
+
+    spec:
+      containers:
+        - name: ntfy
+          image: binwiederhier/ntfy:v2.26.3
+          imagePullPolicy: IfNotPresent
+
+          command:
+            - ntfy
+            - serve
+
+          ports:
+            - name: http
+              containerPort: 80
+
+          env:
+            - name: TZ
+              value: "America/Denver"
+
+            - name: NTFY_BASE_URL
+              value: "https://ntfy.alarlab.dev"
+
+            - name: NTFY_CACHE_FILE
+              value: "/var/cache/ntfy/cache.db"
+
+            - name: NTFY_AUTH_FILE
+              value: "/var/cache/ntfy/user.db"
+
+            - name: NTFY_AUTH_DEFAULT_ACCESS
+              value: "deny-all"
+
+            - name: NTFY_AUTH_USERS
+              valueFrom:
+                secretKeyRef:
+                  name: ntfy-auth
+                  key: auth-users
+
+            - name: NTFY_ATTACHMENT_CACHE_DIR
+              value: "/var/cache/ntfy/attachments"
+
+            - name: NTFY_BEHIND_PROXY
+              value: "true"
+
+            - name: NTFY_ENABLE_LOGIN
+              value: "true"
+
+            - name: NTFY_REQUIRE_LOGIN
+              value: "true"
+
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+
+            limits:
+              cpu: "1"
+              memory: 512Mi
+
+          startupProbe:
+            httpGet:
+              path: /v1/health
+              port: http
+            periodSeconds: 10
+            failureThreshold: 30
+
+          readinessProbe:
+            httpGet:
+              path: /v1/health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            timeoutSeconds: 5
+
+          livenessProbe:
+            httpGet:
+              path: /v1/health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 5
+
+          volumeMounts:
+            - name: cache
+              mountPath: /var/cache/ntfy
+
+      volumes:
+        - name: cache
+          persistentVolumeClaim:
+            claimName: ntfy-cache-pvc

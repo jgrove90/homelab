@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ntfy-cache-pvc
+  namespace: utils
+
+spec:
+  accessModes:
+    - ReadWriteMany
+
+  resources:
+    requests:
+      storage: 5Gi
+
+  volumeName: ntfy-cache-pv
+
+  storageClassName: ""
