@@ -29,7 +29,7 @@ jobs:
 
       - name: Validate cluster manifests
         run: |
-          kustomize build clusters/home > /tmp/rendered.yaml
+          kustomize build kubernetes/clusters/home > /tmp/rendered.yaml
 
       - name: Enable auto-merge
         env:
