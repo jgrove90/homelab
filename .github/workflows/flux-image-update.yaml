@@ -2,6 +2,8 @@ name: Flux Image Update
 
 on:
   pull_request:
+    branches:
+      - main
     types:
       - opened
       - synchronize
@@ -13,14 +15,11 @@ permissions:
 
 jobs:
   validate:
-    if: github.event.pull_request.head.ref == 'app-image-update'
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout PR
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Install Kustomize
         run: |
