@@ -14,18 +14,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Create pull request if needed
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if gh pr list \
+          OPEN_PRS=$(gh pr list \
+            --repo "${{ github.repository }}" \
             --head app-image-update \
             --base main \
             --state open \
             --json number \
-            --jq 'length' | grep -q '^0$'; then
+            --jq 'length')
 
+          if [ "$OPEN_PRS" -eq 0 ]; then
             gh pr create \
+              --repo "${{ github.repository }}" \
               --base main \
               --head app-image-update \
               --title "Update container images" \
