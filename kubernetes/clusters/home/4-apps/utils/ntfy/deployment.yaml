@@ -39,6 +39,9 @@ spec:
             - name: NTFY_BASE_URL
               value: "https://ntfy.alarlab.dev"
 
+            - name: NTFY_UPSTREAM_BASE_URL
+              value: "https://ntfy.sh"
+
             - name: NTFY_CACHE_FILE
               value: "/var/cache/ntfy/cache.db"
 
