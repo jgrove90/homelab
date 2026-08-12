@@ -1,0 +1,31 @@
+name: Flux Update Notification
+
+on:
+  pull_request:
+    types:
+      - closed
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    if: >
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.head.ref == 'app-image-update'
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send ntfy notification
+        env:
+          NTFY_URL: ${{ secrets.NTFY_URL }}
+          NTFY_TOKEN: ${{ secrets.NTFY_TOKEN }}
+        run: |
+          curl --fail-with-body \
+            -H "Authorization: Bearer ${NTFY_TOKEN}" \
+            -H "Title: Kubernetes update succeeded" \
+            -H "Priority: default" \
+            -H "Tags: white_check_mark" \
+            -d "${{ github.event.pull_request.title }}" \
+            "${NTFY_URL}/app_update"
