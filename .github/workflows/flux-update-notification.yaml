@@ -13,7 +13,6 @@ jobs:
     if: >
       github.event.pull_request.merged == true &&
       github.event.pull_request.head.ref == 'app-image-update'
-    
     runs-on: ubuntu-latest
 
     steps:
