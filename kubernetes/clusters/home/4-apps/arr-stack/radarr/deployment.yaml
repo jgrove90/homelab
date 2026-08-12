@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: radarr
-          image: lscr.io/linuxserver/radarr:6.3.0 # {"$imagepolicy": "flux-system:radarr"}
+          image: lscr.io/linuxserver/radarr:6.2.0 # {"$imagepolicy": "flux-system:radarr"}
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
