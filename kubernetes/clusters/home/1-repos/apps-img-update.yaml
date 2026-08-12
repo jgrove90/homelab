@@ -24,7 +24,7 @@ spec:
         Update container images
 
     push:
-      branch: flux-image-updates
+      branch: app-image-update
 
   update:
     path: ./kubernetes/clusters/home/4-apps
