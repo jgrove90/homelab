@@ -5,55 +5,43 @@ metadata:
   namespace: arr-stack
   labels:
     app: radarr
-
 spec:
   replicas: 1
-
   selector:
     matchLabels:
       app: radarr
-
   template:
     metadata:
       labels:
         app: radarr
-
     spec:
       containers:
         - name: radarr
-          image: lscr.io/linuxserver/radarr:6.2.1 # {"$imagepolicy": "flux-system:radarr"}
+          image: lscr.io/linuxserver/radarr:6.3.0 # {"$imagepolicy": "flux-system:radarr"}
           imagePullPolicy: IfNotPresent
-
           ports:
             - name: http
               containerPort: 7878
-
           env:
             - name: PUID
               value: "1000"
-
             - name: PGID
               value: "1000"
-
             - name: TZ
               value: "America/Denver"
-
           resources:
             requests:
               cpu: 100m
               memory: 512Mi
-
             limits:
               cpu: "1"
               memory: 4Gi
-
           startupProbe:
             httpGet:
               path: /
               port: http
             periodSeconds: 10
             failureThreshold: 30
-
           readinessProbe:
             httpGet:
               path: /
@@ -62,7 +50,6 @@ spec:
             periodSeconds: 15
             timeoutSeconds: 5
             failureThreshold: 3
-
           livenessProbe:
             httpGet:
               path: /
@@ -71,26 +58,20 @@ spec:
             periodSeconds: 30
             timeoutSeconds: 5
             failureThreshold: 3
-
           volumeMounts:
             - name: config
               mountPath: /config
-
             - name: movies-media
               mountPath: /movies-media
-
             - name: downloads
               mountPath: /downloads
-
       volumes:
         - name: config
           persistentVolumeClaim:
             claimName: radarr-pvc
-
         - name: movies-media
           persistentVolumeClaim:
             claimName: radarr-movies-pvc
-
         - name: downloads
           persistentVolumeClaim:
             claimName: radarr-downloads-pvc
