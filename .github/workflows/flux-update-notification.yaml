@@ -2,6 +2,8 @@ name: Flux Update Notification
 
 on:
   pull_request:
+    branches:
+      - main
     types:
       - closed
 
@@ -10,9 +12,7 @@ permissions:
 
 jobs:
   notify:
-    if: >
-      github.event.pull_request.merged == true &&
-      github.event.pull_request.head.ref == 'app-image-update'
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
