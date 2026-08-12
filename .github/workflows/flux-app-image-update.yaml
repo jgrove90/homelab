@@ -156,7 +156,7 @@ jobs:
         run: |
           curl --fail-with-body \
             -H "Authorization: Bearer ${NTFY_TOKEN}" \
-            -H "Title: Kubernetes image update" \
+            -H "Title: Kubernetes app update" \
             -H "Priority: default" \
             -H "Tags: white_check_mark" \
             --data-binary "$IMAGE_CHANGES" \
