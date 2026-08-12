@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: radarr
-          image: lscr.io/linuxserver/radarr:6.2.1-nightly
+          image: lscr.io/linuxserver/radarr:6.2.1 # {"$imagepolicy": "flux-system:radarr"}
           imagePullPolicy: IfNotPresent
 
           ports:
