@@ -60,6 +60,57 @@ jobs:
         run: |
           kustomize build kubernetes/clusters/home/4-apps > /tmp/rendered.yaml
 
+      - name: Capture image changes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          CHANGES=$(gh pr diff "$PR_NUMBER" \
+            --repo "${{ github.repository }}" |
+            awk '
+              /^-.*image: / {
+                old=$0
+                sub(/^.*image: /, "", old)
+                sub(/[[:space:]]+#.*/, "", old)
+                sub(/[[:space:]]+$/, "", old)
+              }
+
+              /^\+.*image: / {
+                new=$0
+                sub(/^.*image: /, "", new)
+                sub(/[[:space:]]+#.*/, "", new)
+                sub(/[[:space:]]+$/, "", new)
+
+                if (old != "" && new != "") {
+                  split(old, old_parts, ":")
+                  split(new, new_parts, ":")
+
+                  old_tag=old_parts[length(old_parts)]
+                  new_tag=new_parts[length(new_parts)]
+
+                  app=new_parts[1]
+                  sub(/^.*\//, "", app)
+
+                  printf "%s %s -> %s\n", app, old_tag, new_tag
+
+                  old=""
+                  new=""
+                }
+              }
+            ')
+
+          if [ -z "$CHANGES" ]; then
+            CHANGES="Image update merged successfully."
+          fi
+
+          echo "Image changes:"
+          echo "$CHANGES"
+
+          {
+            echo 'IMAGE_CHANGES<<EOF'
+            echo "$CHANGES"
+            echo 'EOF'
+          } >> "$GITHUB_ENV"
+
       - name: Enable auto-merge
         env:
           GH_TOKEN: ${{ github.token }}
@@ -69,7 +120,8 @@ jobs:
           gh pr merge "$PR_NUMBER" \
             --repo "${{ github.repository }}" \
             --auto \
-            --squash
+            --squash \
+            --delete-branch
 
       - name: Wait for PR to merge
         env:
@@ -102,46 +154,10 @@ jobs:
           NTFY_URL: ${{ secrets.NTFY_URL }}
           NTFY_TOKEN: ${{ secrets.NTFY_TOKEN }}
         run: |
-          CHANGES=$(gh pr diff "$PR_NUMBER" \
-            --repo "${{ github.repository }}" |
-            awk '
-              /^-.*image: / {
-                old=$0
-                sub(/^.*image: /, "", old)
-                sub(/ .*/, "", old)
-              }
-
-              /^\+.*image: / {
-                new=$0
-                sub(/^.*image: /, "", new)
-                sub(/ .*/, "", new)
-
-                if (old != "" && new != "") {
-                  split(new, new_parts, ":")
-                  split(old, old_parts, ":")
-
-                  app=new_parts[1]
-                  sub(/^.*\//, "", app)
-
-                  printf "%s %s -> %s\n", app, old_parts[length(old_parts)], new_parts[length(new_parts)]
-
-                  old=""
-                  new=""
-                }
-              }
-            ')
-
-          if [ -z "$CHANGES" ]; then
-            CHANGES="Image update merged successfully."
-          fi
-
-          echo "Notification:"
-          echo "$CHANGES"
-
           curl --fail-with-body \
             -H "Authorization: Bearer ${NTFY_TOKEN}" \
             -H "Title: Kubernetes image update" \
             -H "Priority: default" \
             -H "Tags: white_check_mark" \
-            --data-binary "$CHANGES" \
+            --data-binary "$IMAGE_CHANGES" \
             "${NTFY_URL}/app_update"
