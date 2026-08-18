@@ -16,6 +16,10 @@ spec:
   imageRepositoryRef:
     name: qbittorrent
 
+  filterTags:
+    pattern: '^(?P<version>[0-9]+\.[0-9]+\.[0-9]+)_v.*$'
+    extract: '$version'
+
   policy:
     semver:
       range: ">=1.0.0"
