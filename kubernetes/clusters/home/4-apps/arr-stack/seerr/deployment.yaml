@@ -5,52 +5,41 @@ metadata:
   namespace: arr-stack
   labels:
     app: seerr
-
 spec:
   replicas: 1
-
   selector:
     matchLabels:
       app: seerr
-
   template:
     metadata:
       labels:
         app: seerr
-
     spec:
       containers:
         - name: seerr
-          image: ghcr.io/seerr-team/seerr:v3.3.0 # {"$imagepolicy": "flux-system:seerr"}
+          image: ghcr.io/seerr-team/seerr:v3.4.1 # {"$imagepolicy": "flux-system:seerr"}
           imagePullPolicy: IfNotPresent
-
           ports:
             - name: http
               containerPort: 5055
-
           env:
             - name: TZ
               value: "America/Denver"
-
             - name: LOG_LEVEL
               value: "info"
-
           resources:
             requests:
               cpu: 100m
               memory: 256Mi
-
             limits:
               cpu: "1"
               memory: 1Gi
-
           startupProbe:
             httpGet:
               path: /api/v1/settings/public
               port: http
             periodSeconds: 10
             failureThreshold: 30
-
           readinessProbe:
             httpGet:
               path: /api/v1/settings/public
@@ -58,7 +47,6 @@ spec:
             initialDelaySeconds: 10
             periodSeconds: 15
             timeoutSeconds: 5
-
           livenessProbe:
             httpGet:
               path: /api/v1/settings/public
@@ -66,11 +54,9 @@ spec:
             initialDelaySeconds: 30
             periodSeconds: 30
             timeoutSeconds: 5
-
           volumeMounts:
             - name: config
               mountPath: /app/config
-
       volumes:
         - name: config
           persistentVolumeClaim:
