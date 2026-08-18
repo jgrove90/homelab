@@ -7,8 +7,6 @@ metadata:
     app: vpn-qbittorrent
 spec:
   replicas: 1
-  strategy:
-    type: Recreate
   selector:
     matchLabels:
       app: vpn-qbittorrent
@@ -51,6 +49,8 @@ spec:
               value: "30s"
             - name: LOG_LEVEL
               value: "info"
+            - name: HEALTH_SERVER_ADDRESS
+              value: "0.0.0.0:9999"
           resources:
             requests:
               cpu: 50m
@@ -59,18 +59,21 @@ spec:
               cpu: 250m
               memory: 256Mi
           startupProbe:
-            tcpSocket:
-              port: 8080
+            httpGet:
+              path: /
+              port: 9999
             periodSeconds: 10
             failureThreshold: 30
           readinessProbe:
-            tcpSocket:
-              port: 8080
+            httpGet:
+              path: /
+              port: 9999
             periodSeconds: 15
             timeoutSeconds: 5
           livenessProbe:
-            tcpSocket:
-              port: 8080
+            httpGet:
+              path: /
+              port: 9999
             periodSeconds: 30
             timeoutSeconds: 5
           ports:
@@ -88,11 +91,11 @@ spec:
         - name: qbittorrent
           image: lscr.io/linuxserver/qbittorrent:5.2.3_v2.0.13-ls466 # {"$imagepolicy": "flux-system:qbittorrent"}
           imagePullPolicy: IfNotPresent
-          securityContext:
-            runAsUser: 0
-            capabilities:
-              add:
-                - NET_ADMIN
+          # securityContext:
+          #   runAsUser: 0
+          #   capabilities:
+          #     add:
+          #       - NET_ADMIN
           env:
             - name: PUID
               value: "1000"
