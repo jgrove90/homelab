@@ -84,7 +84,7 @@ spec:
             - name: gluetun-data
               mountPath: /tmp/gluetun
         - name: qbittorrent
-          image: lscr.io/linuxserver/qbittorrent:20.04.1 # {"$imagepolicy": "flux-system:qbittorrent"}
+          image: lscr.io/linuxserver/qbittorrent:5.2.3_v2.0.13-ls466 # {"$imagepolicy": "flux-system:qbittorrent"}
           imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 0
