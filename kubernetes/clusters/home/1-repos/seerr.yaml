@@ -1,0 +1,21 @@
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: seerr
+  namespace: flux-system
+spec:
+  image: ghcr.io/seerr-team/seerr
+  interval: 10m
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: seerr
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: seerr
+
+  policy:
+    semver:
+      range: ">=1.0.0"
