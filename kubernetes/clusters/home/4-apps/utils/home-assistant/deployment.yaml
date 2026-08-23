@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: home-assistant
-          image: ghcr.io/home-assistant/home-assistant:stable
+          image: ghcr.io/home-assistant/home-assistant:2026.05.0 # {"$imagepolicy": "flux-system:home-assistant"}
 
           ports:
             - containerPort: 8123
