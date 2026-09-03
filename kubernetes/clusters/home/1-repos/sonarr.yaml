@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   image: lscr.io/linuxserver/sonarr
-  interval: 10m
+  interval: 12h
 ---
 apiVersion: image.toolkit.fluxcd.io/v1
 kind: ImagePolicy
