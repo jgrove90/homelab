@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: packetsandpods
-          image: ghcr.io/jgrove90/packets-and-pods:sha-1f34721
+          image: ghcr.io/jgrove90/packets-and-pods:sha-c708dd3
           imagePullPolicy: IfNotPresent
 
           ports:
