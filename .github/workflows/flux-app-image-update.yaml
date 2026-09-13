@@ -126,10 +126,19 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          CHECK_COUNT=$(gh pr checks "$PR_NUMBER" \
-            --repo "${{ github.repository }}" \
-            --json name \
-            --jq 'length')
+          CHECK_COUNT=0
+          for attempt in {1..6}; do
+            CHECK_COUNT=$(gh pr checks "$PR_NUMBER" \
+              --repo "${{ github.repository }}" \
+              --json name \
+              --jq 'length')
+
+            if [ "$CHECK_COUNT" -gt 0 ]; then
+              break
+            fi
+
+            sleep 5
+          done
 
           if [ "$CHECK_COUNT" -eq 0 ]; then
             echo "No PR checks to wait for."
@@ -155,6 +164,7 @@ jobs:
           fi
 
           if [ "$status" -ne 0 ]; then
+            echo "PR checks did not complete successfully." >&2
             exit "$status"
           fi
 
