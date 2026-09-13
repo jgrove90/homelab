@@ -126,7 +126,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh pr checks "$PR_NUMBER" \
+          timeout 10m gh pr checks "$PR_NUMBER" \
             --repo "${{ github.repository }}" \
             --required \
             --watch \
