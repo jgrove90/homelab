@@ -165,10 +165,21 @@ jobs:
         run: |
           echo "Merging PR #$PR_NUMBER"
 
-          gh pr merge "$PR_NUMBER" \
-            --repo "${{ github.repository }}" \
-            --squash \
-            --delete-branch
+          for attempt in {1..6}; do
+            if gh pr merge "$PR_NUMBER" \
+              --repo "${{ github.repository }}" \
+              --squash \
+              --delete-branch; then
+              exit 0
+            fi
+
+            if [ "$attempt" -eq 6 ]; then
+              exit 1
+            fi
+
+            echo "Merge attempt $attempt failed; retrying in 10 seconds..."
+            sleep 10
+          done
 
       - name: Send ntfy notification
         env:
