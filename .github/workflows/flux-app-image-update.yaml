@@ -122,6 +122,16 @@ jobs:
             echo 'EOF'
           } >> "$GITHUB_ENV"
 
+      - name: Wait for required PR checks
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr checks "$PR_NUMBER" \
+            --repo "${{ github.repository }}" \
+            --required \
+            --watch \
+            --interval 10
+
       - name: Merge pull request
         env:
           GH_TOKEN: ${{ github.token }}
