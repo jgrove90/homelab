@@ -136,6 +136,11 @@ jobs:
             exit 0
           fi
 
+          if ! command -v timeout >/dev/null 2>&1; then
+            echo "'timeout' is required to bound the PR check wait." >&2
+            exit 1
+          fi
+
           set +e
           timeout 10m gh pr checks "$PR_NUMBER" \
             --repo "${{ github.repository }}" \
