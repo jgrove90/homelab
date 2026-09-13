@@ -145,7 +145,6 @@ jobs:
           timeout 10m gh pr checks "$PR_NUMBER" \
             --repo "${{ github.repository }}" \
             --watch \
-            --fail-fast \
             --interval 10
           status=$?
           set -e
