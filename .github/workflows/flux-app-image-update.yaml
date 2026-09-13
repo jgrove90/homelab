@@ -122,14 +122,24 @@ jobs:
             echo 'EOF'
           } >> "$GITHUB_ENV"
 
-      - name: Wait for required PR checks
+      - name: Wait for PR checks
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          CHECK_COUNT=$(gh pr checks "$PR_NUMBER" \
+            --repo "${{ github.repository }}" \
+            --json name \
+            --jq 'length')
+
+          if [ "$CHECK_COUNT" -eq 0 ]; then
+            echo "No PR checks to wait for."
+            exit 0
+          fi
+
           timeout 10m gh pr checks "$PR_NUMBER" \
             --repo "${{ github.repository }}" \
-            --required \
             --watch \
+            --fail-fast \
             --interval 10
 
       - name: Merge pull request
