@@ -136,11 +136,23 @@ jobs:
             exit 0
           fi
 
+          set +e
           timeout 10m gh pr checks "$PR_NUMBER" \
             --repo "${{ github.repository }}" \
             --watch \
             --fail-fast \
             --interval 10
+          status=$?
+          set -e
+
+          if [ "$status" -eq 124 ]; then
+            echo "Timed out waiting for PR checks to complete." >&2
+            exit "$status"
+          fi
+
+          if [ "$status" -ne 0 ]; then
+            exit "$status"
+          fi
 
       - name: Merge pull request
         env:
