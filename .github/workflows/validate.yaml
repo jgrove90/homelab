@@ -1,0 +1,24 @@
+name: Validate manifests
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  kustomize-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Kustomize
+        env:
+          KUSTOMIZE_VERSION: v5.8.1
+        run: |
+          curl -fsSL -o /tmp/kustomize.tar.gz \
+            "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/${KUSTOMIZE_VERSION}/kustomize_${KUSTOMIZE_VERSION}_linux_amd64.tar.gz"
+          tar -xzf /tmp/kustomize.tar.gz -C /tmp kustomize
+          sudo install -m 0755 /tmp/kustomize /usr/local/bin/kustomize
+
+      - name: Build
+        run: kustomize build kubernetes/clusters/home/4-apps > /tmp/rendered.yaml

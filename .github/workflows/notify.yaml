@@ -1,0 +1,56 @@
+name: Flux Image Update - Notify
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  notify:
+    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'app-image-update'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Compute image changes
+        id: changes
+        run: |
+          CHANGES=$(git diff ${{ github.event.pull_request.base.sha }} \
+                            ${{ github.event.pull_request.merge_commit_sha }} \
+            | awk '
+              /^-.*image: / {
+                old=$0; sub(/^.*image: /, "", old); sub(/[[:space:]]+#.*/, "", old); sub(/[[:space:]]+$/, "", old)
+              }
+              /^\+.*image: / {
+                new=$0; sub(/^.*image: /, "", new); sub(/[[:space:]]+#.*/, "", new); sub(/[[:space:]]+$/, "", new)
+                if (old != "" && new != "") {
+                  split(old, o, ":"); split(new, n, ":")
+                  app=n[1]; sub(/^.*\//, "", app)
+                  printf "%s %s -> %s\n", app, o[length(o)], n[length(n)]
+                  old=""; new=""
+                }
+              }')
+
+          [ -z "$CHANGES" ] && CHANGES="Image update merged successfully."
+
+          {
+            echo 'CHANGES<<EOF'
+            echo "$CHANGES"
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Send ntfy notification
+        env:
+          NTFY_URL: ${{ secrets.NTFY_URL }}
+          NTFY_TOKEN: ${{ secrets.NTFY_TOKEN }}
+        run: |
+          curl --fail-with-body \
+            -H "Authorization: Bearer ${NTFY_TOKEN}" \
+            -H "Title: Kubernetes app update" \
+            -H "Priority: default" \
+            -H "Tags: white_check_mark" \
+            --data-binary "${{ steps.changes.outputs.CHANGES }}" \
+            "${NTFY_URL}/app_update"
