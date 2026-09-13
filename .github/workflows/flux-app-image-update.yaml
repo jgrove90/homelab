@@ -10,7 +10,7 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: flux-app-image-update
+  group: flux-image-update
   cancel-in-progress: false
 
 jobs:
