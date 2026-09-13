@@ -142,30 +142,29 @@ jobs:
 
           if [ "$CHECK_COUNT" -eq 0 ]; then
             echo "No PR checks to wait for."
-            exit 0
-          fi
+          else
+            if ! command -v timeout >/dev/null 2>&1; then
+              echo "'timeout' is required to bound the PR check wait." >&2
+              exit 1
+            fi
 
-          if ! command -v timeout >/dev/null 2>&1; then
-            echo "'timeout' is required to bound the PR check wait." >&2
-            exit 1
-          fi
+            set +e
+            timeout 10m gh pr checks "$PR_NUMBER" \
+              --repo "${{ github.repository }}" \
+              --watch \
+              --interval 10
+            status=$?
+            set -e
 
-          set +e
-          timeout 10m gh pr checks "$PR_NUMBER" \
-            --repo "${{ github.repository }}" \
-            --watch \
-            --interval 10
-          status=$?
-          set -e
+            if [ "$status" -eq 124 ]; then
+              echo "Timed out waiting for PR checks to complete." >&2
+              exit "$status"
+            fi
 
-          if [ "$status" -eq 124 ]; then
-            echo "Timed out waiting for PR checks to complete." >&2
-            exit "$status"
-          fi
-
-          if [ "$status" -ne 0 ]; then
-            echo "PR checks did not complete successfully." >&2
-            exit "$status"
+            if [ "$status" -ne 0 ]; then
+              echo "PR checks did not complete successfully." >&2
+              exit "$status"
+            fi
           fi
 
       - name: Merge pull request
