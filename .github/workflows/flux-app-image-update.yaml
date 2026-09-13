@@ -59,9 +59,13 @@ jobs:
           echo "PR_NUMBER=$PR_NUMBER" >> "$GITHUB_ENV"
 
       - name: Install Kustomize
+        env:
+          KUSTOMIZE_VERSION: v5.8.1
         run: |
-          curl -sS https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh | bash
-          sudo mv kustomize /usr/local/bin/kustomize
+          curl -fsSL -o /tmp/kustomize.tar.gz \
+            "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/${KUSTOMIZE_VERSION}/kustomize_${KUSTOMIZE_VERSION}_linux_amd64.tar.gz"
+          tar -xzf /tmp/kustomize.tar.gz -C /tmp kustomize
+          sudo install -m 0755 /tmp/kustomize /usr/local/bin/kustomize
 
       - name: Validate cluster manifests
         run: |
@@ -118,43 +122,73 @@ jobs:
             echo 'EOF'
           } >> "$GITHUB_ENV"
 
-      - name: Enable auto-merge
+      - name: Wait for PR checks
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          echo "Enabling auto-merge for PR #$PR_NUMBER"
-
-          gh pr merge "$PR_NUMBER" \
-            --repo "${{ github.repository }}" \
-            --auto \
-            --squash \
-            --delete-branch
-
-      - name: Wait for PR to merge
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          echo "Waiting for PR #$PR_NUMBER to merge..."
-
-          for i in {1..60}; do
-            STATE=$(gh pr view "$PR_NUMBER" \
+          CHECK_COUNT=0
+          for attempt in {1..6}; do
+            CHECK_COUNT=$(gh pr checks "$PR_NUMBER" \
               --repo "${{ github.repository }}" \
-              --json state \
-              --jq '.state')
+              --json name \
+              --jq 'length' \
+              2>/dev/null || printf '0')
 
-            if [ "$STATE" = "MERGED" ]; then
-              echo "PR #$PR_NUMBER merged."
+            if [ "$CHECK_COUNT" -gt 0 ]; then
               break
             fi
 
-            echo "PR state: $STATE"
-            sleep 10
+            sleep 5
           done
 
-          if [ "$STATE" != "MERGED" ]; then
-            echo "PR did not merge within the timeout."
-            exit 1
+          if [ "$CHECK_COUNT" -eq 0 ]; then
+            echo "No PR checks to wait for."
+          else
+            if ! command -v timeout >/dev/null 2>&1; then
+              echo "'timeout' is required to bound the PR check wait." >&2
+              exit 1
+            fi
+
+            set +e
+            timeout 10m gh pr checks "$PR_NUMBER" \
+              --repo "${{ github.repository }}" \
+              --watch \
+              --interval 10
+            status=$?
+            set -e
+
+            if [ "$status" -eq 124 ]; then
+              echo "Timed out waiting for PR checks to complete." >&2
+              exit "$status"
+            fi
+
+            if [ "$status" -ne 0 ]; then
+              echo "PR checks did not complete successfully." >&2
+              exit "$status"
+            fi
           fi
+
+      - name: Merge pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "Merging PR #$PR_NUMBER"
+
+          for attempt in {1..6}; do
+            if gh pr merge "$PR_NUMBER" \
+              --repo "${{ github.repository }}" \
+              --squash \
+              --delete-branch; then
+              exit 0
+            fi
+
+            if [ "$attempt" -eq 6 ]; then
+              exit 1
+            fi
+
+            echo "Merge attempt $attempt failed; retrying in 10 seconds..."
+            sleep 10
+          done
 
       - name: Send ntfy notification
         env:
