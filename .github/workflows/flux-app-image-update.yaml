@@ -131,7 +131,8 @@ jobs:
             CHECK_COUNT=$(gh pr checks "$PR_NUMBER" \
               --repo "${{ github.repository }}" \
               --json name \
-              --jq 'length')
+              --jq 'length' \
+              2>/dev/null || printf '0')
 
             if [ "$CHECK_COUNT" -gt 0 ]; then
               break
