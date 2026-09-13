@@ -121,43 +121,16 @@ jobs:
             echo 'EOF'
           } >> "$GITHUB_ENV"
 
-      - name: Enable auto-merge
+      - name: Merge pull request
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          echo "Enabling auto-merge for PR #$PR_NUMBER"
+          echo "Merging PR #$PR_NUMBER"
 
           gh pr merge "$PR_NUMBER" \
             --repo "${{ github.repository }}" \
-            --auto \
             --squash \
             --delete-branch
-
-      - name: Wait for PR to merge
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          echo "Waiting for PR #$PR_NUMBER to merge..."
-
-          for i in {1..60}; do
-            STATE=$(gh pr view "$PR_NUMBER" \
-              --repo "${{ github.repository }}" \
-              --json state \
-              --jq '.state')
-
-            if [ "$STATE" = "MERGED" ]; then
-              echo "PR #$PR_NUMBER merged."
-              break
-            fi
-
-            echo "PR state: $STATE"
-            sleep 10
-          done
-
-          if [ "$STATE" != "MERGED" ]; then
-            echo "PR did not merge within the timeout."
-            exit 1
-          fi
 
       - name: Send ntfy notification
         env:
