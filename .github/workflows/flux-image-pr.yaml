@@ -24,7 +24,7 @@ jobs:
       - name: Create PR if needed
         id: pr
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.FLUX_ACTIONS }}
         run: |
           PR_NUMBER=$(gh pr list --repo "${{ github.repository }}" \
             --head app-image-update --base main --state open \
@@ -42,7 +42,7 @@ jobs:
 
       - name: Enable auto-merge
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.FLUX_ACTIONS }}
         run: |
           gh pr merge "${{ steps.pr.outputs.pr_number }}" \
             --repo "${{ github.repository }}" \
