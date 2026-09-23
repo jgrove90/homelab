@@ -44,6 +44,13 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.FLUX_ACTIONS }}
         run: |
-          gh pr merge "${{ steps.pr.outputs.pr_number }}" \
-            --repo "${{ github.repository }}" \
-            --auto --squash --delete-branch
+          for i in 1 2 3 4 5; do
+            if gh pr merge "${{ steps.pr.outputs.pr_number }}" \
+                --repo "${{ github.repository }}" \
+                --auto --squash --delete-branch; then
+              exit 0
+            fi
+            echo "auto-merge not accepted yet (attempt $i/5), retrying in 10s..."
+            sleep 10
+          done
+          exit 1
