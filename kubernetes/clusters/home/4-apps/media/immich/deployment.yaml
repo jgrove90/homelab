@@ -87,7 +87,7 @@ spec:
             limits:
               cpu: "2"
               memory: 3Gi
-              ephemeral-storage: "30Gi"
+              ephemeral-storage: "6Gi"
 
           readinessProbe:
             httpGet:
