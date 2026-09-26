@@ -20,6 +20,9 @@ spec:
         app: immich
 
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker-02
+
       securityContext:
         fsGroup: 1000
         runAsUser: 1000
