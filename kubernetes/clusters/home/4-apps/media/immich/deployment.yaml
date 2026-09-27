@@ -8,7 +8,7 @@ metadata:
     app: immich
 
 spec:
-  replicas: 1
+  replicas: 0 # paused while worker-02 disk is resized
 
   selector:
     matchLabels:
