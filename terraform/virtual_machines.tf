@@ -113,7 +113,7 @@ resource "proxmox_virtual_environment_vm" "talos_worker_02" {
     file_id      = "local:iso/talos_linux_v1.9.4_amd_v2.iso"
     file_format  = "raw"
     interface    = "virtio0"
-    size         = 20
+    size         = 100
   }
 
   operating_system {

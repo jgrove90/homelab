@@ -8,7 +8,7 @@ metadata:
     app: immich
 
 spec:
-  replicas: 1
+  replicas: 0 # paused while worker-02 disk is resized
 
   selector:
     matchLabels:
@@ -20,6 +20,9 @@ spec:
         app: immich
 
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker-02
+
       securityContext:
         fsGroup: 1000
         runAsUser: 1000
@@ -28,6 +31,7 @@ spec:
       containers:
         - name: immich
           image: ghcr.io/immich-app/immich-server:release
+          imagePullPolicy: Always
 
           ports:
             - containerPort: 2283
@@ -83,7 +87,7 @@ spec:
             limits:
               cpu: "2"
               memory: 3Gi
-              ephemeral-storage: "30Gi"
+              ephemeral-storage: "6Gi"
 
           readinessProbe:
             httpGet:
