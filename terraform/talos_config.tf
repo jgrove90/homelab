@@ -15,12 +15,13 @@ data "talos_client_configuration" "talos_config" {
 }
 
 data "talos_machine_configuration" "machineconfig_control_plane" {
-  depends_on       = [proxmox_virtual_environment_vm.talos_control_plane]
-  cluster_name     = var.cluster_name
-  cluster_endpoint = "https://${var.talos_control_plane_ip_addr}:6443"
-  machine_type     = "controlplane"
-  machine_secrets  = talos_machine_secrets.machine_secrets.machine_secrets
-  talos_version    = var.talos_os_version
+  depends_on         = [proxmox_virtual_environment_vm.talos_control_plane]
+  cluster_name       = var.cluster_name
+  cluster_endpoint   = "https://${var.talos_control_plane_ip_addr}:6443"
+  machine_type       = "controlplane"
+  machine_secrets    = talos_machine_secrets.machine_secrets.machine_secrets
+  talos_version      = var.talos_os_version
+  kubernetes_version = var.kubernetes_version
   config_patches = [file("${path.module}/patch/global.yaml"),
   file("${path.module}/patch/control-plane.yaml")]
 }
@@ -38,10 +39,12 @@ resource "talos_machine_configuration_apply" "control_plane_config_apply" {
 # ********************************************
 
 data "talos_machine_configuration" "machineconfig_worker_01" {
-  cluster_name     = var.cluster_name
-  cluster_endpoint = "https://${var.talos_control_plane_ip_addr}:6443"
-  machine_type     = "worker"
-  machine_secrets  = talos_machine_secrets.machine_secrets.machine_secrets
+  cluster_name       = var.cluster_name
+  cluster_endpoint   = "https://${var.talos_control_plane_ip_addr}:6443"
+  machine_type       = "worker"
+  machine_secrets    = talos_machine_secrets.machine_secrets.machine_secrets
+  talos_version      = var.talos_os_version
+  kubernetes_version = var.kubernetes_version
   config_patches = [file("${path.module}/patch/global.yaml"),
   file("${path.module}/patch/worker-01.yaml")]
 }
@@ -59,10 +62,12 @@ resource "talos_machine_configuration_apply" "worker_01_config_apply" {
 # ********************************************
 
 data "talos_machine_configuration" "machineconfig_worker_02" {
-  cluster_name     = var.cluster_name
-  cluster_endpoint = "https://${var.talos_control_plane_ip_addr}:6443"
-  machine_type     = "worker"
-  machine_secrets  = talos_machine_secrets.machine_secrets.machine_secrets
+  cluster_name       = var.cluster_name
+  cluster_endpoint   = "https://${var.talos_control_plane_ip_addr}:6443"
+  machine_type       = "worker"
+  machine_secrets    = talos_machine_secrets.machine_secrets.machine_secrets
+  talos_version      = var.talos_os_version
+  kubernetes_version = var.kubernetes_version
   config_patches = [file("${path.module}/patch/global.yaml"),
   file("${path.module}/patch/worker-02.yaml")]
 }

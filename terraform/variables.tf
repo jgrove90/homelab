@@ -1,7 +1,13 @@
 variable "talos_os_version" {
   description = "The version of Talos Linux to use"
   type        = string
-  default     = "1.9.4"
+  default     = "1.14.5"
+}
+
+variable "kubernetes_version" {
+  description = "The version of Kubernetes to run on the cluster"
+  type        = string
+  default     = "1.37.1"
 }
 
 variable "proxmox_endpoint" {

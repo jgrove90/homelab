@@ -115,7 +115,7 @@ If you disable `reconcile_flux_sops_age_secret`, create the secret manually with
 ### 4. Reconcile the cluster
 
 ```bash
-flux reconcile kustomization home --with-source --namespace=flux-system
+flux reconcile source git <repository-name> -n flux-system
 ```
 
 If you need to apply a specific encrypted manifest by hand, use the matching stack path under `kubernetes/clusters/home/`.
