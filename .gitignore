@@ -11,3 +11,4 @@ terraform.tfvars
 terraform.tfstate.backup
 *.txt
 config.json
+/docs
