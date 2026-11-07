@@ -5,6 +5,7 @@ resources:
 - gotk-sync.yaml
 - 0-namespaces-sync.yaml
 - 1-repos-sync.yaml
+- 2-cilium-sync.yaml
 - 2-cluster-manager-sync.yaml
 - 2-cluster-issuer-sync.yaml
 - 2-ddns-updater-sync.yaml
