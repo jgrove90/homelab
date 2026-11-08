@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - secret.enc.yaml
   - cert-issuer.yaml
+  - hubble-ca.yaml
   - wildcard-tls_arr-stack.yaml
   - wildcard-tls_media.yaml
   - wildcard-tls_utils.yaml

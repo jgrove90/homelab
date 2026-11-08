@@ -15,6 +15,7 @@ spec:
 
   dependsOn:
     - name: repositories
+    - name: cert-issuer
 
   sourceRef:
     kind: GitRepository

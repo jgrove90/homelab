@@ -65,3 +65,44 @@ spec:
     # Homelab sizing: one operator is enough
     operator:
       replicas: 1
+
+    # Phase 2: Hubble. The agents already serve flows on :4244; Relay aggregates them
+    # cluster-wide and the UI shows the service map. Certs come from cert-manager
+    # (ClusterIssuer hubble-ca in 2-infra/cert-issuer) so Helm upgrades do not
+    # regenerate them. No Ingress: reach the UI with kubectl port-forward until Phase 4.
+    hubble:
+      tls:
+        auto:
+          enabled: true
+          method: certmanager
+          certManagerIssuerRef:
+            group: cert-manager.io
+            kind: ClusterIssuer
+            name: hubble-ca
+      relay:
+        enabled: true
+        resources:
+          requests:
+            cpu: 25m
+            memory: 64Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
+      ui:
+        enabled: true
+        backend:
+          resources:
+            requests:
+              cpu: 25m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+        frontend:
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi

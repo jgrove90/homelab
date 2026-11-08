@@ -1,0 +1,37 @@
+# Internal CA for Cilium/Hubble mTLS (not Let's Encrypt: Hubble's names are internal).
+# Chain: self-signed issuer -> CA certificate -> CA issuer that Cilium points at.
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: hubble-selfsigned
+
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: hubble-ca
+  namespace: cert-manager
+
+spec:
+  isCA: true
+  commonName: hubble-ca
+  secretName: hubble-ca-tls
+  duration: 87600h
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+
+  issuerRef:
+    name: hubble-selfsigned
+    kind: ClusterIssuer
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: hubble-ca
+
+spec:
+  ca:
+    secretName: hubble-ca-tls
