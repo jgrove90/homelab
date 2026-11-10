@@ -66,6 +66,16 @@ spec:
     operator:
       replicas: 1
 
+    # Phase 4: Gateway API (ADR 0006). Cilium's operator reconciles Gateway/HTTPRoute with
+    # Envoy. Needs the Gateway API CRDs (kustomization gateway-api-crds), which is why that
+    # Kustomization is in this release's dependsOn. create: "true" so the GatewayClass is
+    # not skipped by the chart's CRD auto-detection. Gateway Services get their LoadBalancer
+    # IP from MetalLB until Phase 5.
+    gatewayAPI:
+      enabled: true
+      gatewayClass:
+        create: "true"
+
     # Phase 2: Hubble. The agents already serve flows on :4244; Relay aggregates them
     # cluster-wide and the UI shows the service map. Certs come from cert-manager
     # (ClusterIssuer hubble-ca in 2-infra/cert-issuer) so Helm upgrades do not
