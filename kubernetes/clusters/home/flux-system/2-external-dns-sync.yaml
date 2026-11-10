@@ -17,6 +17,7 @@ spec:
     - name: repositories
     - name: ingress-nginx
     - name: cert-issuer
+    - name: gateway-api-crds
 
   sourceRef:
     kind: GitRepository

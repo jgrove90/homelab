@@ -7,3 +7,4 @@ resources:
   - wildcard-tls_arr-stack.yaml
   - wildcard-tls_media.yaml
   - wildcard-tls_utils.yaml
+  - wildcard-tls_infra.yaml

@@ -49,6 +49,7 @@ spec:
     sources:
       - ingress
       - service
+      - gateway-httproute
 
     logLevel: debug
 

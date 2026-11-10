@@ -1,0 +1,33 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: homelab
+  namespace: infra
+spec:
+  gatewayClassName: cilium
+
+  # Cilium creates a LoadBalancer Service for this Gateway; MetalLB assigns the IP until
+  # Phase 5. Pinned to a spare address so it runs beside ingress-nginx (.110).
+  # spec.addresses would be ignored here: it only works with Cilium LB-IPAM.
+  infrastructure:
+    annotations:
+      metallb.io/loadBalancerIPs: 192.168.1.111
+
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: All
+
+    - name: https
+      protocol: HTTPS
+      port: 443
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: wildcard-alarlab-tls
+      allowedRoutes:
+        namespaces:
+          from: All
