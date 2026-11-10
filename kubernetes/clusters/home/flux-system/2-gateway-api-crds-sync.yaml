@@ -6,13 +6,19 @@ metadata:
   namespace: flux-system
 
 spec:
-  interval: 1h
+  interval: 24h
 
-  path: ./kubernetes/clusters/home/2-infra/gateway-api-crds
+  # Upstream Gateway API standard-channel CRDs at the pinned tag (see ADR 0006).
+  # Upgrading Gateway API = change the tag in 1-repos/gateway-api.yaml.
+  path: ./config/crd/standard
 
+  # Never let a Git mistake delete the CRDs (and with them every Gateway/Route)
   prune: false
   wait: true
 
+  dependsOn:
+    - name: repositories
+
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: gateway-api
