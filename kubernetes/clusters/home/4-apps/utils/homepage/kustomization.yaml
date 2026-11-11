@@ -10,6 +10,7 @@ resources:
   - secrets.enc.yaml
   - deployment.yaml
   - ingress.yaml
+  - httproute.yaml
   
 configMapGenerator:
   - name: homepage-bookmarks
