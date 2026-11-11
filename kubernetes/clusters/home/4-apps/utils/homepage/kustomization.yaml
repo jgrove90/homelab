@@ -9,7 +9,6 @@ resources:
   - pvc.yaml
   - secrets.enc.yaml
   - deployment.yaml
-  - ingress.yaml
   - httproute.yaml
   
 configMapGenerator:
