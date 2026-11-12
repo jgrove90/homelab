@@ -1,0 +1,24 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: qbittorrent
+  namespace: utils
+
+  annotations:
+    # STAGING: external-dns skips this route while the nginx Ingress still owns the
+    # qbittorrent.alarlab.dev DNS record. Removed in the cutover commit (ADR 0006).
+    external-dns.alpha.kubernetes.io/controller: ignore
+
+spec:
+  parentRefs:
+    - name: homelab
+      namespace: infra
+      sectionName: https
+
+  hostnames:
+    - qbittorrent.alarlab.dev
+
+  rules:
+    - backendRefs:
+        - name: qbittorrent-service
+          port: 8080
