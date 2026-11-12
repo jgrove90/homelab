@@ -15,7 +15,7 @@ spec:
 
   dependsOn:
     - name: metallb-config
-    - name: ingress-nginx
+    - name: gateway
     - name: cert-issuer
 
   sourceRef:

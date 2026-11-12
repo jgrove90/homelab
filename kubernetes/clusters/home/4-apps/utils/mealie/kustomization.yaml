@@ -7,5 +7,4 @@ resources:
   - secret.enc.yaml
   - deployment.yaml
   - service.yaml
-  - ingress.yaml
   - httproute.yaml

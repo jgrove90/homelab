@@ -15,7 +15,7 @@ spec:
 
   dependsOn:
     - name: repositories
-    - name: ingress-nginx
+    - name: gateway
     - name: cert-issuer
     - name: gateway-api-crds
 

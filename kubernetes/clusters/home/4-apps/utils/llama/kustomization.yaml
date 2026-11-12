@@ -5,5 +5,4 @@ namespace: utils
 
 resources:
   - service.yaml
-  - ingress.yaml
   - httproute.yaml

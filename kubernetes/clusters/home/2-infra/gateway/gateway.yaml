@@ -7,11 +7,12 @@ spec:
   gatewayClassName: cilium
 
   # Cilium creates a LoadBalancer Service for this Gateway; MetalLB assigns the IP until
-  # Phase 5. Pinned to a spare address so it runs beside ingress-nginx (.110).
+  # Phase 5. .110 is the address DNS (router wildcard) and the 443 port-forward point at;
+  # the Gateway took it over from ingress-nginx (ADR 0006).
   # spec.addresses would be ignored here: it only works with Cilium LB-IPAM.
   infrastructure:
     annotations:
-      metallb.io/loadBalancerIPs: 192.168.1.111
+      metallb.io/loadBalancerIPs: 192.168.1.110
 
   listeners:
     - name: http
