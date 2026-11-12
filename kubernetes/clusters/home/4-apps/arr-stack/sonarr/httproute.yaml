@@ -4,11 +4,6 @@ metadata:
   name: sonarr
   namespace: arr-stack
 
-  annotations:
-    # STAGING: external-dns skips this route while the nginx Ingress still owns the
-    # sonarr.alarlab.dev DNS record. Removed in the cutover commit (ADR 0006).
-    external-dns.alpha.kubernetes.io/controller: ignore
-
 spec:
   parentRefs:
     - name: homelab
