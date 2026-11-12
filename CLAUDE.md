@@ -213,7 +213,7 @@ Existing applications generally follow:
 ```text
 deployment.yaml
 service.yaml
-ingress.yaml
+httproute.yaml
 pvc.yaml
 pv.yaml
 secret.enc.yaml
@@ -292,7 +292,7 @@ For example:
 * web application
 * GPU application
 * NFS-backed application
-* application requiring ingress
+* application requiring an HTTPRoute
 * application requiring secrets
 
 Use that application as the structural template.
@@ -307,7 +307,7 @@ Does it need a HelmRepository?
 Does it need a database?
 Does it need Redis?
 Does it need persistent storage?
-Does it need ingress?
+Does it need an HTTPRoute (Gateway)?
 Does it need TLS?
 Does it need DNS?
 Does it need a GPU?
@@ -412,7 +412,7 @@ Do not automatically "fix" them:
 * static NFS PersistentVolumes
 * MetalLB on the LAN
 * Cloudflare DNS
-* internal services exposed through ingress
+* internal services exposed through the Gateway (HTTPRoute)
 * relatively small cluster
 * limited hardware
 
@@ -651,7 +651,7 @@ image availability
 resource dependencies
 namespace existence
 storage bindings
-Ingress configuration
+HTTPRoute / Gateway configuration
 DNS configuration
 secrets
 ```
@@ -696,21 +696,46 @@ Do not automatically add image automation to every application.
 
 # 18. Networking
 
+Cilium is the CNI and replaces kube-proxy (eBPF). It also provides Hubble (flow
+visibility) and the Gateway API controller (Envoy). Rationale and history:
+`docs/architecture/decisions/0001`, `0002`, `0004`, `0005`, `0006`.
+
 MetalLB provides LoadBalancer addresses from:
 
 ```text
 192.168.1.110-150
 ```
 
-Ingress-nginx uses:
+(Replacing MetalLB with Cilium LB-IPAM is planned, ADR 0001 Phase 5.) Addresses in use:
 
 ```text
-192.168.1.110
+192.168.1.110   Gateway "homelab" (namespace infra), the HTTP/HTTPS entry point
+192.168.1.115   plex-external
+192.168.1.138   immich-pg-lb (CNPG)
+192.168.1.139   postgres-lb (CNPG)
 ```
 
-Ingress is the normal entry point for HTTP services.
+The Gateway's address is pinned with `infrastructure.annotations:
+metallb.io/loadBalancerIPs`. `spec.addresses` is ignored while MetalLB owns the IPs.
 
-external-dns manages DNS records.
+HTTPRoute (Gateway API) is the normal entry point for HTTP services. An app ships an
+`httproute.yaml` in its own namespace that attaches to Gateway `homelab` (listener `https`,
+namespace `infra`). There is one wildcard certificate in `infra`; one global route redirects
+HTTP to HTTPS. Ingress-nginx was removed (ADR 0006); do not add new Ingress objects.
+
+external-dns manages DNS records from HTTPRoutes (`gateway-httproute` source) and Services.
+For Cloudflare-proxied hosts put `external-dns.alpha.kubernetes.io/cloudflare-proxied` and
+`.../target` on the HTTPRoute. `external-dns.alpha.kubernetes.io/controller: ignore` makes
+external-dns skip a route (useful while staging a migration).
+
+LAN DNS: the router (192.168.1.1) has a split-DNS wildcard `*.alarlab.dev -> 192.168.1.110`
+(the Gateway), and LAN clients use the router, not Cloudflare. A new app therefore needs only
+an HTTPRoute. After any DNS-related change, check the router's answer, not just Cloudflare's.
+Internet access for proxied apps: Cloudflare -> router port-forward 443 -> 192.168.1.110.
+
+Cilium operations: Cilium pods do not restart when its ConfigMap changes. After changing the
+Cilium HelmRelease values, restart the operator, then the agents one node at a time, and
+re-run `terraform/scripts/render-cilium-bootstrap.sh` so the Talos bootstrap manifest matches.
 
 Most services resolve to private LAN/VPN addresses.
 
@@ -722,7 +747,7 @@ When exposing a new service, determine:
 LAN only?
 VPN access?
 Internet accessible?
-Ingress?
+HTTPRoute?
 LoadBalancer?
 DNS?
 TLS?
@@ -810,18 +835,19 @@ before deleting the pod.
 For:
 
 ```text
-Ingress failure
+Route / HTTP failure
 ```
 
 inspect:
 
 ```text
-Ingress
+HTTPRoute (status: Accepted, ResolvedRefs)
+Gateway (status: Programmed, address)
 Service
 Endpoints
 Pod
-Ingress controller
-DNS
+Cilium operator / Envoy (and Hubble flows)
+DNS (including the router's split DNS)
 TLS
 ```
 
@@ -938,20 +964,34 @@ What the result means
 
 ## Terraform
 
+**WARNING: the Terraform state is currently MISSING** (it lived on another machine).
+`terraform plan` wants to create every resource, so **do not run `terraform apply`** or
+`-replace` until the state is recovered or deliberately rebuilt (ADR 0003). Read-only
+`terraform validate` and `terraform plan` are fine. Until then, change live node config with
+`talosctl patch machineconfig` (run `--dry-run` first) and keep `terraform/patch/*.yaml`
+in sync by hand. Remove this warning once the state is back.
+
 ```bash
 cd terraform
 source env.sh
 terraform init
-terraform apply
-terraform apply -replace=talos_cluster_kubeconfig.kubeconfig
+terraform validate
+terraform plan        # read-only; expect "create everything" while the state is missing
 ```
 
-Generated files:
+Config files actually in use (set by `$KUBECONFIG` / `$TALOSCONFIG`):
 
 ```text
-~/.talos/homelab/talosconfig
-~/.kube/homelab-config
+~/.talos/kubeconfig
+~/.talos/talosconfig
 ```
+
+Terraform's own outputs default to `~/.talos/homelab/talosconfig` and
+`~/.kube/homelab-config`; those are not the files in use.
+
+The Cilium bootstrap manifest is generated, not hand-edited:
+`terraform/scripts/render-cilium-bootstrap.sh` (ADR 0002). Re-run it whenever the Cilium
+HelmRelease chart version or values change.
 
 Talos version is represented independently in multiple places:
 
