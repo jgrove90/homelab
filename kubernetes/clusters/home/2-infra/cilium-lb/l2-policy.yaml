@@ -1,0 +1,17 @@
+# Which Services Cilium announces on the LAN, and from where (ADR 0007).
+apiVersion: cilium.io/v2alpha1
+kind: CiliumL2AnnouncementPolicy
+metadata:
+  name: homelab
+spec:
+  serviceSelector:
+    matchLabels:
+      lb-owner: cilium
+  # Announce from the workers only (the control-plane node is excluded)
+  nodeSelector:
+    matchExpressions:
+      - key: node-role.kubernetes.io/control-plane
+        operator: DoesNotExist
+  interfaces:
+    - ^ens18$
+  loadBalancerIPs: true

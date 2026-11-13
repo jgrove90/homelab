@@ -1,0 +1,16 @@
+# Addresses Cilium LB-IPAM may hand out (ADR 0007). Single /32s for exactly the four
+# addresses in use, so Cilium and MetalLB never draw from overlapping ranges. Only Services
+# labelled lb-owner=cilium are served; everything else is still MetalLB's.
+apiVersion: cilium.io/v2
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: homelab
+spec:
+  blocks:
+    - cidr: 192.168.1.110/32   # Gateway homelab
+    - cidr: 192.168.1.115/32   # plex-external
+    - cidr: 192.168.1.138/32   # immich-pg-lb
+    - cidr: 192.168.1.139/32   # postgres-lb
+  serviceSelector:
+    matchLabels:
+      lb-owner: cilium

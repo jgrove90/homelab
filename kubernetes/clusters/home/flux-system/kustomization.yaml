@@ -7,6 +7,7 @@ resources:
 - 1-repos-sync.yaml
 - 2-gateway-api-crds-sync.yaml
 - 2-cilium-sync.yaml
+- 2-cilium-lb-sync.yaml
 - 2-cluster-manager-sync.yaml
 - 2-cluster-issuer-sync.yaml
 - 2-ddns-updater-sync.yaml
