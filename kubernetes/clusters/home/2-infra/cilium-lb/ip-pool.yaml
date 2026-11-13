@@ -11,6 +11,7 @@ spec:
     - cidr: 192.168.1.115/32   # plex-external
     - cidr: 192.168.1.138/32   # immich-pg-lb
     - cidr: 192.168.1.139/32   # postgres-lb
+    - cidr: 192.168.1.148/32   # TEMPORARY canary for Phase 5b; remove after the test
   serviceSelector:
     matchLabels:
       lb-owner: cilium
