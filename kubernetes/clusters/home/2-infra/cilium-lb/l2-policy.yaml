@@ -1,4 +1,6 @@
-# Which Services Cilium announces on the LAN, and from where (ADR 0007).
+# Which Services Cilium announces on the LAN, and from where (ADR 0008).
+# Stays label-gated (matches nothing) until the MetalLB speakers are retired; widening it
+# earlier would put two ARP responders (two MACs) on the same IP.
 apiVersion: cilium.io/v2alpha1
 kind: CiliumL2AnnouncementPolicy
 metadata:

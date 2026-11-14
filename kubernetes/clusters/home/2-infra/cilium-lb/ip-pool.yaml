@@ -1,6 +1,8 @@
-# Addresses Cilium LB-IPAM may hand out (ADR 0007). Single /32s for exactly the four
-# addresses in use, so Cilium and MetalLB never draw from overlapping ranges. Only Services
-# labelled lb-owner=cilium are served; everything else is still MetalLB's.
+# Addresses Cilium LB-IPAM may hand out (ADR 0008). Single /32s for exactly the four
+# addresses in use. No serviceSelector: with defaultLBServiceIPAM=lbipam Cilium owns every
+# class-less Service, and a Service that matches no pool has its IP stripped (ADR 0007
+# incident). Each Service requests its address (spec.loadBalancerIP or the
+# lbipam.cilium.io/ips annotation), so each gets exactly the IP it already holds.
 apiVersion: cilium.io/v2
 kind: CiliumLoadBalancerIPPool
 metadata:
@@ -11,6 +13,3 @@ spec:
     - cidr: 192.168.1.115/32   # plex-external
     - cidr: 192.168.1.138/32   # immich-pg-lb
     - cidr: 192.168.1.139/32   # postgres-lb
-  serviceSelector:
-    matchLabels:
-      lb-owner: cilium
