@@ -6,10 +6,8 @@ metadata:
 spec:
   gatewayClassName: cilium
 
-  # Cilium creates a LoadBalancer Service for this Gateway and LB-IPAM (pool in
-  # 2-infra/cilium-lb) assigns the address from spec.addresses, announced over L2 (ADR 0008).
-  # .110 is what DNS (router wildcard) and the 443 port-forward point at; the Gateway took it
-  # over from ingress-nginx (ADR 0006).
+  # LB-IPAM (pool in 2-infra/cilium-lb) gives the Gateway's Service this address.
+  # .110 is what the router's wildcard DNS and the 443 port-forward point at.
   addresses:
     - type: IPAddress
       value: 192.168.1.110

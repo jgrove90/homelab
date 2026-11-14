@@ -8,7 +8,7 @@ metadata:
 spec:
   interval: 24h
 
-  # Upstream Gateway API standard-channel CRDs at the pinned tag (see ADR 0006).
+  # Upstream Gateway API standard-channel CRDs at the pinned tag.
   # Upgrading Gateway API = change the tag in 1-repos/gateway-api.yaml.
   path: ./config/crd/standard
 

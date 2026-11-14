@@ -58,13 +58,12 @@ spec:
           - SYS_ADMIN
           - SYS_RESOURCE
 
-    # Cilium LB-IPAM owns EVERY class-less LoadBalancer Service with "lbipam": a Service that
-    # matches no pool has its IP stripped (incident 2026-11-14, ADR 0007). Safe only because
-    # the pool covers all four addresses and each Service requests its own (ADR 0008).
-    # Restart the operator after changing this: it reads the value at startup.
+    # With "lbipam", Cilium owns EVERY class-less LoadBalancer Service, and a Service that
+    # matches no pool has its IP stripped. Every Service needs an address in the pool
+    # (2-infra/cilium-lb). Restart the operator after changing this: it reads it at startup.
     defaultLBServiceIPAM: lbipam
 
-    # Phase 5: L2 announcements (Beta). Each announced Service holds a Lease that its leader
+    # L2 announcements (Beta). Each announced Service holds a Lease that its leader
     # renews every 5s. Four Services is ~1 request/s, well inside the default client rate
     # limit; raise k8sClientRateLimit only if Lease renewals start failing.
     l2announcements:
@@ -74,20 +73,17 @@ spec:
     operator:
       replicas: 1
 
-    # Phase 4: Gateway API (ADR 0006). Cilium's operator reconciles Gateway/HTTPRoute with
-    # Envoy. Needs the Gateway API CRDs (kustomization gateway-api-crds), which is why that
-    # Kustomization is in this release's dependsOn. create: "true" so the GatewayClass is
-    # not skipped by the chart's CRD auto-detection. The Gateway Service's LoadBalancer IP
-    # comes from LB-IPAM (2-infra/cilium-lb, ADR 0008).
+    # Gateway API: the operator reconciles Gateway/HTTPRoute with Envoy. Needs the Gateway API
+    # CRDs (kustomization gateway-api-crds, hence this release's dependsOn). create: "true" so
+    # the GatewayClass is not skipped by the chart's CRD auto-detection.
     gatewayAPI:
       enabled: true
       gatewayClass:
         create: "true"
 
-    # Phase 2: Hubble. The agents already serve flows on :4244; Relay aggregates them
-    # cluster-wide and the UI shows the service map. Certs come from cert-manager
-    # (ClusterIssuer hubble-ca in 2-infra/cert-issuer) so Helm upgrades do not
-    # regenerate them. No Ingress: reach the UI with kubectl port-forward until Phase 4.
+    # Hubble: agents serve flows on :4244, Relay aggregates them cluster-wide, the UI shows the
+    # service map. Certs come from cert-manager (ClusterIssuer hubble-ca in 2-infra/cert-issuer)
+    # so Helm upgrades do not regenerate them. No route: use kubectl port-forward for the UI.
     hubble:
       tls:
         auto:

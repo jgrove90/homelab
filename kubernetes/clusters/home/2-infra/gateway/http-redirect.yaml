@@ -1,4 +1,4 @@
-# Replaces the nginx ssl-redirect / force-ssl-redirect annotations for every host.
+# Redirects HTTP to HTTPS (301) for every host attached to the Gateway.
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:

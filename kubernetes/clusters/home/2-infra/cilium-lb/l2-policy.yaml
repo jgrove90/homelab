@@ -1,6 +1,5 @@
-# Which Services Cilium announces on the LAN, and from where (ADR 0008).
-# No serviceSelector: every LoadBalancer Service is announced (only four exist). Widened in
-# the same commit that removed MetalLB, so there is never a second ARP responder per IP.
+# Which Services Cilium announces on the LAN (ARP), and from where. No serviceSelector: every
+# LoadBalancer Service is announced.
 apiVersion: cilium.io/v2alpha1
 kind: CiliumL2AnnouncementPolicy
 metadata:

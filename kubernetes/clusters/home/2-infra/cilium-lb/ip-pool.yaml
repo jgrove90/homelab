@@ -1,8 +1,7 @@
-# Addresses Cilium LB-IPAM may hand out (ADR 0008). Single /32s for exactly the four
-# addresses in use. No serviceSelector: with defaultLBServiceIPAM=lbipam Cilium owns every
-# class-less Service, and a Service that matches no pool has its IP stripped (ADR 0007
-# incident). Each Service requests its address (spec.loadBalancerIP or the
-# lbipam.cilium.io/ips annotation), so each gets exactly the IP it already holds.
+# Addresses Cilium LB-IPAM may hand out: one /32 per address in use. Each Service requests its
+# own (spec.loadBalancerIP, lbipam.cilium.io/ips, or the Gateway's spec.addresses).
+# Keep this pool without a serviceSelector: Cilium owns every class-less LoadBalancer Service
+# (defaultLBServiceIPAM: lbipam) and strips the IP of any Service that matches no pool.
 apiVersion: cilium.io/v2
 kind: CiliumLoadBalancerIPPool
 metadata:
