@@ -17,7 +17,7 @@ spec:
     - name: repositories
     - name: cilium
     - name: cert-issuer
-    - name: metallb-config
+    - name: cilium-lb
     - name: gateway-api-crds
 
   sourceRef:

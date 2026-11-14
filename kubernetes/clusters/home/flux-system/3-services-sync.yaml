@@ -14,7 +14,7 @@ spec:
   wait: false
 
   dependsOn:
-    - name: metallb-config
+    - name: cilium-lb
     - name: gateway
     - name: cert-issuer
 
