@@ -26,6 +26,8 @@ machine:
           - rw
     extraArgs:
       node-labels: hardware.type=intel-gpu
+      # kubelet serving certs signed by the cluster CA (metrics-server, Prometheus)
+      rotate-server-certificates: "true"
 
   install:
     image: factory.talos.dev/installer/d3dc673627e9b94c6cd4122289aa52c2484cddb31017ae21b75309846e257d30:v1.14.5

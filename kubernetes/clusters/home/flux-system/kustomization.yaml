@@ -13,6 +13,8 @@ resources:
 - 2-ddns-updater-sync.yaml
 - 2-intel-gpu-plugin-sync.yaml
 - 2-local-path-provisioner-sync.yaml
+- 2-kubelet-cert-approver-sync.yaml
+- 2-metrics-server-sync.yaml
 - 2-gateway-sync.yaml
 - 2-external-dns-sync.yaml
 - 3-services-sync.yaml

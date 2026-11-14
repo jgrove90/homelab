@@ -1,4 +1,8 @@
 machine:
+  kubelet:
+    extraArgs:
+      # kubelet serving certs signed by the cluster CA (metrics-server, Prometheus)
+      rotate-server-certificates: "true"
   network:
     hostname: control-plane
     interfaces:
@@ -14,3 +18,15 @@ machine:
       - 8.8.8.8 
   install:
     image: factory.talos.dev/installer/d3dc673627e9b94c6cd4122289aa52c2484cddb31017ae21b75309846e257d30:v1.14.5
+
+cluster:
+  # Expose control-plane metrics to Prometheus (default is localhost only)
+  controllerManager:
+    extraArgs:
+      bind-address: 0.0.0.0
+  scheduler:
+    extraArgs:
+      bind-address: 0.0.0.0
+  etcd:
+    extraArgs:
+      listen-metrics-urls: http://0.0.0.0:2381

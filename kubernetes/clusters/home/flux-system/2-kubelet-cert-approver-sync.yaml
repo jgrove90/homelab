@@ -1,0 +1,24 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+
+metadata:
+  name: kubelet-cert-approver
+  namespace: flux-system
+
+spec:
+  interval: 24h
+
+  # Upstream standalone install (namespace, RBAC, one Deployment) at the pinned tag.
+  # Upgrading = change the tag in 1-repos/kubelet-serving-cert-approver.yaml.
+  path: ./deploy/standalone
+
+  prune: true
+  wait: true
+
+  dependsOn:
+    - name: repositories
+    - name: cilium
+
+  sourceRef:
+    kind: GitRepository
+    name: kubelet-serving-cert-approver
