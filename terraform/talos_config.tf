@@ -79,7 +79,8 @@ data "talos_machine_configuration" "machineconfig_worker_02" {
   talos_version      = var.talos_os_version
   kubernetes_version = var.kubernetes_version
   config_patches = [file("${path.module}/patch/global.yaml"),
-  file("${path.module}/patch/worker-02.yaml")]
+    file("${path.module}/patch/worker-02.yaml"),
+  file("${path.module}/patch/worker-02-prometheus-volume.yaml")]
 }
 
 resource "talos_machine_configuration_apply" "worker_02_config_apply" {

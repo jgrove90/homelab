@@ -1,0 +1,10 @@
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: prometheus
+provisioning:
+  diskSelector:
+    match: disk.dev_path == '/dev/vdb' && !system_disk
+  minSize: 10GiB
+  maxSize: 40GiB
+filesystem:
+  type: xfs
