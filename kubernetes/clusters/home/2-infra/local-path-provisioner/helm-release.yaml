@@ -1,0 +1,49 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: local-path-provisioner
+  namespace: local-path-storage
+spec:
+  interval: 24h
+  chart:
+    spec:
+      # The project publishes no Helm repository; the chart lives in its Git repo (same tag
+      # as the image). Upgrading = change the tag in 1-repos/local-path-provisioner.yaml.
+      chart: ./deploy/chart/local-path-provisioner
+      sourceRef:
+        kind: GitRepository
+        name: local-path-provisioner
+        namespace: flux-system
+  install:
+    createNamespace: false
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  values:
+    # Short-lived pods that create/remove volume directories; pin instead of :latest
+    helperImage:
+      repository: docker.io/library/busybox
+      tag: "1.37.0"
+
+    storageClass:
+      create: true
+      name: local-path
+      defaultClass: false
+      # Keep the data when a PVC is deleted: metrics are rebuilt slowly, deleted never.
+      reclaimPolicy: Retain
+      volumeBindingMode: WaitForFirstConsumer
+      # Only worker-02 has the dedicated disk (Talos UserVolumeConfig "prometheus").
+      allowedTopologies:
+        - matchLabelExpressions:
+            - key: kubernetes.io/hostname
+              values:
+                - worker-02
+
+    # Volumes are directories on the dedicated disk. No default path: nodes not listed here
+    # (everything but worker-02) can never get a volume, so nothing lands on the OS disk.
+    nodePathMap:
+      - node: worker-02
+        paths:
+          - /var/mnt/prometheus
