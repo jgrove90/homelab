@@ -410,7 +410,7 @@ Do not automatically "fix" them:
 * single NFS server
 * single-instance Postgres clusters
 * static NFS PersistentVolumes
-* MetalLB on the LAN
+* LoadBalancer IPs on the LAN (Cilium LB-IPAM + L2 announcements)
 * Cloudflare DNS
 * internal services exposed through the Gateway (HTTPRoute)
 * relatively small cluster
@@ -700,13 +700,9 @@ Cilium is the CNI and replaces kube-proxy (eBPF). It also provides Hubble (flow
 visibility) and the Gateway API controller (Envoy). Rationale and history:
 `docs/architecture/decisions/0001`, `0002`, `0004`, `0005`, `0006`.
 
-MetalLB provides LoadBalancer addresses from:
-
-```text
-192.168.1.110-150
-```
-
-(Replacing MetalLB with Cilium LB-IPAM is planned, ADR 0001 Phase 5.) Addresses in use:
+Cilium LB-IPAM hands out LoadBalancer addresses and announces them on the LAN (L2, Beta;
+ADR 0008, which replaced MetalLB). The pool (`2-infra/cilium-lb`) holds exactly these four
+/32s, and each Service requests its own address. Addresses in use:
 
 ```text
 192.168.1.110   Gateway "homelab" (namespace infra), the HTTP/HTTPS entry point
@@ -715,8 +711,11 @@ MetalLB provides LoadBalancer addresses from:
 192.168.1.139   postgres-lb (CNPG)
 ```
 
-The Gateway's address is pinned with `infrastructure.annotations:
-metallb.io/loadBalancerIPs`. `spec.addresses` is ignored while MetalLB owns the IPs.
+`defaultLBServiceIPAM: lbipam` means Cilium owns EVERY class-less LoadBalancer Service, and
+a Service that matches no pool has its IP stripped. A NEW LoadBalancer Service therefore
+needs: an address added to the pool as a /32 (or a new pool block) AND a request for it
+(`spec.loadBalancerIP`, or the `lbipam.cilium.io/ips` annotation). The Gateway uses
+`spec.addresses`. Each announced Service holds a Lease (`kube-system/cilium-l2announce-*`).
 
 HTTPRoute (Gateway API) is the normal entry point for HTTP services. An app ships an
 `httproute.yaml` in its own namespace that attaches to Gateway `homelab` (listener `https`,

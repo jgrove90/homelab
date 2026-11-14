@@ -77,8 +77,8 @@ spec:
     # Phase 4: Gateway API (ADR 0006). Cilium's operator reconciles Gateway/HTTPRoute with
     # Envoy. Needs the Gateway API CRDs (kustomization gateway-api-crds), which is why that
     # Kustomization is in this release's dependsOn. create: "true" so the GatewayClass is
-    # not skipped by the chart's CRD auto-detection. Gateway Services get their LoadBalancer
-    # IP from MetalLB until Phase 5.
+    # not skipped by the chart's CRD auto-detection. The Gateway Service's LoadBalancer IP
+    # comes from LB-IPAM (2-infra/cilium-lb, ADR 0008).
     gatewayAPI:
       enabled: true
       gatewayClass:
