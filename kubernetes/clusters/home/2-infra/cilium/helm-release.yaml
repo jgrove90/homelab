@@ -58,11 +58,11 @@ spec:
           - SYS_ADMIN
           - SYS_RESOURCE
 
-    # MetalLB keeps owning LoadBalancer IPs while Services are migrated (ADR 0007). The chart
-    # default (lbipam) would make Cilium a competing LoadBalancer IP manager. Switch to
-    # lbipam with the first production migration; the pool/policy only select Services
-    # labelled lb-owner=cilium, so unlabelled Services stay with MetalLB.
-    defaultLBServiceIPAM: none
+    # Cilium LB-IPAM also handles Services with no loadBalancerClass (ADR 0007). Safe next to
+    # MetalLB because the pool and L2 policy (2-infra/cilium-lb) select only Services labelled
+    # lb-owner=cilium; unlabelled Services stay with MetalLB, which excludes that label.
+    # Restart the operator after changing this: it reads the value at startup.
+    defaultLBServiceIPAM: lbipam
 
     # Phase 5: L2 announcements (Beta). Each announced Service holds a Lease that its leader
     # renews every 5s. Four Services is ~1 request/s, well inside the default client rate
