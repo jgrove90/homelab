@@ -58,12 +58,11 @@ spec:
           - SYS_ADMIN
           - SYS_RESOURCE
 
-    # Keep "none" while MetalLB owns any LoadBalancer Service. With "lbipam", Cilium LB-IPAM
-    # claims EVERY class-less Service; any Service with no matching pool gets its IP removed
-    # (pool_selector_mismatch / no_pool), and MetalLB re-adds it, so the two fight and
-    # ingress goes down. A pool serviceSelector does not prevent this (incident 2026-11-14,
-    # ADR 0007). Restart the operator after changing this: it reads the value at startup.
-    defaultLBServiceIPAM: none
+    # Cilium LB-IPAM owns EVERY class-less LoadBalancer Service with "lbipam": a Service that
+    # matches no pool has its IP stripped (incident 2026-11-14, ADR 0007). Safe only because
+    # the pool covers all four addresses and each Service requests its own (ADR 0008).
+    # Restart the operator after changing this: it reads the value at startup.
+    defaultLBServiceIPAM: lbipam
 
     # Phase 5: L2 announcements (Beta). Each announced Service holds a Lease that its leader
     # renews every 5s. Four Services is ~1 request/s, well inside the default client rate
