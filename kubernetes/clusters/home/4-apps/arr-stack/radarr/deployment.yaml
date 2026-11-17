@@ -7,6 +7,8 @@ metadata:
     app: radarr
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: radarr
@@ -29,6 +31,24 @@ spec:
               value: "1000"
             - name: TZ
               value: "America/Denver"
+            - name: RADARR__POSTGRES__HOST
+              value: "platform-db-rw.cnpg-system.svc.cluster.local"
+            - name: RADARR__POSTGRES__PORT
+              value: "5432"
+            - name: RADARR__POSTGRES__MAINDB
+              value: "radarr-main"
+            - name: RADARR__POSTGRES__LOGDB
+              value: "radarr-log"
+            - name: RADARR__POSTGRES__USER
+              valueFrom:
+                secretKeyRef:
+                  name: radarr-secret
+                  key: POSTGRES_USER
+            - name: RADARR__POSTGRES__PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: radarr-secret
+                  key: POSTGRES_PASSWORD
           resources:
             requests:
               cpu: 100m
