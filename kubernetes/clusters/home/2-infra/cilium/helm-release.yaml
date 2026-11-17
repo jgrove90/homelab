@@ -83,7 +83,8 @@ spec:
 
     # Hubble: agents serve flows on :4244, Relay aggregates them cluster-wide, the UI shows the
     # service map. Certs come from cert-manager (ClusterIssuer hubble-ca in 2-infra/cert-issuer)
-    # so Helm upgrades do not regenerate them. No route: use kubectl port-forward for the UI.
+    # so Helm upgrades do not regenerate them. The UI is published at hubble.alarlab.dev by
+    # httproute.yaml (ADR 0011); it has no authentication of its own.
     hubble:
       tls:
         auto:
