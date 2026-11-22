@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: omada
+  namespace: utils
+  labels:
+    app: omada
+
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+
+  selector:
+    matchLabels:
+      app: omada
+
+  template:
+    metadata:
+      labels:
+        app: omada
+
+    spec:
+      # local-path volume lives on worker-02's dedicated disk
+      nodeSelector:
+        kubernetes.io/hostname: worker-02
+
+      containers:
+        - name: omada
+          # Pinned to the version the VM runs; a restore needs target >= source version
+          image: mbentley/omada-controller:6.0.0.24
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - name: https
+              containerPort: 8043
+            - name: http
+              containerPort: 8088
+            - name: portal
+              containerPort: 8843
+
+          env:
+            - name: TZ
+              value: "America/Denver"
+            - name: PUID
+              value: "508"
+            - name: PGID
+              value: "508"
+
+          resources:
+            requests:
+              cpu: 200m
+              memory: 768Mi
+            limits:
+              cpu: "2"
+              memory: 2Gi
+
+          startupProbe:
+            tcpSocket:
+              port: 8043
+            periodSeconds: 10
+            failureThreshold: 60
+
+          readinessProbe:
+            tcpSocket:
+              port: 8043
+            periodSeconds: 15
+
+          livenessProbe:
+            tcpSocket:
+              port: 8043
+            periodSeconds: 30
+            failureThreshold: 5
+
+          volumeMounts:
+            - name: data
+              mountPath: /opt/tplink/EAPController/data
+            - name: logs
+              mountPath: /opt/tplink/EAPController/logs
+
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: omada-data-pvc
+        - name: logs
+          emptyDir: {}

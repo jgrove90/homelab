@@ -1,0 +1,23 @@
+# LAN/VPN-only: no Cloudflare annotations; the router's wildcard split DNS points
+# *.alarlab.dev at the Gateway. Omada's UI is HTTPS with a self-signed cert, so the Gateway
+# must re-encrypt to the backend; that needs a BackendTLSPolicy (added once the pod's cert
+# can be read), until then this route returns errors.
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: omada
+  namespace: utils
+
+spec:
+  parentRefs:
+    - name: homelab
+      namespace: infra
+      sectionName: https
+
+  hostnames:
+    - omada.alarlab.dev
+
+  rules:
+    - backendRefs:
+        - name: omada
+          port: 8043

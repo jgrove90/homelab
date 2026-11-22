@@ -1,0 +1,61 @@
+# Devices (APs, switches) reach the controller directly on these ports, so this is a
+# LoadBalancer on its own LAN IP, not an HTTPRoute. The web UI is HTTPS with a self-signed
+# cert, so it is used at https://<ip>:8043 rather than through the Gateway.
+apiVersion: v1
+kind: Service
+metadata:
+  name: omada
+  namespace: utils
+
+spec:
+  selector:
+    app: omada
+
+  type: LoadBalancer
+  loadBalancerIP: 192.168.1.140 # staging IP; becomes 192.168.1.175 at cutover
+
+  ports:
+    - name: https
+      port: 8043
+      targetPort: 8043
+      protocol: TCP
+    - name: http
+      port: 8088
+      targetPort: 8088
+      protocol: TCP
+    - name: portal
+      port: 8843
+      targetPort: 8843
+      protocol: TCP
+    - name: discovery
+      port: 29810
+      targetPort: 29810
+      protocol: UDP
+    - name: app-discovery
+      port: 27001
+      targetPort: 27001
+      protocol: UDP
+    - name: manager-v1
+      port: 29811
+      targetPort: 29811
+      protocol: TCP
+    - name: adopt-v1
+      port: 29812
+      targetPort: 29812
+      protocol: TCP
+    - name: upgrade-v1
+      port: 29813
+      targetPort: 29813
+      protocol: TCP
+    - name: manager-v2
+      port: 29814
+      targetPort: 29814
+      protocol: TCP
+    - name: transfer-v2
+      port: 29815
+      targetPort: 29815
+      protocol: TCP
+    - name: rtty
+      port: 29816
+      targetPort: 29816
+      protocol: TCP

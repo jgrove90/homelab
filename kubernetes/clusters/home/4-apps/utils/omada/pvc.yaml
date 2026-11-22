@@ -1,0 +1,15 @@
+# Omada's embedded MongoDB needs a real local filesystem, so this uses local-path on worker-02
+# (ADR 0009 pattern), not NFS. The StorageClass only allows worker-02; reclaimPolicy is Retain.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: omada-data-pvc
+  namespace: utils
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 5Gi
